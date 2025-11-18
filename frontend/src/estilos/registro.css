@@ -1,0 +1,188 @@
+/* registro */
+
+body {
+    background-color: #f4f4f4; /* Fondo claro */
+    display: flex; /* Para centrar el main */
+    flex-direction: column;
+    min-height: 100vh; /* Para que el footer se quede abajo */
+}
+
+main.contenedor-formulario {
+    flex-grow: 1; /* main ocupa el espacio restante */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra horizontalmente */
+    justify-content: center; /* Centra verticalmente */
+    padding: 20px;
+    box-sizing: border-box; /* Incluye padding en el tamaño total */
+}
+
+.logo-formulario img {
+    height: 60px; /* Tamaño del logo en el formulario */
+    margin-bottom: 20px;
+}
+
+main.contenedor-formulario h2 {
+    color: black;
+    margin-bottom: 10px;
+}
+
+main.contenedor-formulario p {
+    color: black;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+#formulario-registro {
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 12px 30px #0077cc;;
+    width: 100%;
+    max-width: 400px; /* Ancho máximo del formulario */
+    box-sizing: border-box;
+}
+
+.grupo-input {
+    margin-bottom: 20px;
+}
+
+.grupo-input label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: black;
+}
+
+
+/* campo del género */
+#formulario-registro label[for="genero"] {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: black;
+}
+
+#formulario-registro select#genero {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    background-color: #fff;
+    color: #333;
+    appearance: none; /* Quita estilos nativos del navegador */
+    cursor: pointer;
+}
+
+/* Opcional: efecto al enfocar */
+#formulario-registro select#genero:focus {
+    border-color: #0077cc;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 119, 204, 0.5);
+}
+
+
+.grupo-input input[type="text"],
+.grupo-input input[type="email"],
+.grupo-input input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box; /* Asegura que el padding no aumente el ancho */
+    font-size: 1rem;
+}
+
+/* En tu archivo .css */
+.lista-requisitos {
+  list-style-type: none;
+  padding-left: 10px;
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
+
+.lista-requisitos .cumplido {
+  color: green;
+}
+
+.lista-requisitos .no-cumplido {
+  color: red;
+}
+.grupo-input input[type="text"]::placeholder,
+.grupo-input input[type="email"]::placeholder {
+    color: #aaa;
+}
+
+.aceptar-terminos {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.aceptar-terminos input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.aceptar-terminos label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.aceptar-terminos a {
+    color: #0077cc;
+    text-decoration: none;
+}
+
+.aceptar-terminos a:hover {
+    text-decoration: underline;
+}
+
+.boton-primario {
+    background-color: #0077cc;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.boton-primario:hover {
+    background-color: #005f99;
+}
+
+/* Estilo para el botón de "Crear Cuenta" en la barra de navegación cuando estás en la página de registro */
+.barra-navegacion .boton.active {
+    background-color: #005f99; /* Un poco más oscuro para indicar que está activo */
+}
+
+
+.enlace-login {
+    margin-top: 25px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.enlace-login a {
+    color: #0077cc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.enlace-login a:hover {
+    text-decoration: underline;
+}
+
+footer {
+    background-color:white; /* o el color que uses para tu footer */
+    color: #333; /* Color de texto para el footer */
+    text-align: center;
+    padding: 15px;
+    margin-top: auto; /* Empuja el footer hacia abajo */
+    width: 100%;
+    box-sizing: border-box;
+    border-top: 1px solid #eee; /* Borde superior sutil */
+}

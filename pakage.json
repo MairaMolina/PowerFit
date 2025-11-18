@@ -1,0 +1,19 @@
+{
+  "name": "power-fit-web",
+  "version": "1.0.0",
+  "description": "Página web para seguimiento de salud física y rutinas personalizadas",
+  "main": "src/aplicacion.js",
+  "scripts": {
+    "start": "live-server public",
+    "build": "echo 'No hay proceso de build definido aún'",
+    "test": "echo 'No hay pruebas definidas aún'"
+  },
+  "author": "Maira Molina y equipo Power Fit",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.50.0"
+  }
+}
