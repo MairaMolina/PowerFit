@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Fit - Cambiar Contraseña</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="/src/estilos/generales.css">
+    <link rel="stylesheet" href="/src/estilos/inicio_sesion.css">
+</head>
+<body>
+
+    <main class="contenedor-formulario">
+
+        <div class="logo-formulario">
+            <img src="./recursos/imagenes/logo_powerfit.png" alt="Logo Power Fit">
+        </div>
+
+        <h2>Cambiar Contraseña</h2>
+        <p>Ingresa tu nueva contraseña dos veces para confirmar</p>
+
+        <form id="formulario-cambiar-contrasena" action="" novalidate>
+
+            <div class="grupo-input">
+                <label for="nuevaContrasena">Nueva Contraseña</label>
+                <input type="password" id="nuevaContrasena" name="nuevaContrasena" required>
+            </div>
+
+            <div class="grupo-input">
+                <label for="confirmarContrasena">Confirmar Nueva Contraseña</label>
+                <input type="password" id="confirmarContrasena" name="confirmarContrasena" required>
+            </div>
+
+            <button type="submit" id="btn-cambiar-contrasena" class="boton-primario">Cambiar Contraseña</button>
+
+        </form>
+
+        <div id="mensaje-exito" style="display: none; text-align: center;">
+            <p>Contraseña cambiada exitosamente.</p>
+            <button id="btn-volver-login" class="boton-primario">Volver al Inicio de Sesión</button>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>© 2025 Power Fit</p>
+    </footer>
+
+    <script type="module" src="/src/paginas/cambiar-contraseña.js"></script>
+</body>
+</html>

@@ -63,7 +63,36 @@ export async function loginUsuario(datosLogin) {
     return { data: data, error: null };
 
   } catch (error) {
-    console.error('Error en servicio de autenticación (login):', error.message);
-    return { data: null, error: error };
+   console.error('Error en servicio de autenticación (login):', error.message);
+   return { data: null, error: error };
   }
+}
+
+/**
+* Solicita reset de contraseña llamando al backend.
+* @param {object} datosReset - Objeto con { correo }
+* @returns {object} - { data, error }
+*/
+export async function solicitarResetPassword(datosReset) {
+ try {
+   const response = await fetch(`${API_URL}/reset-password`, {
+     method: 'POST',
+     headers: {
+       'Content-Type': 'application/json',
+     },
+     body: JSON.stringify(datosReset),
+   });
+
+   const data = await response.json();
+
+   if (!response.ok) {
+     throw new Error(data.error || 'Error al solicitar reset');
+   }
+
+   return { data: data, error: null };
+
+ } catch (error) {
+   console.error('Error en servicio de reset password:', error.message);
+   return { data: null, error: error };
+ }
 }
