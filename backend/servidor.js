@@ -23,13 +23,28 @@ app.use('/src', express.static(srcPath));
 app.use(express.static(publicPath));
 
 // === Rutas ===
-// Ruta específica para cambiar-contrasena
-app.get('/cambiar-contrasena', (req, res) => {
-  res.sendFile(path.join(process.cwd(), 'frontend/public/cambiar-contrasena.html'));
+// Ruta raíz - redirige a inicio.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(publicPath, 'inicio.html'));
+});
+
+// Ruta específica para cambiar-contrasena  
+app.get('/cambiar_contrasena', (req, res) => {
+  res.sendFile(path.join(process.cwd(), 'frontend/public/cambiar_contrasena.html'));
 });
 
 // Le decimos a Express que use nuestras rutas de usuario y que todas empiecen con '/api'
 app.use('/api', rutasUsuario);
+
+// === Manejo de errores 404 (AGREGAR ESTO) ===
+app.use((req, res) => {
+  console.log('❌ 404 - Ruta no encontrada:', req.url);
+  res.status(404).send(`
+    <h1>404 - Página no encontrada</h1>
+    <p>La ruta <code>${req.url}</code> no existe.</p>
+    <a href="/">Ir al inicio</a>
+  `);
+});
 
 // Iniciar el servidor
 app.listen(PORT, () => {
