@@ -1,0 +1,914 @@
+/* ====== VARIABLES Y RESET ====== */
+:root {
+  --color-primario: #0077cc;
+  --color-secundario: #005fa3;
+  --color-exito: #28a745;
+  --color-advertencia: #ffc107;
+  --color-peligro: #dc3545;
+  --color-info: #17a2b8;
+  
+  --color-naranja: #ff6b35;
+  --color-azul: #0077cc;
+  --color-verde: #28a745;
+  --color-morado: #6f42c1;
+  --color-amarillo: #ffc107;
+  
+  --color-fondo: #f8f9fa;
+  --color-fondo-tarjeta: #ffffff;
+  --color-texto: #212529;
+  --color-texto-secundario: #6c757d;
+  --color-borde: #dee2e6;
+  
+  --sidebar-width: 250px;
+  --header-height: 80px;
+  
+  --sombra-pequena: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --sombra-mediana: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --sombra-grande: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Tema oscuro */
+body.tema-oscuro {
+  --color-fondo: #1a1a1a;
+  --color-fondo-tarjeta: #2d2d2d;
+  --color-texto: #f8f9fa;
+  --color-texto-secundario: #adb5bd;
+  --color-borde: #495057;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ====== SIDEBAR ====== */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background-color: var(--color-fondo-tarjeta);
+  border-right: 1px solid var(--color-borde);
+  padding: 20px 0;
+  z-index: 1000;
+  overflow-y: auto;
+  transition: all 0.3s ease;
+}
+
+.logo-sidebar {
+  text-align: center;
+  padding: 0 20px 30px;
+  border-bottom: 1px solid var(--color-borde);
+  margin-bottom: 30px;
+}
+
+.logo-sidebar img {
+  height: 60px;
+  width: auto;
+}
+
+.navegacion-sidebar {
+  padding: 0 15px;
+}
+
+.titulo-menu {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-texto-secundario);
+  padding: 0 15px;
+  margin-bottom: 15px;
+  letter-spacing: 0.5px;
+}
+
+.lista-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.item-menu {
+  margin-bottom: 5px;
+}
+
+.item-menu a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  color: var(--color-texto);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.item-menu a i {
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.item-menu a:hover {
+  background-color: rgba(0, 119, 204, 0.1);
+  color: var(--color-primario);
+  transform: translateX(5px);
+}
+
+.item-menu.activo a {
+  background-color: var(--color-primario);
+  color: white;
+}
+
+.item-menu.activo a:hover {
+  background-color: var(--color-secundario);
+  transform: translateX(0);
+}
+
+/* ====== CONTENIDO PRINCIPAL ====== */
+.contenido-principal {
+  margin-left: var(--sidebar-width);
+  min-height: 100vh;
+  transition: margin-left 0.3s ease;
+}
+
+/* ====== HEADER ====== */
+.header-dashboard {
+  background-color: var(--color-fondo-tarjeta);
+  border-bottom: 1px solid var(--color-borde);
+  padding: 20px 0;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  box-shadow: var(--sombra-pequena);
+}
+
+.titulo-pagina {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-texto);
+  margin-bottom: 5px;
+}
+
+.subtitulo-pagina {
+  font-size: 0.95rem;
+  color: var(--color-texto-secundario);
+  margin-bottom: 0;
+}
+
+.controles-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.boton-tema {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 2px solid var(--color-borde);
+  background-color: var(--color-fondo-tarjeta);
+  color: var(--color-texto);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+}
+
+.boton-tema:hover {
+  border-color: var(--color-primario);
+  color: var(--color-primario);
+  transform: rotate(180deg);
+}
+
+/* Perfil de usuario */
+.perfil-usuario {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 15px;
+  background-color: transparent;
+  border: 2px solid var(--color-borde);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.perfil-usuario:hover {
+  border-color: var(--color-primario);
+  background-color: rgba(0, 119, 204, 0.05);
+}
+
+.avatar-usuario {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.info-usuario {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.nombre-usuario {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-texto);
+  line-height: 1.2;
+}
+
+.rol-usuario {
+  font-size: 0.75rem;
+  color: var(--color-texto-secundario);
+}
+
+.perfil-usuario i {
+  color: var(--color-texto-secundario);
+  font-size: 0.8rem;
+}
+
+/* Dropdown del perfil */
+.dropdown-menu {
+  border: 1px solid var(--color-borde);
+  box-shadow: var(--sombra-mediana);
+  border-radius: 12px;
+  padding: 8px;
+  min-width: 220px;
+}
+
+.dropdown-item {
+  padding: 10px 15px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item i {
+  width: 20px;
+  text-align: center;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(0, 119, 204, 0.1);
+  color: var(--color-primario);
+}
+
+.dropdown-divider {
+  margin: 8px 0;
+  border-color: var(--color-borde);
+}
+
+/* ====== CONTENEDOR DASHBOARD ====== */
+.contenedor-dashboard {
+  padding: 30px;
+}
+
+/* ====== TARJETAS DE ESTADÍSTICAS ====== */
+.tarjetas-estadisticas {
+  margin-bottom: 30px;
+}
+
+.tarjeta-stat {
+  background-color: var(--color-fondo-tarjeta);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  box-shadow: var(--sombra-mediana);
+  transition: all 0.3s ease;
+  height: 100%;
+  border: 1px solid var(--color-borde);
+}
+
+.tarjeta-stat:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--sombra-grande);
+}
+
+.icono-stat {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+.icono-stat.naranja {
+  background: linear-gradient(135deg, #ff6b35, #ff8c42);
+}
+
+.icono-stat.azul {
+  background: linear-gradient(135deg, #0077cc, #0099ff);
+}
+
+.icono-stat.verde {
+  background: linear-gradient(135deg, #28a745, #34ce57);
+}
+
+.icono-stat.morado {
+  background: linear-gradient(135deg, #6f42c1, #8e54e9);
+}
+
+.contenido-stat {
+  flex: 1;
+}
+
+.titulo-stat {
+  font-size: 0.85rem;
+  color: var(--color-texto-secundario);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.valor-stat {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-texto);
+  margin-bottom: 5px;
+  line-height: 1;
+}
+
+.descripcion-stat {
+  font-size: 0.8rem;
+  color: var(--color-texto-secundario);
+  margin: 0;
+}
+
+/* ====== SECCIONES ====== */
+.seccion-entrenamientos,
+.seccion-logros,
+.tarjeta-proximos,
+.tarjeta-medidas {
+  background-color: var(--color-fondo-tarjeta);
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: var(--sombra-mediana);
+  border: 1px solid var(--color-borde);
+}
+
+.header-seccion {
+  margin-bottom: 20px;
+}
+
+.header-seccion h2,
+.header-seccion h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-texto);
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-seccion h3 {
+  font-size: 1.1rem;
+}
+
+.header-seccion p {
+  font-size: 0.9rem;
+  color: var(--color-texto-secundario);
+  margin: 0;
+}
+
+/* ====== ENTRENAMIENTOS RECIENTES ====== */
+.lista-entrenamientos {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.item-entrenamiento {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: var(--color-fondo);
+  border-radius: 12px;
+  border: 1px solid var(--color-borde);
+  transition: all 0.3s ease;
+}
+
+.item-entrenamiento:hover {
+  border-color: var(--color-primario);
+  background-color: rgba(0, 119, 204, 0.05);
+  transform: translateX(5px);
+}
+
+.icono-entrenamiento {
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+.icono-entrenamiento.azul {
+  background: linear-gradient(135deg, #0077cc, #0099ff);
+}
+
+.info-entrenamiento {
+  flex: 1;
+}
+
+.info-entrenamiento h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-texto);
+  margin-bottom: 3px;
+}
+
+.info-entrenamiento p {
+  font-size: 0.85rem;
+  color: var(--color-texto-secundario);
+  margin: 0;
+}
+
+.detalles-entrenamiento {
+  display: flex;
+  gap: 10px;
+}
+
+.detalles-entrenamiento span {
+  font-size: 0.85rem;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.duracion {
+  background-color: rgba(0, 119, 204, 0.1);
+  color: var(--color-primario);
+}
+
+.calorias {
+  background-color: rgba(255, 107, 53, 0.1);
+  color: var(--color-naranja);
+}
+
+/* ====== LOGROS ====== */
+.item-logro {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: var(--color-fondo);
+  border-radius: 12px;
+  border: 1px solid var(--color-borde);
+  transition: all 0.3s ease;
+  margin-bottom: 12px;
+}
+
+.item-logro:hover {
+  transform: scale(1.02);
+  box-shadow: var(--sombra-mediana);
+}
+
+.icono-logro {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+.icono-logro.amarillo {
+  background: linear-gradient(135deg, #ffc107, #ffdb4d);
+}
+
+.icono-logro.naranja {
+  background: linear-gradient(135deg, #ff6b35, #ff8c42);
+}
+
+.icono-logro.morado {
+  background: linear-gradient(135deg, #6f42c1, #8e54e9);
+}
+
+.info-logro h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-texto);
+  margin-bottom: 3px;
+}
+
+.info-logro p {
+  font-size: 0.85rem;
+  color: var(--color-texto-secundario);
+  margin: 0;
+}
+
+/* ====== COLUMNA DERECHA ====== */
+.tarjeta-saludo {
+  background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+  color: white;
+  border-radius: 16px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: var(--sombra-mediana);
+}
+
+.tarjeta-saludo h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.tarjeta-saludo p {
+  font-size: 0.95rem;
+  margin: 0;
+  opacity: 0.95;
+}
+
+/* ====== TARJETAS DE INFORMACIÓN RÁPIDA ====== */
+.tarjeta-info {
+  background-color: var(--color-fondo-tarjeta);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: var(--sombra-mediana);
+  border: 1px solid var(--color-borde);
+  transition: all 0.3s ease;
+}
+
+.tarjeta-info:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--sombra-grande);
+}
+
+.tarjeta-info .icono-info {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.tarjeta-info.peso .icono-info {
+  background: linear-gradient(135deg, #0077cc, #0099ff);
+  color: white;
+}
+
+.tarjeta-info.dias .icono-info {
+  background: linear-gradient(135deg, #6f42c1, #8e54e9);
+  color: white;
+}
+
+.tarjeta-info.calorias .icono-info {
+  background: linear-gradient(135deg, #ff6b35, #ff8c42);
+  color: white;
+}
+
+.tarjeta-info.proxima-clase .icono-info {
+  background: linear-gradient(135deg, #28a745, #34ce57);
+  color: white;
+}
+
+.contenido-info {
+  flex: 1;
+}
+
+.titulo-info {
+  font-size: 0.8rem;
+  color: var(--color-texto-secundario);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.valor-info {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-texto);
+  margin-bottom: 3px;
+  line-height: 1;
+}
+
+.meta-info {
+  font-size: 0.8rem;
+  color: var(--color-texto-secundario);
+  margin: 0;
+}
+
+/* ====== RUTINA ASIGNADA HOY ====== */
+.tarjeta-rutina-hoy {
+  background-color: var(--color-fondo-tarjeta);
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: var(--sombra-mediana);
+  border: 1px solid var(--color-borde);
+  margin-top: 20px;
+}
+
+.header-rutina {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.header-rutina h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-texto);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.lista-ejercicios {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.ejercicio-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px;
+  background-color: var(--color-fondo);
+  border-radius: 12px;
+  border: 1px solid var(--color-borde);
+  transition: all 0.3s ease;
+}
+
+.ejercicio-item:hover {
+  border-color: var(--color-primario);
+  background-color: rgba(0, 119, 204, 0.05);
+}
+
+.ejercicio-item.completado {
+  border-color: var(--color-exito);
+  background-color: rgba(40, 167, 69, 0.05);
+}
+
+.numero-ejercicio {
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.ejercicio-item.completado .numero-ejercicio {
+  background: linear-gradient(135deg, var(--color-exito), #34ce57);
+}
+
+.info-ejercicio {
+  flex: 1;
+}
+
+.info-ejercicio h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-texto);
+  margin-bottom: 3px;
+}
+
+.info-ejercicio p {
+  font-size: 0.8rem;
+  color: var(--color-texto-secundario);
+  margin: 0;
+}
+
+.estado-ejercicio {
+  font-size: 0.8rem;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.estado-ejercicio.hecho {
+  background-color: rgba(40, 167, 69, 0.1);
+  color: var(--color-exito);
+}
+
+.estado-ejercicio.pendiente {
+  background-color: rgba(108, 117, 125, 0.1);
+  color: var(--color-texto-secundario);
+}
+
+/* ====== PRÓXIMOS ENTRENAMIENTOS ====== */
+.lista-proximos {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.item-proximo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px;
+  background-color: var(--color-fondo);
+  border-radius: 12px;
+  border: 1px solid var(--color-borde);
+  transition: all 0.3s ease;
+}
+
+.item-proximo:hover {
+  border-color: var(--color-primario);
+  transform: translateX(5px);
+}
+
+.icono-proximo {
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+.icono-proximo.verde {
+  background: linear-gradient(135deg, #28a745, #34ce57);
+}
+
+.info-proximo {
+  flex: 1;
+}
+
+.info-proximo h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-texto);
+  margin-bottom: 3px;
+}
+
+.info-proximo p {
+  font-size: 0.8rem;
+  color: var(--color-texto-secundario);
+  margin: 0;
+}
+
+.badge-proximo {
+  font-size: 0.75rem;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.badge-proximo.intermedio {
+  background-color: rgba(255, 193, 7, 0.2);
+  color: var(--color-advertencia);
+}
+
+.badge-proximo.principiante {
+  background-color: rgba(40, 167, 69, 0.2);
+  color: var(--color-exito);
+}
+
+/* ====== MEDIDAS CORPORALES ====== */
+.lista-medidas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item-medida {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  background-color: var(--color-fondo);
+  border-radius: 10px;
+  border: 1px solid var(--color-borde);
+}
+
+.nombre-medida {
+  font-size: 0.9rem;
+  color: var(--color-texto);
+  font-weight: 500;
+}
+
+.valor-medida {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-primario);
+}
+
+/* ====== BOTONES ====== */
+.boton-iniciar-entrenamiento {
+  background: linear-gradient(135deg, var(--color-exito), #34ce57);
+  border: none;
+  color: white;
+}
+
+.boton-iniciar-entrenamiento:hover {
+  background: linear-gradient(135deg, #218838, var(--color-exito));
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 991px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebar.activo {
+    transform: translateX(0);
+  }
+
+  .contenido-principal {
+    margin-left: 0;
+  }
+
+  .controles-header {
+    flex-wrap: wrap;
+  }
+
+  .tarjeta-stat {
+    margin-bottom: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .titulo-pagina {
+    font-size: 1.3rem;
+  }
+
+  .contenedor-dashboard {
+    padding: 20px 15px;
+  }
+
+  .perfil-usuario {
+    padding: 6px 12px;
+  }
+
+  .info-usuario {
+    display: none;
+  }
+
+  .tarjeta-saludo h2 {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .header-dashboard {
+    padding: 15px 0;
+  }
+
+  .valor-stat {
+    font-size: 1.4rem;
+  }
+
+  .icono-stat {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+}

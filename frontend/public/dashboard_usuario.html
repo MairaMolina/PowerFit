@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Fit - Dashboard</title>    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- CSS Custom -->
+    <link rel="stylesheet" href="/src/estilos/dashboard.css">
+</head>
+<body>
+    
+    <!-- SIDEBAR LATERAL IZQUIERDO -->
+    <aside class="sidebar">
+        <!-- Logo -->
+        <div class="logo-sidebar">
+            <img src="/recursos/imagenes/Logo_powerfit.png" alt="Power Fit Logo">
+        </div>
+
+        <!-- Menú de navegación -->
+        <nav class="navegacion-sidebar">
+            <p class="titulo-menu">Menú Principal</p>
+            <ul class="lista-menu">
+                <li class="item-menu activo">
+                    <a href="/dashboard.html">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="item-menu">
+                    <a href="/mis-rutinas.html">
+                        <i class="fas fa-dumbbell"></i>
+                        <span>Mis Rutinas</span>
+                    </a>
+                </li>
+                <li class="item-menu">
+                    <a href="/explorar-rutinas.html">
+                        <i class="fas fa-compass"></i>
+                        <span>Explorar Rutinas</span>
+                    </a>
+                </li>
+                <li class="item-menu">
+                    <a href="/objetivos.html">
+                        <i class="fas fa-bullseye"></i>
+                        <span>Objetivos</span>
+                    </a>
+                </li>
+                <li class="item-menu">
+                    <a href="/configuracion.html">
+                        <i class="fas fa-cog"></i>
+                        <span>Configuración</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="contenido-principal">
+        
+        <!-- HEADER SUPERIOR -->
+        <header class="header-dashboard">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h1 class="titulo-pagina">Página principal</h1>
+                        <p class="subtitulo-pagina">Bienvenido de vuelta, <span id="nombreUsuarioHeader">Cargando...</span>!</p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="controles-header">
+                            <!-- Botón tema -->
+                            <button class="boton-tema" id="botonTema" title="Cambiar tema">
+                                <i class="fas fa-moon"></i>
+                            </button>
+
+                            <!-- Perfil de usuario -->
+                            <div class="dropdown perfil-dropdown">
+                                <button class="perfil-usuario" id="dropdownPerfil" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="avatar-usuario">
+                                        <span id="iniciales">CM</span>
+                                    </div>
+                                    <div class="info-usuario">
+                                        <span class="nombre-usuario" id="nombreUsuario">Cargando...</span>
+                                        <span class="rol-usuario">Usuario</span>
+                                    </div>
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownPerfil">
+                                    <li><a class="dropdown-item" href="/perfil.html">
+                                        <i class="fas fa-user"></i> Mi Perfil
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="/configuracion.html">
+                                        <i class="fas fa-cog"></i> Configuración de Cuenta
+                                    </a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-danger" href="#" id="botonCerrarSesion">
+                                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                                    </a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTENIDO DEL DASHBOARD -->
+        <div class="container-fluid contenedor-dashboard">
+            <div class="row">
+                
+                <!-- COLUMNA IZQUIERDA: Estadísticas y contenido principal -->
+                <div class="col-lg-8">
+                    
+                    <!-- Tarjetas de estadísticas -->
+                    <div class="row tarjetas-estadisticas">
+                        <div class="col-md-6 col-lg-3 mb-3">
+                            <div class="tarjeta-stat">
+                                <div class="icono-stat naranja">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <div class="contenido-stat">
+                                    <span class="titulo-stat">Racha Actual</span>
+                                    <h3 class="valor-stat" id="rachaActual">0 días</h3>
+                                    <p class="descripcion-stat">Días seguidos entrenando</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3 mb-3">
+                            <div class="tarjeta-stat">
+                                <div class="icono-stat azul">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="contenido-stat">
+                                    <span class="titulo-stat">Entrenamientos Totales</span>
+                                    <h3 class="valor-stat" id="entrenamientosTotales">0</h3>
+                                    <p class="descripcion-stat">Sesiones completadas</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3 mb-3">
+                            <div class="tarjeta-stat">
+                                <div class="icono-stat verde">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="contenido-stat">
+                                    <span class="titulo-stat">Meta Semanal</span>
+                                    <h3 class="valor-stat" id="metaSemanal">0/5</h3>
+                                    <div class="progress mt-2" style="height: 6px;">
+                                        <div class="progress-bar bg-success" id="progresoSemanal" role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3 mb-3">
+                            <div class="tarjeta-stat">
+                                <div class="icono-stat morado">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="contenido-stat">
+                                    <span class="titulo-stat">Tiempo Total</span>
+                                    <h3 class="valor-stat" id="tiempoTotal">0h</h3>
+                                    <p class="descripcion-stat">Este mes</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Entrenamientos Recientes -->
+                    <div class="seccion-entrenamientos">
+                        <div class="header-seccion">
+                            <h2><i class="fas fa-history"></i> Entrenamientos Recientes</h2>
+                            <p>Tus últimas sesiones de entrenamiento</p>
+                        </div>
+
+                        <div class="lista-entrenamientos" id="listaEntrenamientosRecientes">
+                            <!-- Se llenará dinámicamente con JavaScript -->
+                            <div class="text-center py-4">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-outline-primary w-100 mt-3" onclick="window.location.href='/mis-rutinas.html'">
+                            Ver Todos los Entrenamientos
+                        </button>
+                    </div>
+
+                    <!-- Logros Recientes -->
+                    <div class="seccion-logros mt-4">
+                        <div class="header-seccion">
+                            <h2><i class="fas fa-trophy"></i> Logros Recientes</h2>
+                            <p>Tus últimas insignias y récords</p>
+                        </div>
+
+                        <div class="row" id="listaLogros">
+                            <!-- Se llenará dinámicamente con JavaScript -->
+                            <div class="col-12 text-center py-4">
+                                <div class="spinner-border text-warning" role="status">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- COLUMNA DERECHA: Rutina del día y metas -->
+                <div class="col-lg-4">
+                    
+                    <!-- Saludo y motivación -->
+                    <div class="tarjeta-saludo">
+                        <h2>¡Hola, <span id="nombreUsuarioSaludo">Usuario</span>! ¡A darle duro!</h2>
+                        <p>Revisa tu progreso, tu rutina de hoy y alcanza tus metas.</p>
+                    </div>
+
+                    <!-- Peso y Días de entrenamiento -->
+                    <div class="row mb-3">
+                        <div class="col-12 mb-3">
+                            <div class="tarjeta-info peso">
+                                <div class="icono-info">
+                                    <i class="fas fa-weight"></i>
+                                </div>
+                                <div class="contenido-info">
+                                    <span class="titulo-info">Peso Actual</span>
+                                    <h3 class="valor-info" id="pesoActual">-- kg</h3>
+                                    <p class="meta-info" id="metaPeso">Meta: -- kg</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mb-3">
+                            <div class="tarjeta-info dias">
+                                <div class="icono-info">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <div class="contenido-info">
+                                    <span class="titulo-info">Días de Entrenamiento</span>
+                                    <h3 class="valor-info" id="diasEntrenamiento">0 / 7</h3>
+                                    <p class="meta-info" id="rachaInfo">Racha: 0 días seguidos</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rutina Asignada Hoy -->
+                    <div class="tarjeta-rutina-hoy">
+                        <div class="header-rutina">
+                            <h3><i class="fas fa-dumbbell"></i> Rutina Asignada Hoy</h3>
+                            <span class="badge bg-primary" id="tipoRutina">Cargando...</span>
+                        </div>
+
+                        <div class="lista-ejercicios" id="listaEjerciciosHoy">
+                            <!-- Se llenará dinámicamente con JavaScript -->
+                            <div class="text-center py-4">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-success w-100 mt-3" id="botonIniciarEntrenamiento">
+                            <i class="fas fa-play"></i> Iniciar Sesión de Entrenamiento
+                        </button>
+                    </div>
+
+                    <!-- Próximos Entrenamientos -->
+                    <div class="tarjeta-proximos mt-4">
+                        <div class="header-seccion">
+                            <h3><i class="fas fa-calendar-alt"></i> Próximos Entrenamientos</h3>
+                            <p>Tus entrenamientos programados</p>
+                        </div>
+
+                        <div class="lista-proximos" id="listaProximosEntrenamientos">
+                            <!-- Se llenará dinámicamente con JavaScript -->
+                            <div class="text-center py-3">
+                                <div class="spinner-border text-info" role="status">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-outline-secondary w-100 mt-3" onclick="window.location.href='/explorar-rutinas.html'">
+                            <i class="fas fa-plus"></i> Programar Entrenamiento
+                        </button>
+                    </div>
+
+                    <!-- Medidas Corporales -->
+                    <div class="tarjeta-medidas mt-4">
+                        <div class="header-seccion">
+                            <h3><i class="fas fa-ruler"></i> Medidas Corporales</h3>
+                            <p>Seguimiento de tu progreso físico</p>
+                        </div>
+
+                        <div class="lista-medidas" id="listaMedidas">
+                            <!-- Se llenará dinámicamente con JavaScript -->
+                            <div class="text-center py-3">
+                                <div class="spinner-border text-secondary" role="status">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-outline-primary w-100 mt-3" data-bs-toggle="modal" data-bs-target="#modalActualizarMedidas">
+                            <i class="fas fa-edit"></i> Actualizar Medidas
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal para Actualizar Medidas -->
+    <div class="modal fade" id="modalActualizarMedidas" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-ruler"></i> Actualizar Medidas Corporales</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formularioMedidas">
+                        <div class="mb-3">
+                            <label class="form-label">Peso Actual (kg)</label>
+                            <input type="number" class="form-control" id="inputPeso" step="0.1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Meta de Peso (kg)</label>
+                            <input type="number" class="form-control" id="inputMetaPeso" step="0.1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Pecho (cm)</label>
+                            <input type="number" class="form-control" id="inputPecho" step="0.1">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Cintura (cm)</label>
+                            <input type="number" class="form-control" id="inputCintura" step="0.1">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Cadera (cm)</label>
+                            <input type="number" class="form-control" id="inputCadera" step="0.1">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Brazo (cm)</label>
+                            <input type="number" class="form-control" id="inputBrazo" step="0.1">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Pierna (cm)</label>
+                            <input type="number" class="form-control" id="inputPierna" step="0.1">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="botonGuardarMedidas">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- JavaScript del Dashboard -->
+    <script type="module" src="/src/paginas/dashboard.js"></script>
+</body>
+</html>
