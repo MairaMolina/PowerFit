@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('supabase.session', JSON.stringify(data.session));
 
       // Redirigimos al perfil
-      window.location.href = 'perfil.html'; // O tu página de dashboard
+      window.location.href = 'dashboard_usuario.html'; // O tu página de dashboard
     }
   });
 });

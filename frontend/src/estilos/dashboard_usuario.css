@@ -59,7 +59,7 @@ body {
   height: 100vh;
   background-color: var(--color-fondo-tarjeta);
   border-right: 1px solid var(--color-borde);
-  padding: 20px 0;
+  padding: 45px 0;
   z-index: 1000;
   overflow-y: auto;
   transition: all 0.3s ease;
@@ -69,6 +69,7 @@ body {
   text-align: center;
   padding: 0 20px 30px;
   border-bottom: 1px solid var(--color-borde);
+  box-shadow: var(--sombra-pequena);
   margin-bottom: 30px;
 }
 
@@ -850,6 +851,105 @@ body {
 
 .boton-iniciar-entrenamiento:hover {
   background: linear-gradient(135deg, #218838, var(--color-exito));
+}
+
+/* ====== FOOTER ====== */
+footer {
+    background-color: var(--color-fondo-tarjeta);
+    border-top: 1px solid var(--color-borde);
+    margin-left: var(--sidebar-width);
+    margin-top: 60px;
+    padding: 40px 0 20px;
+}
+
+.footer-contenido {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+    margin-bottom: 30px;
+}
+
+.footer-columna h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-texto);
+    margin-bottom: 15px;
+}
+
+.footer-columna ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-columna ul li {
+    margin-bottom: 10px;
+}
+
+.footer-columna a {
+    color: var(--color-texto-secundario);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.footer-columna a:hover {
+    color: var(--color-primario);
+}
+
+.footer-columna p {
+    font-size: 0.9rem;
+    color: var(--color-texto-secundario);
+    margin-bottom: 8px;
+}
+
+.footer-columna p a {
+    color: var(--color-texto-secundario);
+}
+
+.footer-columna p a:hover {
+    color: var(--color-primario);
+}
+
+.footer-copy {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid var(--color-borde);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-copy p {
+    font-size: 0.85rem;
+    color: var(--color-texto-secundario);
+    margin: 0;
+}
+
+/* Responsive del footer */
+@media (max-width: 991px) {
+    footer {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    footer {
+        padding: 30px 0 15px;
+    }
+    
+    .footer-contenido {
+        padding: 0 20px;
+        gap: 30px;
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .footer-columna ul li {
+        margin-bottom: 8px;
+    }
 }
 
 /* ====== RESPONSIVE ====== */
