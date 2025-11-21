@@ -18,14 +18,28 @@ document.addEventListener('DOMContentLoaded', async () => {
 // ====== VERIFICAR SI HAY SESIÓN ACTIVA ======
 async function verificarSesion() {
     try {
-        const { data: { session }, error } = await supabase.auth.getSession();
+        // 1. Intenta obtener la sesión del localStorage (guardada por login)
+        const sesionGuardada = localStorage.getItem('supabase.session');
         
-        if (error || !session) {
+        if (!sesionGuardada) {
+            // Si no hay sesión en localStorage, redirigir a login
             window.location.href = '/iniciar_sesion.html';
             return;
         }
 
+        // 2. Parsear la sesión guardada
+        const session = JSON.parse(sesionGuardada);
+        
+        // 3. Validar que tenga los datos necesarios
+        if (!session || !session.user || !session.access_token) {
+            window.location.href = '/iniciar_sesion.html';
+            return;
+        }
+
+        // 4. Establecer el usuario actual
         usuarioActual = session.user;
+        
+        // 5. Cargar datos del usuario y dashboard
         await cargarDatosUsuario();
         await cargarDashboard();
 
@@ -370,10 +384,11 @@ function inicializarEventos() {
         
         if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
             try {
-                const { error } = await supabase.auth.signOut();
-                if (error) throw error;
+                // Limpiar la sesión del localStorage
+                localStorage.removeItem('supabase.session');
                 
-                window.location.href = '/inicio.html';
+                // Redirigir a inicio
+                window.location.href = '/iniciar_sesion.html';
             } catch (error) {
                 console.error('Error al cerrar sesión:', error);
                 alert('Error al cerrar sesión');
