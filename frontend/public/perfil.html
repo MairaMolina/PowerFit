@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Fit - Mi Perfil</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="../src/estilos/perfil.css">
+</head>
+<body>
+    <!-- SIDEBAR LATERAL IZQUIERDO -->
+    <aside class="sidebar">
+        <!-- Logo -->
+        <div class="logo-sidebar">
+            <img src="././recursos/imagenes/Logo_powerfit.png" alt="Power Fit Logo">
+        </div>
+
+        <!-- Menú de navegación -->
+        <nav class="navegacion-sidebar">
+            <p class="titulo-menu">Menú Principal</p>
+            <ul class="lista-menu">
+                <li class="item-menu">
+                    <a href="/dashboard.html">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="item-menu">
+                    <a href="/mis-rutinas.html">
+                        <i class="fas fa-dumbbell"></i>
+                        <span>Mis Rutinas</span>
+                    </a>
+                </li>
+                <li class="item-menu">
+                    <a href="/explorar-rutinas.html">
+                        <i class="fas fa-compass"></i>
+                        <span>Explorar Rutinas</span>
+                    </a>
+                </li>
+                <li class="item-menu">
+                    <a href="/objetivos.html">
+                        <i class="fas fa-bullseye"></i>
+                        <span>Objetivos</span>
+                    </a>
+                </li>
+                <li class="item-menu activo">
+                    <a href="/perfil.html">
+                        <i class="fas fa-user"></i>
+                        <span>Mi Perfil</span>
+                    </a>
+                </li>
+                <li class="item-menu">
+                    <a href="/configuracion.html">
+                        <i class="fas fa-cog"></i>
+                        <span>Configuración</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="contenido-principal">
+
+        <!-- HEADER SUPERIOR -->
+        <header class="header-dashboard">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h1 class="titulo-pagina">Mi Perfil</h1>
+                        <p class="subtitulo-pagina">Revisa y actualiza tu información personal</p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="controles-header">
+                            <!-- Botón tema -->
+                            <button class="boton-tema" id="botonTema" title="Cambiar tema">
+                                <i class="fas fa-moon"></i>
+                            </button>
+
+                            <!-- Perfil de usuario -->
+                            <div class="dropdown perfil-dropdown">
+                                <button class="perfil-usuario" id="dropdownPerfil" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="avatar-usuario">
+                                        <span id="iniciales">PF</span>
+                                    </div>
+                                    <div class="info-usuario">
+                                        <span class="nombre-usuario" id="nombreUsuario">Cargando...</span>
+                                        <span class="rol-usuario">Usuario</span>
+                                    </div>
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownPerfil">
+                                    <li><a class="dropdown-item" href="/perfil.html">
+                                        <i class="fas fa-user"></i> Mi Perfil
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="/configuracion.html">
+                                        <i class="fas fa-cog"></i> Configuración de Cuenta
+                                    </a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-danger" href="#" id="botonCerrarSesion">
+                                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                                    </a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTENIDO DEL PERFIL -->
+        <div class="container-fluid contenedor-perfil">
+            <div class="row">
+                <!-- COLUMNA IZQUIERDA: Avatar y información básica -->
+                <div class="col-lg-4">
+                    <div class="tarjeta-avatar">
+                        <div class="avatar-grande">
+                            <img id="fotoPerfil" src="" alt="Foto de perfil" style="display: none;">
+                            <div id="avatarPredeterminado" class="avatar-predeterminado">
+                                <span id="inicialesGrandes">PF</span>
+                            </div>
+                        </div>
+                        <h3 id="nombreCompletoPerfil">Cargando...</h3>
+                        <p class="correo-perfil" id="correoPerfil">Cargando...</p>
+                        <button class="btn btn-outline-primary btn-sm mt-3" id="botonEditarPerfil" data-bs-toggle="modal" data-bs-target="#modalEditarPerfil">
+                            <i class="fas fa-edit"></i> Editar Perfil
+                        </button>
+                    </div>
+                </div>
+
+                <!-- COLUMNA DERECHA: Detalles del perfil -->
+                <div class="col-lg-8">
+                    <div class="tarjeta-detalles">
+                        <h2><i class="fas fa-user-circle"></i> Información Personal</h2>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="campo-info">
+                                    <label><i class="fas fa-user"></i> Nombre</label>
+                                    <p id="campoNombre">Cargando...</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="campo-info">
+                                    <label><i class="fas fa-user"></i> Apellido</label>
+                                    <p id="campoApellido">Cargando...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="campo-info">
+                                    <label><i class="fas fa-envelope"></i> Correo Electrónico</label>
+                                    <p id="campoCorreo">Cargando...</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="campo-info">
+                                    <label><i class="fas fa-venus-mars"></i> Género</label>
+                                    <p id="campoGenero">Cargando...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="campo-info">
+                                    <label><i class="fas fa-phone"></i> Teléfono</label>
+                                    <p id="campoTelefono">Cargando...</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="campo-info">
+                                    <label><i class="fas fa-birthday-cake"></i> Edad</label>
+                                    <p id="campoEdad">Cargando...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="campo-info">
+                                    <label><i class="fas fa-weight"></i> Peso</label>
+                                    <p id="campoPeso">Cargando...</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="campo-info">
+                                    <label><i class="fas fa-ruler-vertical"></i> Altura</label>
+                                    <p id="campoAltura">Cargando...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="campo-info">
+                            <label><i class="fas fa-bullseye"></i> Objetivos</label>
+                            <p id="campoObjetivos">Cargando...</p>
+                        </div>
+                    </div>
+
+                    <!-- Mensaje de error -->
+                    <div id="mensajeError" class="alert alert-danger" style="display: none;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span id="textoError">Error al cargar los datos del perfil.</span>
+                        <button class="btn btn-sm btn-outline-danger ms-3" id="botonReintentar">
+                            <i class="fas fa-redo"></i> Reintentar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-contenido">
+            <div class="footer-columna">
+                <h4>Enlaces</h4>
+                <ul>
+                    <li><a href="/inicio.html">Inicio</a></li>
+                    <li><a href="/dashboard.html">Dashboard</a></li>
+                    <li><a href="/mis-rutinas.html">Mis Rutinas</a></li>
+                    <li><a href="/explorar-rutinas.html">Explorar</a></li>
+                </ul>
+            </div>
+            <div class="footer-columna">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Términos y Condiciones</a></li>
+                    <li><a href="#">Política de Privacidad</a></li>
+                </ul>
+            </div>
+            <div class="footer-columna">
+                <h4>Contacto</h4>
+                <p>📩 <a href="mailto:contacto@powerfit.com">contacto@powerfit.com</a></p>
+                <p>📞 +57 311 1111111</p>
+            </div>
+        </div>
+        <div class="footer-copy">
+            <p>© 2025 Power Fit. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Modal para Editar Perfil -->
+    <div class="modal fade" id="modalEditarPerfil" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-user-edit"></i> Editar Perfil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formularioEditarPerfil">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="inputNombre" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Apellido</label>
+                                <input type="text" class="form-control" id="inputApellido" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="inputCorreo" required>
+                            <div class="form-text">Se usará para iniciar sesión</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Género</label>
+                                <select class="form-control" id="inputGenero">
+                                    <option value="">Seleccionar género</option>
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Femenino">Femenino</option>
+                                    <option value="Otro">Otro</option>
+                                    <option value="Prefiero no decir">Prefiero no decir</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Fecha de Nacimiento</label>
+                                <input type="date" class="form-control" id="inputFechaNacimiento">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Teléfono</label>
+                                <input type="tel" class="form-control" id="inputTelefono" placeholder="Ej: +57 300 123 4567">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Peso (kg)</label>
+                                <input type="number" class="form-control" id="inputPeso" step="0.1" min="0" placeholder="Ej: 70.5">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Altura (cm)</label>
+                                <input type="number" class="form-control" id="inputAltura" step="0.1" min="0" placeholder="Ej: 175.0">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Objetivos</label>
+                                <select class="form-control" id="inputObjetivos">
+                                    <option value="">Seleccionar objetivo</option>
+                                    <option value="Perder peso">Perder peso</option>
+                                    <option value="Ganar masa muscular">Ganar masa muscular</option>
+                                    <option value="Tonificar">Tonificar</option>
+                                    <option value="Mantener forma">Mantener forma</option>
+                                    <option value="Mejorar resistencia">Mejorar resistencia</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Teléfono</label>
+                                <input type="tel" class="form-control" id="inputTelefono" placeholder="Ej: +57 300 123 4567">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Peso (kg)</label>
+                                <input type="number" class="form-control" id="inputPeso" step="0.1" min="0" placeholder="Ej: 70.5">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Altura (cm)</label>
+                                <input type="number" class="form-control" id="inputAltura" step="0.1" min="0" placeholder="Ej: 175.0">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Objetivos</label>
+                                <select class="form-control" id="inputObjetivos">
+                                    <option value="">Seleccionar objetivo</option>
+                                    <option value="Perder peso">Perder peso</option>
+                                    <option value="Ganar masa muscular">Ganar masa muscular</option>
+                                    <option value="Tonificar">Tonificar</option>
+                                    <option value="Mantener forma">Mantener forma</option>
+                                    <option value="Mejorar resistencia">Mejorar resistencia</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                            </div>
+                        </div>
+                        -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="botonGuardarPerfil">
+                        <i class="fas fa-save"></i> Guardar Cambios
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="/src/paginas/perfil.js"></script>
+</body>
+</html>
