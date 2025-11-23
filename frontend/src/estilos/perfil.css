@@ -491,6 +491,60 @@ footer {
     }
 }
 
+/* ====== OBJETIVOS CHECKBOXES ====== */
+.objetivos-container {
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+  padding: 10px;
+  background-color: var(--color-fondo);
+}
+
+.objetivos-container .form-check {
+  margin-bottom: 8px;
+}
+
+.objetivos-container .form-check:last-child {
+  margin-bottom: 0;
+}
+
+.objetivos-container .form-check-input:checked {
+  background-color: var(--color-primario);
+  border-color: var(--color-primario);
+}
+
+/* ====== VISTA PREVIA OBJETIVOS ====== */
+.vista-previa-objetivos {
+  min-height: 40px;
+  padding: 8px;
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+  background-color: var(--color-fondo);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.vista-previa-objetivos .badge {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+}
+
+/* ====== DISPLAY OBJETIVOS ====== */
+.objetivos-display {
+  min-height: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.objetivos-display .badge {
+  font-size: 0.8rem;
+  padding: 6px 12px;
+}
+
 /* ====== RESPONSIVE ====== */
 @media (max-width: 991px) {
   .sidebar {

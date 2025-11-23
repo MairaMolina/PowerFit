@@ -181,6 +181,11 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Información Física -->
+                    <div class="tarjeta-detalles mt-4">
+                        <h2><i class="fas fa-dumbbell"></i> Información Física</h2>
 
                         <div class="row">
                             <div class="col-md-6">
@@ -196,10 +201,13 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="campo-info">
-                            <label><i class="fas fa-bullseye"></i> Objetivos</label>
-                            <p id="campoObjetivos">Cargando...</p>
+                    <!-- Objetivos Fitness -->
+                    <div class="tarjeta-detalles mt-4">
+                        <h2><i class="fas fa-bullseye"></i> Objetivos Fitness</h2>
+                        <div id="campoObjetivos" class="objetivos-display">
+                            Cargando...
                         </div>
                     </div>
 
@@ -304,16 +312,45 @@
                                 <input type="number" class="form-control" id="inputAltura" step="0.1" min="0" placeholder="Ej: 175.0">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Objetivos</label>
-                                <select class="form-control" id="inputObjetivos">
-                                    <option value="">Seleccionar objetivo</option>
-                                    <option value="Perder peso">Perder peso</option>
-                                    <option value="Ganar masa muscular">Ganar masa muscular</option>
-                                    <option value="Tonificar">Tonificar</option>
-                                    <option value="Mantener forma">Mantener forma</option>
-                                    <option value="Mejorar resistencia">Mejorar resistencia</option>
-                                    <option value="Otro">Otro</option>
-                                </select>
+                                <label class="form-label">Objetivos Fitness</label>
+                                <div class="objetivos-container">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Perder peso" id="objPerderPeso">
+                                        <label class="form-check-label" for="objPerderPeso">
+                                            Perder peso
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Ganar masa muscular" id="objGanarMusculo">
+                                        <label class="form-check-label" for="objGanarMusculo">
+                                            Ganar masa muscular
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Tonificar" id="objTonificar">
+                                        <label class="form-check-label" for="objTonificar">
+                                            Tonificar
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Mantener forma" id="objMantener">
+                                        <label class="form-check-label" for="objMantener">
+                                            Mantener forma
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="Mejorar resistencia" id="objResistencia">
+                                        <label class="form-check-label" for="objResistencia">
+                                            Mejorar resistencia
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Vista Previa de Objetivos</label>
+                            <div id="vistaPreviaObjetivos" class="vista-previa-objetivos">
+                                <small class="text-muted">Selecciona objetivos arriba para ver la vista previa</small>
                             </div>
                         </div>
                         <!--

@@ -153,7 +153,18 @@ function actualizarInformacionUsuario() {
 
     document.getElementById('campoPeso').textContent = datosUsuario?.peso ? `${datosUsuario.peso} kg` : 'No especificado';
     document.getElementById('campoAltura').textContent = datosUsuario?.altura ? `${datosUsuario.altura} cm` : 'No especificada';
-    document.getElementById('campoObjetivos').textContent = datosUsuario?.objetivos || 'No especificados';
+
+    // Mostrar objetivos como etiquetas
+    const contenedorObjetivos = document.getElementById('campoObjetivos');
+    const objetivos = datosUsuario?.objetivos ? datosUsuario.objetivos.split(',').map(obj => obj.trim()) : [];
+
+    if (objetivos.length === 0) {
+        contenedorObjetivos.innerHTML = '<span class="text-muted">No especificados</span>';
+    } else {
+        contenedorObjetivos.innerHTML = objetivos.map(objetivo => `
+            <span class="badge bg-primary me-1 mb-1">${objetivo}</span>
+        `).join('');
+    }
 
     // Avatar
     actualizarAvatar(nombreCompleto);
@@ -238,7 +249,17 @@ function llenarModalEdicion() {
     document.getElementById('inputFechaNacimiento').value = datosUsuario?.fecha_nacimiento ? datosUsuario.fecha_nacimiento.split('T')[0] : '';
     document.getElementById('inputPeso').value = datosUsuario?.peso || '';
     document.getElementById('inputAltura').value = datosUsuario?.altura || '';
-    document.getElementById('inputObjetivos').value = datosUsuario?.objetivos || '';
+
+    // Llenar checkboxes de objetivos
+    const objetivosSeleccionados = datosUsuario?.objetivos ? datosUsuario.objetivos.split(',').map(obj => obj.trim()) : [];
+    document.getElementById('objPerderPeso').checked = objetivosSeleccionados.includes('Perder peso');
+    document.getElementById('objGanarMusculo').checked = objetivosSeleccionados.includes('Ganar masa muscular');
+    document.getElementById('objTonificar').checked = objetivosSeleccionados.includes('Tonificar');
+    document.getElementById('objMantener').checked = objetivosSeleccionados.includes('Mantener forma');
+    document.getElementById('objResistencia').checked = objetivosSeleccionados.includes('Mejorar resistencia');
+
+    // Actualizar vista previa
+    actualizarVistaPreviaObjetivos();
 }
 
 // ====== VALIDAR FORMATO DE EMAIL ======
@@ -247,13 +268,58 @@ function validarEmail(email) {
     return regex.test(email);
 }
 
+// ====== VALIDAR FORMATO DE TELÉFONO ======
+function validarTelefono(telefono) {
+    if (!telefono || telefono.trim() === '') return true; // Permitir vacío
+
+    // Formato básico: solo números, espacios, guiones, paréntesis, mínimo 7 dígitos
+    const regex = /^[\d\s\-\(\)\+]{7,}$/;
+    const soloNumeros = telefono.replace(/[\s\-\(\)\+]/g, '');
+    return regex.test(telefono) && soloNumeros.length >= 7;
+}
+
+// ====== ACTUALIZAR VISTA PREVIA DE OBJETIVOS ======
+function actualizarVistaPreviaObjetivos() {
+    const contenedor = document.getElementById('vistaPreviaObjetivos');
+    const objetivosSeleccionados = [];
+
+    // Recopilar objetivos seleccionados
+    if (document.getElementById('objPerderPeso').checked) objetivosSeleccionados.push('Perder peso');
+    if (document.getElementById('objGanarMusculo').checked) objetivosSeleccionados.push('Ganar masa muscular');
+    if (document.getElementById('objTonificar').checked) objetivosSeleccionados.push('Tonificar');
+    if (document.getElementById('objMantener').checked) objetivosSeleccionados.push('Mantener forma');
+    if (document.getElementById('objResistencia').checked) objetivosSeleccionados.push('Mejorar resistencia');
+
+    if (objetivosSeleccionados.length === 0) {
+        contenedor.innerHTML = '<small class="text-muted">Selecciona objetivos arriba para ver la vista previa</small>';
+    } else {
+        contenedor.innerHTML = objetivosSeleccionados.map(objetivo => `
+            <span class="badge bg-primary me-1 mb-1">${objetivo}</span>
+        `).join('');
+    }
+}
+
+// ====== OBTENER OBJETIVOS SELECCIONADOS ======
+function obtenerObjetivosSeleccionados() {
+    const objetivos = [];
+
+    if (document.getElementById('objPerderPeso').checked) objetivos.push('Perder peso');
+    if (document.getElementById('objGanarMusculo').checked) objetivos.push('Ganar masa muscular');
+    if (document.getElementById('objTonificar').checked) objetivos.push('Tonificar');
+    if (document.getElementById('objMantener').checked) objetivos.push('Mantener forma');
+    if (document.getElementById('objResistencia').checked) objetivos.push('Mejorar resistencia');
+
+    return objetivos.join(', ');
+}
+
 // ====== VALIDAR CAMPOS DEL FORMULARIO ======
 function validarFormulario() {
     const nombre = document.getElementById('inputNombre').value.trim();
     const apellido = document.getElementById('inputApellido').value.trim();
     const correo = document.getElementById('inputCorreo').value.trim();
-    const peso = document.getElementById('inputPeso').value;
-    const altura = document.getElementById('inputAltura').value;
+    const telefono = document.getElementById('inputTelefono').value.trim();
+    const peso = document.getElementById('inputPeso').value.trim();
+    const altura = document.getElementById('inputAltura').value.trim();
 
     // Validar campos obligatorios no vacíos
     if (!nombre || !apellido || !correo) {
@@ -267,16 +333,28 @@ function validarFormulario() {
         return false;
     }
 
-    // Validar peso si se ingresa
-    if (peso && (isNaN(peso) || parseFloat(peso) <= 0)) {
-        alert('El peso debe ser un número positivo.');
+    // Validar teléfono si se ingresa
+    if (telefono && !validarTelefono(telefono)) {
+        alert('Por favor ingresa un número de teléfono válido (mínimo 7 dígitos).');
         return false;
     }
 
+    // Validar peso si se ingresa
+    if (peso) {
+        const pesoNum = parseFloat(peso);
+        if (isNaN(pesoNum) || pesoNum <= 0 || pesoNum > 500) {
+            alert('El peso debe ser un número positivo entre 0.1 y 500 kg.');
+            return false;
+        }
+    }
+
     // Validar altura si se ingresa
-    if (altura && (isNaN(altura) || parseFloat(altura) <= 0)) {
-        alert('La altura debe ser un número positivo.');
-        return false;
+    if (altura) {
+        const alturaNum = parseFloat(altura);
+        if (isNaN(alturaNum) || alturaNum <= 0 || alturaNum > 300) {
+            alert('La altura debe ser un número positivo entre 0.1 y 300 cm.');
+            return false;
+        }
     }
 
     return true;
@@ -317,7 +395,7 @@ async function guardarCambiosPerfil() {
     const telefono = document.getElementById('inputTelefono').value.trim();
     const peso = document.getElementById('inputPeso').value;
     const altura = document.getElementById('inputAltura').value;
-    const objetivos = document.getElementById('inputObjetivos').value;
+    const objetivos = obtenerObjetivosSeleccionados();
 
     const nombreCompleto = `${nombre} ${apellido}`;
 
@@ -338,6 +416,8 @@ async function guardarCambiosPerfil() {
             genero: genero || null,
             fecha_nacimiento: fechaNacimiento || null
         };
+
+        console.log('Datos a guardar en usuarios:', datosUsuarioActualizar);
 
         let usuarioData, usuarioError;
 
@@ -373,6 +453,8 @@ async function guardarCambiosPerfil() {
 
         if (usuarioError) throw usuarioError;
 
+        console.log('Datos guardados en usuarios:', usuarioData);
+
         // Actualizar el ID si se creó el usuario
         if (usuarioData && usuarioData[0]) {
             datosUsuario.id = usuarioData[0].id;
@@ -386,6 +468,8 @@ async function guardarCambiosPerfil() {
             altura: altura ? parseFloat(altura) : null,
             objetivos: objetivos || null
         };
+
+        console.log('Datos a guardar en perfiles_usuario:', datosPerfilActualizar);
 
         // Intentar insertar primero
         let perfilData, perfilError;
@@ -417,6 +501,8 @@ async function guardarCambiosPerfil() {
         if (perfilError) {
             console.error('Error al guardar datos de perfil:', perfilError);
             // No lanzamos error aquí porque los datos básicos ya se guardaron
+        } else {
+            console.log('Datos guardados en perfiles_usuario:', perfilData);
         }
 
         // Actualizar datos locales
@@ -475,6 +561,12 @@ function inicializarEventos() {
     // Guardar cambios del perfil
     document.getElementById('botonGuardarPerfil')?.addEventListener('click', async () => {
         await guardarCambiosPerfil();
+    });
+
+    // Actualizar vista previa de objetivos cuando cambian los checkboxes
+    const checkboxesObjetivos = ['objPerderPeso', 'objGanarMusculo', 'objTonificar', 'objMantener', 'objResistencia'];
+    checkboxesObjetivos.forEach(id => {
+        document.getElementById(id)?.addEventListener('change', actualizarVistaPreviaObjetivos);
     });
 
     // Cambiar tema
