@@ -38,7 +38,7 @@ app.use('/api', rutasUsuario);
 
 // === Manejo de errores 404 (AGREGAR ESTO) ===
 app.use((req, res) => {
-  console.log('❌ 404 - Ruta no encontrada:', req.url);
+  console.log('Error 404, ruta no encontrada:', req.url);
   res.status(404).send(`
     <h1>404 - Página no encontrada</h1>
     <p>La ruta <code>${req.url}</code> no existe.</p>
@@ -48,5 +48,5 @@ app.use((req, res) => {
 
 // Iniciar el servidor
 app.listen(PORT, () => {
-  console.log(`Servidor de POWERFIT corriendo en http://localhost:${PORT}`);
+  console.log(`Servidor POWERFIT corriendo en http://localhost:${PORT}`);
 });

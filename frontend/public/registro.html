@@ -18,12 +18,17 @@
 
         <form id="formulario-registro">
             <div class="grupo-input">
-                <label for="nombreCompleto">Nombre completo</label>
-                <input type="text" id="nombreCompleto" name="nombreCompleto" placeholder="Tu nombre" required>
+                <label for="nombreCompleto">Nombres completos</label>
+                <input type="text" id="nombreCompleto" name="nombreCompleto" placeholder="Tus nombres" required>
+            </div>
+
+            <div class="grupo-input">
+                <label for="nombreCompleto">Apellidos completos</label>
+                <input type="text" id="apellidoCompleto" name="apellidoCompleto" placeholder="Tus apellidos" required>
             </div>
 
             <div>
-                <label for="genero">Género:</label>
+                <label for="genero">Género</label>
                 <select id="genero" name="genero" required>
                 <option value="" disabled selected>Selecciona una opción</option>
                 <option value="femenino">Femenino</option>
@@ -32,6 +37,11 @@
                 <option value="prefiero-no-decirlo">Prefiero no decirlo</option>
                 <option value="otro">Otro</option>
                 </select>
+            </div>
+
+            <div class="grupo-input">
+                <label for="fechaNacimiento">Fecha de Nacimiento</label>
+                     <input type="date" id="fechaNacimiento" name="fechaNacimiento" required>
             </div>
 
             <div class="grupo-input">

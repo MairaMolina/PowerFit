@@ -64,9 +64,9 @@ main.contenedor-formulario p {
 
 #formulario-registro select#genero {
     width: 100%;
-    padding: 12px;
+    padding: 15px;
     border: 1px solid #ddd;
-    border-radius: 6px;
+    border-radius: 7px;
     box-sizing: border-box;
     font-size: 1rem;
     background-color: #fff;
@@ -82,12 +82,27 @@ main.contenedor-formulario p {
     box-shadow: 0 0 5px rgba(0, 119, 204, 0.5);
 }
 
+/* selector para LA Fecha de Nacimiento */
+.grupo-input input[type="date"] {
+    width: 100%;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box; 
+    font-size: 1rem;
+    background-color: #fff;
+    color: #333;
+    /* espaciado interno del icono de calendario */
+    line-height: normal; 
+    cursor: pointer;
+}
 
 .grupo-input input[type="text"],
 .grupo-input input[type="email"],
+.grupo-input input[type="date"]
 .grupo-input input[type="password"] {
     width: 100%;
-    padding: 12px;
+    padding: 17px;
     border: 1px solid #ddd;
     border-radius: 6px;
     box-sizing: border-box; /* Asegura que el padding no aumente el ancho */
