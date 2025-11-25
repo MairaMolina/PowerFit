@@ -1,0 +1,322 @@
+/* --- Estilos para centrar el formulario --- */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f7f7f7;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+main.contenedor-formulario {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.logo-formulario img {
+    height: 60px;
+    /* Tamaño del logo en el formulario */
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 1.8rem;
+    color: #333;
+    margin: 10px 0;
+}
+
+main.contenedor-formulario>p {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+/* --- Estilos del formulario --- */
+#formulario-login {
+    background-color: white;
+    padding: 50px 55px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    text-align: left;
+    max-width: 400px;
+    /* Ancho máximo del formulario */
+    box-sizing: border-box;
+}
+
+.grupo-input {
+    margin-bottom: 20px;
+}
+
+.grupo-input label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.grupo-input input[type="email"],
+.grupo-input input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+}
+
+.grupo-input input::placeholder {
+    color: #aaa;
+}
+
+/* --- CLAVE: Fila de Opciones (Recordarme / Olvidé) --- */
+.opciones-fila {
+    display: flex;
+    justify-content: space-between;
+    /* <-- Esto los separa */
+    align-items: center;
+    margin-bottom: 25px;
+    font-size: 0.85rem;
+}
+
+.recordarme {
+    display: flex;
+    align-items: center;
+    color: #555;
+}
+
+.recordarme input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.olvidar-contrasena {
+    color: #0077cc;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.olvidar-contrasena:hover {
+    text-decoration: underline;
+}
+
+/* --- Botón y Enlaces --- */
+.boton-primario {
+    background-color: #0077cc;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.boton-primario:hover {
+    background-color: #005f99;
+}
+
+/* --- Estilos para centrar el formulario --- */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f7f7f7;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+main.contenedor-formulario {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.logo-formulario img {
+    height: 60px;
+    /* Tamaño del logo en el formulario */
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 1.8rem;
+    color: #333;
+    margin: 10px 0;
+}
+
+main.contenedor-formulario>p {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+/* --- Estilos del formulario --- */
+#formulario-login {
+    background-color: white;
+    padding: 50px 55px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    text-align: left;
+    max-width: 400px;
+    /* Ancho máximo del formulario */
+    box-sizing: border-box;
+}
+
+.grupo-input {
+    margin-bottom: 20px;
+}
+
+.grupo-input label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.grupo-input input[type="email"],
+.grupo-input input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+}
+
+.grupo-input input::placeholder {
+    color: #aaa;
+}
+
+/* --- CLAVE: Fila de Opciones (Recordarme / Olvidé) --- */
+.opciones-fila {
+    display: flex;
+    justify-content: space-between;
+    /* <-- Esto los separa */
+    align-items: center;
+    margin-bottom: 25px;
+    font-size: 0.85rem;
+}
+
+.recordarme {
+    display: flex;
+    align-items: center;
+    color: #555;
+}
+
+.recordarme input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.olvidar-contrasena {
+    color: #0077cc;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.olvidar-contrasena:hover {
+    text-decoration: underline;
+}
+
+/* --- Botón y Enlaces --- */
+.boton-primario {
+    background-color: #0077cc;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.boton-primario:hover {
+    background-color: #005f99;
+}
+
+.enlace-registro {
+    /* Lo opuesto a la pág. de registro */
+    margin-top: 25px;
+    font-size: 0.9rem;
+}
+
+.enlace-registro a {
+    color: #0077cc;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* --- Footer --- */
+footer {
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    color: #999;
+    font-size: 0.85rem;
+    margin-top: auto;
+}
+
+/* --- Mensajes de Error/Éxito --- */
+#mensaje-contenedor {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    text-align: left;
+    display: none;
+    /* Oculto por defecto */
+}
+
+#mensaje-contenedor.mensaje-error {
+    display: block;
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #ffcdd2;
+}
+
+#mensaje-contenedor.mensaje-exito {
+    display: block;
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+}
+
+.mensaje-oculto {
+    display: none;
+}
+
+/* --- Input con Icono (Ojo) --- */
+.input-con-icono {
+    position: relative;
+    width: 100%;
+}
+
+.input-con-icono input {
+    width: 100%;
+    padding-right: 40px;
+    /* Espacio para el icono */
+}
+
+.icono-ojo {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.icono-ojo:hover {
+    color: #0077cc;
+}

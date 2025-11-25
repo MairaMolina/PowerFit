@@ -1,0 +1,636 @@
+/* registro */
+
+body {
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main.contenedor-formulario {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.logo-formulario img {
+    height: 60px;
+    margin-bottom: 20px;
+}
+
+main.contenedor-formulario h2 {
+    color: black;
+    margin-bottom: 10px;
+}
+
+main.contenedor-formulario p {
+    color: black;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* Estilos para mensajes de error y éxito */
+#mensaje-contenedor {
+    width: 100%;
+    max-width: 400px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: slideDown 0.3s ease-out;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#mensaje-contenedor::before {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 1.2rem;
+}
+
+#mensaje-contenedor.mensaje-error {
+    background-color: #fee;
+    border-left: 4px solid #dc3545;
+    color: #721c24;
+}
+
+#mensaje-contenedor.mensaje-error::before {
+    content: "\f06a";
+    color: #dc3545;
+}
+
+#mensaje-contenedor.mensaje-exito {
+    background-color: #d4edda;
+    border-left: 4px solid #28a745;
+    color: #155724;
+}
+
+#mensaje-contenedor.mensaje-exito::before {
+    content: "\f058";
+    color: #28a745;
+}
+
+#mensaje-contenedor.mensaje-oculto {
+    display: none;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#formulario-registro {
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 12px 30px #0077cc;
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+}
+
+.grupo-input {
+    margin-bottom: 20px;
+}
+
+.grupo-input label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: black;
+}
+
+/* campo del género */
+#formulario-registro label[for="genero"] {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: black;
+}
+
+#formulario-registro select#genero {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    background-color: #fff;
+    color: #333;
+    appearance: none;
+    cursor: pointer;
+}
+
+#formulario-registro select#genero:focus {
+    border-color: #0077cc;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 119, 204, 0.5);
+}
+
+/* Inputs generales */
+.grupo-input input[type="text"],
+.grupo-input input[type="email"],
+.grupo-input input[type="password"] {
+    width: 100%;
+    padding: 17px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+/* Contenedor para input con icono de ojo */
+.input-con-icono {
+    position: relative;
+    width: 100%;
+}
+
+.input-con-icono input {
+    width: 100%;
+    padding-right: 45px;
+}
+
+.icono-ojo {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.icono-ojo:hover {
+    color: #0077cc;
+}
+
+/* Lista de requisitos de contraseña */
+.lista-requisitos {
+    list-style-type: none;
+    padding-left: 10px;
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
+.lista-requisitos .cumplido {
+    color: green;
+}
+
+.lista-requisitos .no-cumplido {
+    color: red;
+}
+
+.grupo-input input[type="text"]::placeholder,
+.grupo-input input[type="email"]::placeholder {
+    color: #aaa;
+}
+
+.aceptar-terminos {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.aceptar-terminos input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.aceptar-terminos label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.aceptar-terminos a {
+    color: #0077cc;
+    text-decoration: none;
+}
+
+.aceptar-terminos a:hover {
+    text-decoration: underline;
+}
+
+.boton-primario {
+    background-color: #0077cc;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.boton-primario:hover {
+    background-color: #005f99;
+}
+
+.barra-navegacion .boton.active {
+    background-color: #005f99;
+}
+
+.enlace-login {
+    margin-top: 25px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.enlace-login a {
+    color: #0077cc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.enlace-login a:hover {
+    text-decoration: underline;
+}
+
+footer {
+    background-color: white;
+    color: #333;
+    text-align: center;
+    padding: 15px;
+    margin-top: auto;
+    fill: white;
+    padding: 10px;
+}
+
+.flatpickr-months .flatpickr-prev-month:hover,
+.flatpickr-months .flatpickr-next-month:hover {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+}
+
+/* Días de la semana */
+.flatpickr-weekdays {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 10px 0;
+}
+
+.flatpickr-weekday {
+    color: #666;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+/* Días del calendario */
+.flatpickr-days {
+    background-color: white;
+}
+
+.flatpickr-day {
+    color: #333;
+    border-radius: 8px;
+    margin: 2px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.flatpickr-day:hover:not(.flatpickr-disabled):not(.selected) {
+    background-color: #e6f2ff;
+    border-color: #0077cc;
+    color: #0077cc;
+    transform: scale(1.05);
+}
+
+/* Día seleccionado */
+.flatpickr-day.selected,
+.flatpickr-day.selected:hover {
+    background: linear-gradient(135deg, #0077cc 0%, #005fa3 100%);
+    border-color: #0077cc;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 119, 204, 0.3);
+}
+
+/* Día de hoy */
+.flatpickr-day.today {
+    border-color: #0077cc;
+    color: #0077cc;
+    font-weight: 600;
+}
+
+.flatpickr-day.today:hover {
+    background-color: #e6f2ff;
+    color: #0077cc;
+}
+
+/* Días deshabilitados */
+.flatpickr-day.flatpickr-disabled,
+.flatpickr-day.prevMonthDay,
+.flatpickr-day.nextMonthDay {
+    color: #ccc;
+}
+
+.grupo-input input[type="password"] {
+    width: 100%;
+    padding: 17px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+/* Contenedor para input con icono de ojo */
+.input-con-icono {
+    position: relative;
+    width: 100%;
+}
+
+.input-con-icono input {
+    width: 100%;
+    padding-right: 45px;
+}
+
+.icono-ojo {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.icono-ojo:hover {
+    color: #0077cc;
+}
+
+/* Lista de requisitos de contraseña */
+.lista-requisitos {
+    list-style-type: none;
+    padding-left: 10px;
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
+.lista-requisitos .cumplido {
+    color: green;
+}
+
+.lista-requisitos .no-cumplido {
+    color: red;
+}
+
+.grupo-input input[type="text"]::placeholder,
+.grupo-input input[type="email"]::placeholder {
+    color: #aaa;
+}
+
+.aceptar-terminos {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.aceptar-terminos input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.aceptar-terminos label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.aceptar-terminos a {
+    color: #0077cc;
+    text-decoration: none;
+}
+
+.aceptar-terminos a:hover {
+    text-decoration: underline;
+}
+
+.boton-primario {
+    background-color: #0077cc;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.boton-primario:hover {
+    background-color: #005f99;
+}
+
+.barra-navegacion .boton.active {
+    background-color: #005f99;
+}
+
+.enlace-login {
+    margin-top: 25px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.enlace-login a {
+    color: #0077cc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.enlace-login a:hover {
+    text-decoration: underline;
+}
+
+footer {
+    background-color: white;
+    color: #333;
+    text-align: center;
+    padding: 15px;
+    margin-top: auto;
+    fill: white;
+    padding: 10px;
+}
+
+.flatpickr-months .flatpickr-prev-month:hover,
+.flatpickr-months .flatpickr-next-month:hover {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+}
+
+/* Días de la semana */
+.flatpickr-weekdays {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 10px 0;
+}
+
+.flatpickr-weekday {
+    color: #666;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+/* Días del calendario */
+.flatpickr-days {
+    background-color: white;
+}
+
+.flatpickr-day {
+    color: #333;
+    border-radius: 8px;
+    margin: 2px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.flatpickr-day:hover:not(.flatpickr-disabled):not(.selected) {
+    background-color: #e6f2ff;
+    border-color: #0077cc;
+    color: #0077cc;
+    transform: scale(1.05);
+}
+
+/* Día seleccionado */
+.flatpickr-day.selected,
+.flatpickr-day.selected:hover {
+    background: linear-gradient(135deg, #0077cc 0%, #005fa3 100%);
+    border-color: #0077cc;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 119, 204, 0.3);
+}
+
+/* Día de hoy */
+.flatpickr-day.today {
+    border-color: #0077cc;
+    color: #0077cc;
+    font-weight: 600;
+}
+
+.flatpickr-day.today:hover {
+    background-color: #e6f2ff;
+    color: #0077cc;
+}
+
+/* Días deshabilitados */
+.flatpickr-day.flatpickr-disabled,
+.flatpickr-day.prevMonthDay,
+.flatpickr-day.nextMonthDay {
+    color: #ccc;
+}
+
+/* Flecha del calendario */
+.flatpickr-calendar.arrowTop:before {
+    border-bottom-color: #0077cc;
+}
+
+.flatpickr-calendar.arrowTop:after {
+    border-bottom-color: #0077cc;
+}
+
+/* --- Estilos para Multi-paso y Nuevos Campos --- */
+
+.paso-formulario {
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+.paso-oculto {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Grupo doble para peso y altura */
+.grupo-doble {
+    display: flex;
+    gap: 15px;
+}
+
+.grupo-doble .grupo-input {
+    flex: 1;
+}
+
+/* Checkboxes y Radios personalizados */
+.opciones-checkbox,
+.opciones-radio {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.opciones-checkbox label,
+.opciones-radio label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: normal;
+    cursor: pointer;
+    padding: 8px;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.opciones-checkbox label:hover,
+.opciones-radio label:hover {
+    background-color: #f9f9f9;
+}
+
+.opciones-checkbox input[type="checkbox"],
+.opciones-radio input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #0077cc;
+}
+
+/* Botones de navegación */
+.botones-navegacion {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.boton-secundario {
+    background-color: #6c757d;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    flex: 1;
+    transition: background-color 0.3s ease;
+}
+
+.boton-secundario:hover {
+    background-color: #5a6268;
+}
+
+/* Ajuste para que el botón primario comparta espacio si está en grupo */
+.botones-navegacion .boton-primario {
+    flex: 2;
+}

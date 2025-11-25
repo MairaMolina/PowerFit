@@ -1,35 +1,44 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Power Fit - Iniciar Sesión</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="../src/estilos/generales.css">
-    <link rel="stylesheet" href="../src/estilos/inicio_sesion.css">
+    <link rel="stylesheet" href="./css/inicio_sesion.css">
 </head>
+
 <body>
 
     <main class="contenedor-formulario">
-        
+
         <div class="logo-formulario">
-            <img src="./recursos/imagenes/logo_powerfit.png" alt="Logo Power Fit">
+            <img src="../registrer/images/Logo_powerfit.png" alt="Logo Power Fit">
         </div>
 
         <h2>Iniciar Sesión</h2>
         <p>Ingresa tus credenciales para acceder a tu cuenta</p>
 
+        <!-- Contenedor de mensajes -->
+        <div id="mensaje-contenedor" class="mensaje-oculto"></div>
+
         <form id="formulario-login" novalidate>
-            
+
             <div class="grupo-input">
                 <label for="correoElectronico">Correo electrónico</label>
-                <input type="email" id="correoElectronico" name="correoElectronico" placeholder="nombre@ejemplo.com" required>
+                <input type="email" id="correoElectronico" name="correoElectronico" placeholder="nombre@ejemplo.com"
+                    required>
             </div>
-            
+
             <div class="grupo-input">
                 <label for="contrasena">Contraseña</label>
-                <input type="password" id="contrasena" name="contrasena" required>
+                <div class="input-con-icono">
+                    <input type="password" id="contrasena" name="contrasena" required>
+                    <i class="fa fa-eye icono-ojo" id="toggle-contrasena"></i>
+                </div>
+            </div>
 
             <div class="opciones-fila">
                 <div class="recordarme">
@@ -39,18 +48,19 @@
                 <a href="reset_password.html" class="olvidar-contrasena">¿Olvidaste tu contraseña?</a>
             </div>
 
-            <button type="submit" id="btn-iniciar-sesion" href="dashboard_usuario.html"class="boton-primario">Iniciar Sesión</button>
-        
+            <button type="submit" id="btn-iniciar-sesion" class="boton-primario">Iniciar Sesión</button>
+
         </form>
 
-        <p class="enlace-registro">¿No tienes una cuenta? <a href="registro.html">Crear cuenta</a></p>
-    
+        <p class="enlace-registro">¿No tienes una cuenta? <a href="../registrer/registro.html">Crear cuenta</a></p>
+
     </main>
 
     <footer>
         <p>© 2025 Power Fit</p>
     </footer>
 
-    <script type="module" src="../src/paginas/inicio_sesion.js"></script>
+    <script type="module" src="./scripts/inicio_sesion.js"></script>
 </body>
+
 </html>

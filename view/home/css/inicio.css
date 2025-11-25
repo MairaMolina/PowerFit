@@ -72,7 +72,7 @@ body {
 /* ====== HERO (SECCIÓN PRINCIPAL) ====== */
 .hero {
   /* Imagen como fondo */
-  background-image: url('/recursos/imagenes/fondo_inicio.jpeg');
+  background-image: url('../images/fondo_inicio.jpeg');
   background-size: cover; /* Ajusta la imagen a la altura y anchura de la sección */
   background-position: center;
   background-repeat: no-repeat;
@@ -90,7 +90,7 @@ body {
   left: -5%;
   width: 110%;
   height: 110%;
-  background-image: url('/recursos/imagenes/fondo_inicio.jpeg');
+  background-image: url('../images/fondo_inicio.jpeg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

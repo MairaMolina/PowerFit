@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Fit - Registro</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <!-- Flatpickr - Date Picker -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="/view/registrer/css/registro.css">
+</head>
+
+<body>
+
+    <main class="contenedor-formulario">
+        <div class="logo-formulario">
+            <img src="./images/Logo_powerfit.png" alt="Logo Power Fit">
+        </div>
+        <h2>Crear Cuenta</h2>
+        <p>Regístrate para acceder a todas las funcionalidades</p>
+
+        <!-- Contenedor de mensajes -->
+        <div id="mensaje-contenedor" class="mensaje-oculto"></div>
+
+        <form id="formulario-registro">
+            <!-- PASO 1: Información de Cuenta -->
+            <div id="paso-1" class="paso-formulario">
+                <h3>Paso 1: Información Personal</h3>
+                <div class="grupo-input">
+                    <label for="nombreCompleto">Nombres completos</label>
+                    <input type="text" id="nombreCompleto" name="nombreCompleto" placeholder="Tus nombres" required>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="apellidoCompleto">Apellidos completos</label>
+                    <input type="text" id="apellidoCompleto" name="apellidoCompleto" placeholder="Tus apellidos"
+                        required>
+                </div>
+
+                <div>
+                    <label for="genero">Género</label>
+                    <select id="genero" name="genero" required>
+                        <option value="" disabled selected>Selecciona una opción</option>
+                        <option value="femenino">Femenino</option>
+                        <option value="masculino">Masculino</option>
+                        <option value="no-binario">No binario</option>
+                        <option value="prefiero-no-decirlo">Prefiero no decirlo</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="fechaNacimiento">Fecha de Nacimiento</label>
+                    <input type="text" id="fechaNacimiento" name="fechaNacimiento" placeholder="Selecciona tu fecha"
+                        required>
+                </div>
+
+                <div class="grupo-input">
+                    <label for="correoElectronico">Correo electrónico</label>
+                    <input type="email" id="correoElectronico" name="correoElectronico" placeholder="nombre@ejemplo.com"
+                        required>
+                </div>
+                <div class="grupo-input">
+                    <label for="contrasena">Contraseña</label>
+                    <div class="input-con-icono">
+                        <input type="password" id="contrasena" name="contrasena" required>
+                        <i class="fa fa-eye icono-ojo" id="toggle-contrasena"></i>
+                    </div>
+                    <ul id="requisitos-contrasena-lista" class="lista-requisitos">
+                    </ul>
+                </div>
+                <div class="grupo-input">
+                    <label for="confirmarContrasena">Confirmar contraseña</label>
+                    <div class="input-con-icono">
+                        <input type="password" id="confirmarContrasena" name="confirmarContrasena" required>
+                        <i class="fa fa-eye icono-ojo" id="toggle-confirmar"></i>
+                    </div>
+                </div>
+
+                <button type="button" id="btn-siguiente" class="boton-primario">Siguiente</button>
+            </div>
+
+            <!-- PASO 2: Información Física y Objetivos -->
+            <div id="paso-2" class="paso-formulario paso-oculto">
+                <h3>Paso 2: Perfil Fitness</h3>
+
+                <!-- 1. Información Física -->
+                <div class="grupo-doble">
+                    <div class="grupo-input">
+                        <label for="peso">Peso (kg)</label>
+                        <input type="number" id="peso" name="peso" placeholder="Ej: 70" step="0.1" min="20" max="300">
+                    </div>
+                    <div class="grupo-input">
+                        <label for="altura">Altura (cm)</label>
+                        <input type="number" id="altura" name="altura" placeholder="Ej: 175" step="1" min="50"
+                            max="250">
+                    </div>
+                </div>
+
+                <!-- 2. Objetivos -->
+                <div class="grupo-input">
+                    <label>¿Cuál es tu objetivo principal?</label>
+                    <div class="opciones-checkbox">
+                        <label><input type="checkbox" name="objetivos" value="ganar_musculo"> Ganar músculo</label>
+                        <label><input type="checkbox" name="objetivos" value="perder_peso"> Perder peso</label>
+                        <label><input type="checkbox" name="objetivos" value="mejorar_salud"> Mejorar salud</label>
+                        <label><input type="checkbox" name="objetivos" value="aumentar_resistencia"> Aumentar
+                            resistencia</label>
+                        <label><input type="checkbox" name="objetivos" value="otro"> Otro</label>
+                    </div>
+                </div>
+
+                <!-- 3. Nivel de Actividad -->
+                <div class="grupo-input">
+                    <label for="nivelActividad">¿Cuántas veces a la semana te ejercitas?</label>
+                    <select id="nivelActividad" name="nivelActividad">
+                        <option value="" disabled selected>Selecciona una opción</option>
+                        <option value="sedentario">0 veces (Sedentario)</option>
+                        <option value="ligero">1-2 veces</option>
+                        <option value="moderado">3-4 veces</option>
+                        <option value="activo">5 o más veces</option>
+                    </select>
+                </div>
+
+                <!-- 4. Preferencias -->
+                <div class="grupo-input">
+                    <label>¿Qué tipo de ejercicio te gusta?</label>
+                    <div class="opciones-checkbox">
+                        <label><input type="checkbox" name="preferencias" value="cardio"> Cardio</label>
+                        <label><input type="checkbox" name="preferencias" value="fuerza"> Fuerza / Pesas</label>
+                        <label><input type="checkbox" name="preferencias" value="yoga"> Yoga / Pilates</label>
+                        <label><input type="checkbox" name="preferencias" value="otro"> Otro</label>
+                    </div>
+                </div>
+
+                <!-- 5. Dieta -->
+                <div class="grupo-input">
+                    <label>¿Incluyes alimentos saludables en tu dieta?</label>
+                    <div class="opciones-radio">
+                        <label><input type="radio" name="dietaSaludable" value="si"> Sí</label>
+                        <label><input type="radio" name="dietaSaludable" value="no"> No</label>
+                    </div>
+                </div>
+
+                <div class="aceptar-terminos">
+                    <input type="checkbox" id="aceptarTerminos" name="aceptarTerminos" required>
+                    <label for="aceptarTerminos">Acepto los <a href="#">términos y condiciones</a></label>
+                </div>
+
+                <div class="botones-navegacion">
+                    <button type="button" id="btn-atras" class="boton-secundario">Atrás</button>
+                    <button type="submit" id="btn-crear-cuenta" class="boton-primario">Crear Cuenta</button>
+                </div>
+            </div>
+        </form>
+
+        <p class="enlace-login">¿Ya tienes una cuenta? <a href="../login/iniciar_sesion.html">Iniciar
+                sesión</a></p>
+    </main>
+
+    <footer>
+        <p>© 2025 Power Fit</p>
+    </footer>
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+    <script type="module" src="./scripts/registro.js"></script>
+
+</body>
+
+</html>
