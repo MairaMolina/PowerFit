@@ -107,10 +107,10 @@ document.addEventListener('DOMContentLoaded', () => {
       // 5. ¡ÉXITO!
       mostrarMensaje("¡Bienvenido! Redirigiendo...", "exito");
 
-      // Redirigimos al home
+      // Redirigimos al dashboard
       setTimeout(() => {
-        window.location.href = '../../../frontend/public/dashboard_usuario.html';
-      }, 1500);
+        window.location.href = '../../view/dashboard/dashboard_usuario.html';
+      }, 800);
     }
   });
 });

@@ -17,9 +17,12 @@ app.use(express.json());
 // 3. Static: Servir archivos estáticos del frontend
 const publicPath = path.join(process.cwd(), 'frontend/public');
 const srcPath = path.join(process.cwd(), 'frontend/src');
+const viewPath = path.join(process.cwd(), 'view');
 console.log('Public path:', publicPath);
 console.log('Src path:', srcPath);
+console.log('View path:', viewPath);
 app.use('/src', express.static(srcPath));
+app.use('/view', express.static(viewPath));
 app.use(express.static(publicPath));
 
 // === Rutas ===

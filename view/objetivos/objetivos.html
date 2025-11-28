@@ -10,37 +10,62 @@
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
-    <link rel="stylesheet" href="../src/estilos/dashboard_usuario.css"> 
-    <link rel="stylesheet" href="../src/estilos/objetivos.css"> 
+    <link rel="stylesheet" href="../dashboard/css/dashboard_usuario.css"> 
+    <link rel="stylesheet" href="../objetivos/css/objetivos.css"> 
 </head>
 <body>
+    <!-- SIDEBAR LATERAL IZQUIERDO -->
     <aside class="sidebar">
+        <!-- Logo -->
         <div class="logo-sidebar">
             <img src="../../view/registrer/images/Logo_powerfit.png" alt="Power Fit Logo">
         </div>
 
+        <!-- Menú de navegación -->
         <nav class="navegacion-sidebar">
             <p class="titulo-menu">Menú Principal</p>
             <ul class="lista-menu">
                 <li class="item-menu">
-                    <a href="./dashboard_usuario.html">
+                    <a href="../dashboard/dashboard_usuario.html">
                         <i class="fas fa-home"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
+
                 <li class="item-menu">
-                    <a href="./perfil.html">
+                    <a href="../perfil/perfil.html">
                         <i class="fas fa-user"></i>
                         <span>Perfil</span>
                     </a>
                 </li>
+
                 <li class="item-menu activo">
-                    <a href="objetivos.html">
+                    <a href="./objetivos.html">
                         <i class="fas fa-bullseye"></i>
                         <span>Objetivos</span>
                     </a>
                 </li>
-                </ul>
+
+                <li class="item-menu">
+                    <a href="mis-rutinas.html">
+                        <i class="fas fa-dumbbell"></i>
+                        <span>Mis Rutinas</span>
+                    </a>
+                </li>
+                <li class="item-menu">
+                    <a href="explorar-rutinas.html">
+                        <i class="fas fa-compass"></i>
+                        <span>Explorar Rutinas</span>
+                    </a>
+                </li>
+                
+                <li class="item-menu">
+                    <a href="configuracion.html">
+                        <i class="fas fa-cog"></i>
+                        <span>Configuración</span>
+                    </a>
+                </li>
+            </ul>
         </nav>
     </aside>
 
