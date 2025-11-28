@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,12 +10,13 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="../perfil/css/perfil.css">
 </head>
+
 <body>
     <!-- SIDEBAR LATERAL IZQUIERDO -->
     <aside class="sidebar">
         <!-- Logo -->
         <div class="logo-sidebar">
-            <img src="../../view/registrer/images/Logo_powerfit.png"alt="Power Fit Logo">
+            <img src="../../view/registrer/images/Logo_powerfit.png" alt="Power Fit Logo">
         </div>
 
         <!-- Menú de navegación -->
@@ -29,7 +31,7 @@
                 </li>
 
                 <li class="item-menu activo">
-                    <a href="/perfil.html">
+                    <a href="../perfil/perfil.html">
                         <i class="fas fa-user"></i>
                         <span>Mi Perfil</span>
                     </a>
@@ -43,7 +45,7 @@
                 </li>
 
                 <li class="item-menu">
-                    <a href="/mis-rutinas.html">
+                    <a href="../rutinas/rutinas.html">
                         <i class="fas fa-dumbbell"></i>
                         <span>Mis Rutinas</span>
                     </a>
@@ -54,7 +56,7 @@
                         <span>Explorar Rutinas</span>
                     </a>
                 </li>
-                
+
                 <li class="item-menu">
                     <a href="/configuracion.html">
                         <i class="fas fa-cog"></i>
@@ -86,7 +88,8 @@
 
                             <!-- Perfil de usuario -->
                             <div class="dropdown perfil-dropdown">
-                                <button class="perfil-usuario" id="dropdownPerfil" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button class="perfil-usuario" id="dropdownPerfil" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
                                     <div class="avatar-usuario">
                                         <span id="iniciales">PF</span>
                                     </div>
@@ -99,15 +102,17 @@
 
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownPerfil">
                                     <li><a class="dropdown-item" href="/perfil.html">
-                                        <i class="fas fa-user"></i> Mi Perfil
-                                    </a></li>
+                                            <i class="fas fa-user"></i> Mi Perfil
+                                        </a></li>
                                     <li><a class="dropdown-item" href="/configuracion.html">
-                                        <i class="fas fa-cog"></i> Configuración de Cuenta
-                                    </a></li>
-                                    <li><hr class="dropdown-divider"></li>
+                                            <i class="fas fa-cog"></i> Configuración de Cuenta
+                                        </a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
                                     <li><a class="dropdown-item text-danger" href="#" id="botonCerrarSesion">
-                                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                                    </a></li>
+                                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                                        </a></li>
                                 </ul>
                             </div>
                         </div>
@@ -130,7 +135,8 @@
                         </div>
                         <h3 id="nombreCompletoPerfil">Cargando...</h3>
                         <p class="correo-perfil" id="correoPerfil">Cargando...</p>
-                        <button class="btn btn-outline-primary btn-sm mt-3" id="botonEditarPerfil" data-bs-toggle="modal" data-bs-target="#modalEditarPerfil">
+                        <button class="btn btn-outline-primary btn-sm mt-3" id="botonEditarPerfil"
+                            data-bs-toggle="modal" data-bs-target="#modalEditarPerfil">
                             <i class="fas fa-edit"></i> Editar Perfil
                         </button>
                     </div>
@@ -303,47 +309,55 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Teléfono</label>
-                                <input type="tel" class="form-control" id="inputTelefono" placeholder="Ej: +57 300 123 4567">
+                                <input type="tel" class="form-control" id="inputTelefono"
+                                    placeholder="Ej: +57 300 123 4567">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Peso (kg)</label>
-                                <input type="number" class="form-control" id="inputPeso" step="0.1" min="0" placeholder="Ej: 70.5">
+                                <input type="number" class="form-control" id="inputPeso" step="0.1" min="0"
+                                    placeholder="Ej: 70.5">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Altura (cm)</label>
-                                <input type="number" class="form-control" id="inputAltura" step="0.1" min="0" placeholder="Ej: 175.0">
+                                <input type="number" class="form-control" id="inputAltura" step="0.1" min="0"
+                                    placeholder="Ej: 175.0">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Objetivos Fitness</label>
                                 <div class="objetivos-container">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="Perder peso" id="objPerderPeso">
+                                        <input class="form-check-input" type="checkbox" value="Perder peso"
+                                            id="objPerderPeso">
                                         <label class="form-check-label" for="objPerderPeso">
                                             Perder peso
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="Ganar masa muscular" id="objGanarMusculo">
+                                        <input class="form-check-input" type="checkbox" value="Ganar masa muscular"
+                                            id="objGanarMusculo">
                                         <label class="form-check-label" for="objGanarMusculo">
                                             Ganar masa muscular
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="Tonificar" id="objTonificar">
+                                        <input class="form-check-input" type="checkbox" value="Tonificar"
+                                            id="objTonificar">
                                         <label class="form-check-label" for="objTonificar">
                                             Tonificar
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="Mantener forma" id="objMantener">
+                                        <input class="form-check-input" type="checkbox" value="Mantener forma"
+                                            id="objMantener">
                                         <label class="form-check-label" for="objMantener">
                                             Mantener forma
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="Mejorar resistencia" id="objResistencia">
+                                        <input class="form-check-input" type="checkbox" value="Mejorar resistencia"
+                                            id="objResistencia">
                                         <label class="form-check-label" for="objResistencia">
                                             Mejorar resistencia
                                         </label>
@@ -402,4 +416,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="/src/paginas/perfil.js"></script>
 </body>
+
 </html>

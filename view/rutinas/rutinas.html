@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Fit - Mis Rutinas</title>    
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <link rel="stylesheet" href="../dashboard/css/dashboard_usuario.css">
+    <link rel="stylesheet" href="./css/rutinas.css">
+</head>
+
+<body>
+    <!-- SIDEBAR LATERAL IZQUIERDO -->
+    <aside class="sidebar">
+        <!-- Logo -->
+        <div class="logo-sidebar">
+            <img src="../../view/registrer/images/Logo_powerfit.png" alt="Power Fit Logo">
+        </div>
+
+        <!-- Menú de navegación -->
+        <nav class="navegacion-sidebar">
+            <p class="titulo-menu">Menú Principal</p>
+            <ul class="lista-menu">
+                <li class="item-menu">
+                    <a href="../dashboard/dashboard_usuario.html">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="item-menu">
+                    <a href="../perfil/perfil.html">
+                        <i class="fas fa-user"></i>
+                        <span>Perfil</span>
+                    </a>
+                </li>
+
+                <li class="item-menu">
+                    <a href="../objetivos/objetivos.html">
+                        <i class="fas fa-bullseye"></i>
+                        <span>Objetivos</span>
+                    </a>
+                </li>
+
+                <li class="item-menu activo">
+                    <a href="../rutinas/rutinas.html">
+                        <i class="fas fa-dumbbell"></i>
+                        <span>Mis Rutinas</span>
+                    </a>
+                </li>
+                <li class="item-menu">
+                    <a href="explorar-rutinas.html">
+                        <i class="fas fa-compass"></i>
+                        <span>Explorar Rutinas</span>
+                    </a>
+                </li>
+
+                <li class="item-menu">
+                    <a href="configuracion.html">
+                        <i class="fas fa-cog"></i>
+                        <span>Configuración</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="contenido-principal">
+
+        <header class="header-dashboard">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h1 class="titulo-pagina">Mis Rutinas Personalizadas</h1>
+                        <p class="subtitulo-pagina">Rutinas diseñadas especialmente para ti según tus objetivos.</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="container-fluid contenedor-dashboard pt-4">
+            <div class="row">
+
+                <div class="col-lg-8">
+                    <div class="tarjeta-listado mb-4">
+                        <div class="header-seccion d-flex justify-content-between align-items-center">
+                            <h2><i class="fas fa-dumbbell"></i> Rutinas Recomendadas</h2>
+                        </div>
+
+                        <p class="text-muted mb-3">
+                            <i class="fas fa-lightbulb"></i> Rutinas personalizadas basadas en tu perfil (IMC,
+                            nivel de actividad y preferencias). Cada rutina incluye 3 niveles de progresión.
+                        </p>
+
+                        <!-- Filtros por objetivo -->
+                        <div class="filtros-rutinas mb-4">
+                            <button class="btn-filtro active" data-filter="todos">
+                                <i class="fas fa-th"></i> Todas
+                            </button>
+                            <button class="btn-filtro" data-filter="perder_peso">
+                                🎯 Perder peso
+                            </button>
+                            <button class="btn-filtro" data-filter="ganar_musculo">
+                                💪 Ganar músculo
+                            </button>
+                            <button class="btn-filtro" data-filter="mejorar_salud">
+                                ❤️ Mejorar salud
+                            </button>
+                            <button class="btn-filtro" data-filter="resistencia">
+                                🏃 Resistencia
+                            </button>
+                        </div>
+
+                        <div id="listaRutinasPersonalizadas" class="mt-3">
+                            <div class="text-center py-4">
+                                <i class="fas fa-spinner fa-spin"></i> Cargando rutinas...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+
+                    <div class="row resumen-estadisticas mb-4">
+                        <div class="col-md-6 col-lg-12 mb-3">
+                            <div style="background-color: #e3f2fd;">
+                                <p class="valor-resumen" id="nivelActual">1</p>
+                                <p class="descripcion-resumen">Nivel Actual</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-12 mb-3">
+                            <div style="background-color: #f3e5f5;">
+                                <p class="valor-resumen" id="rutinasDisponibles">0</p>
+                                <p class="descripcion-resumen">Rutinas Disponibles</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta-proximos">
+                        <h4><i class="fas fa-star"></i> Tu Progresión</h4>
+                        <div id="infoProgresion">
+                            <p class="text-secondary">Completa tus objetivos semanales para desbloquear el siguiente nivel.</p>
+                        </div>
+                    </div>
+
+                    <div class="tarjeta-motivacion mt-4">
+                        <h4 class="text-primary"><i class="fas fa-bolt"></i> Tip de Entrenamiento</h4>
+                        <p>Aumenta la intensidad gradualmente (+5-10% semanal) para evitar lesiones y mejorar resultados. 💪</p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="./scripts/rutinas.js"></script>
+</body>
+
+</html>

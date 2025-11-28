@@ -1,8 +1,8 @@
 // ====== CONFIGURACIÓN DE SUPABASE ======
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-const supabaseUrl = 'https://iinbzpqjxpciivcomruk.supabase.co'; 
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpbmJ6cHFqeHBjaWl2Y29tcnVrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjI4NjQzMywiZXhwIjoyMDc3ODYyNDMzfQ.ZrgGyJUf50WzlIONM_t0-qmufnixDdgb8xUaAtsGpuI'; 
+const supabaseUrl = 'https://iinbzpqjxpciivcomruk.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpbmJ6cHFqeHBjaWl2Y29tcnVrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjI4NjQzMywiZXhwIjoyMDc3ODYyNDMzfQ.ZrgGyJUf50WzlIONM_t0-qmufnixDdgb8xUaAtsGpuI';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // ====== VARIABLES GLOBALES ======
@@ -20,7 +20,7 @@ async function verificarSesion() {
     try {
         // 1. Intenta obtener la sesión del localStorage (guardada por login)
         const sesionGuardada = localStorage.getItem('supabase.session');
-        
+
         if (!sesionGuardada) {
             // Si no hay sesión en localStorage, redirigir a login
             window.location.href = '/iniciar_sesion.html';
@@ -29,7 +29,7 @@ async function verificarSesion() {
 
         // 2. Parsear la sesión guardada
         const session = JSON.parse(sesionGuardada);
-        
+
         // 3. Validar que tenga los datos necesarios
         if (!session || !session.user || !session.access_token) {
             window.location.href = '/iniciar_sesion.html';
@@ -38,7 +38,7 @@ async function verificarSesion() {
 
         // 4. Establecer el usuario actual
         usuarioActual = session.user;
-        
+
         // 5. Cargar datos del usuario y dashboard
         await cargarDatosUsuario();
         await cargarDashboard();
@@ -83,7 +83,7 @@ function actualizarInformacionUsuario() {
     document.getElementById('nombreUsuarioHeader').textContent = nombreCompleto;
     document.getElementById('nombreUsuario').textContent = nombreCompleto;
     document.getElementById('nombreUsuarioSaludo').textContent = nombreCompleto.split(' ')[0];
-    
+
     // Actualizar iniciales
     document.getElementById('iniciales').textContent = iniciales;
 }
@@ -112,7 +112,7 @@ async function cargarEstadisticas() {
     try {
         // Por ahora valores estáticos ya que no tienes tabla de entrenamientos completados
         // Estos se calcularían cuando implementes el seguimiento de entrenamientos
-        
+
         document.getElementById('rachaActual').textContent = '0 días';
         document.getElementById('entrenamientosTotales').textContent = '0';
         document.getElementById('metaSemanal').textContent = '0/5';
@@ -147,7 +147,7 @@ async function cargarRutinasRecientes() {
         if (error) throw error;
 
         const lista = document.getElementById('listaEntrenamientosRecientes');
-        
+
         if (!rutinas || rutinas.length === 0) {
             lista.innerHTML = `
                 <div class="text-center py-4">
@@ -161,7 +161,7 @@ async function cargarRutinasRecientes() {
         lista.innerHTML = rutinas.map(r => {
             const fecha = new Date(r.created_at);
             const diasAtras = Math.floor((new Date() - fecha) / (1000 * 60 * 60 * 24));
-            
+
             let textoFecha = '';
             if (diasAtras === 0) textoFecha = 'Hoy';
             else if (diasAtras === 1) textoFecha = 'Ayer';
@@ -296,7 +296,7 @@ function mostrarRutina(rutina) {
 
     lista.innerHTML = ejercicios.slice(0, 3).map((re, index) => {
         const ejercicio = re.ejercicios;
-        
+
         return `
             <div class="ejercicio-item">
                 <div class="numero-ejercicio">${index + 1}</div>
@@ -363,11 +363,11 @@ function calcularEdad(fechaNacimiento) {
     const nacimiento = new Date(fechaNacimiento);
     let edad = hoy.getFullYear() - nacimiento.getFullYear();
     const mes = hoy.getMonth() - nacimiento.getMonth();
-    
+
     if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
         edad--;
     }
-    
+
     return edad;
 }
 
@@ -381,12 +381,12 @@ function inicializarEventos() {
     // Cerrar sesión
     document.getElementById('botonCerrarSesion')?.addEventListener('click', async (e) => {
         e.preventDefault();
-        
+
         if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
             try {
                 // Limpiar la sesión del localStorage
                 localStorage.removeItem('supabase.session');
-                
+
                 // Redirigir a inicio
                 window.location.href = '/iniciar_sesion.html';
             } catch (error) {
@@ -399,7 +399,7 @@ function inicializarEventos() {
     // Cambiar tema
     document.getElementById('botonTema')?.addEventListener('click', () => {
         document.body.classList.toggle('tema-oscuro');
-        
+
         const icono = document.querySelector('#botonTema i');
         if (document.body.classList.contains('tema-oscuro')) {
             icono.classList.remove('fa-moon');

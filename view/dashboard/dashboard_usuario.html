@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Power Fit - Dashboard</title>    
+    <title>Power Fit - Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="/view/dashboard/css/dashboard_usuario.css">
-     </head>
-    <body>
+</head>
+
+<body>
     <!-- SIDEBAR LATERAL IZQUIERDO -->
     <aside class="sidebar">
         <!-- Logo -->
@@ -43,7 +45,7 @@
                 </li>
 
                 <li class="item-menu">
-                    <a href="../mis-rutinas.html">
+                    <a href="../rutinas/rutinas.html">
                         <i class="fas fa-dumbbell"></i>
                         <span>Mis Rutinas</span>
                     </a>
@@ -54,7 +56,7 @@
                         <span>Explorar Rutinas</span>
                     </a>
                 </li>
-                
+
                 <li class="item-menu">
                     <a href="configuracion.html">
                         <i class="fas fa-cog"></i>
@@ -67,14 +69,15 @@
 
     <!-- CONTENIDO PRINCIPAL -->
     <main class="contenido-principal">
-        
+
         <!-- HEADER SUPERIOR -->
         <header class="header-dashboard">
             <div class="container-fluid">
                 <div class="row align-items-center">
                     <div class="col-md-6">
                         <h1 class="titulo-pagina">Dashboard</h1>
-                        <p class="subtitulo-pagina">Bienvenido de vuelta, <span id="nombreUsuarioHeader">Cargando...</span>!</p>
+                        <p class="subtitulo-pagina">Bienvenido de vuelta, <span
+                                id="nombreUsuarioHeader">Cargando...</span>!</p>
                     </div>
 
                     <div class="col-md-6">
@@ -86,7 +89,8 @@
 
                             <!-- Perfil de usuario -->
                             <div class="dropdown perfil-dropdown">
-                                <button class="perfil-usuario" id="dropdownPerfil" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button class="perfil-usuario" id="dropdownPerfil" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
                                     <div class="avatar-usuario">
                                         <span id="iniciales">PF</span>
                                     </div>
@@ -99,15 +103,17 @@
 
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownPerfil">
                                     <li><a class="dropdown-item" href="/perfil.html">
-                                        <i class="fas fa-user"></i> Mi Perfil
-                                    </a></li>
+                                            <i class="fas fa-user"></i> Mi Perfil
+                                        </a></li>
                                     <li><a class="dropdown-item" href="/configuracion.html">
-                                        <i class="fas fa-cog"></i> Configuración de Cuenta
-                                    </a></li>
-                                    <li><hr class="dropdown-divider"></li>
+                                            <i class="fas fa-cog"></i> Configuración de Cuenta
+                                        </a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
                                     <li><a class="dropdown-item text-danger" href="#" id="botonCerrarSesion">
-                                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                                    </a></li>
+                                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                                        </a></li>
                                 </ul>
                             </div>
                         </div>
@@ -119,10 +125,10 @@
         <!-- CONTENIDO DEL DASHBOARD -->
         <div class="container-fluid contenedor-dashboard">
             <div class="row">
-                
+
                 <!-- COLUMNA IZQUIERDA: Estadísticas y contenido principal -->
                 <div class="col-lg-8">
-                    
+
                     <!-- Tarjetas de estadísticas -->
                     <div class="row tarjetas-estadisticas">
                         <div class="col-md-6 col-lg-3 mb-3">
@@ -160,7 +166,8 @@
                                     <span class="titulo-stat">Meta Semanal</span>
                                     <h3 class="valor-stat" id="metaSemanal">0/5</h3>
                                     <div class="progress mt-2" style="height: 6px;">
-                                        <div class="progress-bar bg-success" id="progresoSemanal" role="progressbar" style="width: 0%"></div>
+                                        <div class="progress-bar bg-success" id="progresoSemanal" role="progressbar"
+                                            style="width: 0%"></div>
                                     </div>
                                 </div>
                             </div>
@@ -196,7 +203,8 @@
                             </div>
                         </div>
 
-                        <button class="btn btn-outline-primary w-100 mt-3" onclick="window.location.href='/mis-rutinas.html'">
+                        <button class="btn btn-outline-primary w-100 mt-3"
+                            onclick="window.location.href='/mis-rutinas.html'">
                             Ver Todos los Entrenamientos
                         </button>
                     </div>
@@ -222,7 +230,7 @@
 
                 <!-- COLUMNA DERECHA: Rutina del día y metas -->
                 <div class="col-lg-4">
-                    
+
                     <!-- Saludo y motivación -->
                     <div class="tarjeta-saludo">
                         <h2>¡Hola, <span id="nombre">nombre</span>! ¡Animate! es momento de transformarte. </h2>
@@ -295,7 +303,8 @@
                             </div>
                         </div>
 
-                        <button class="btn btn-outline-secondary w-100 mt-3" onclick="window.location.href='/explorar-rutinas.html'">
+                        <button class="btn btn-outline-secondary w-100 mt-3"
+                            onclick="window.location.href='/explorar-rutinas.html'">
                             <i class="fas fa-plus"></i> Programar Entrenamiento
                         </button>
                     </div>
@@ -316,7 +325,8 @@
                             </div>
                         </div>
 
-                        <button class="btn btn-outline-primary w-100 mt-3" data-bs-toggle="modal" data-bs-target="#modalActualizarMedidas">
+                        <button class="btn btn-outline-primary w-100 mt-3" data-bs-toggle="modal"
+                            data-bs-target="#modalActualizarMedidas">
                             <i class="fas fa-edit"></i> Actualizar Medidas
                         </button>
                     </div>
@@ -328,7 +338,7 @@
 
     </main>
 
-     <!-- FOOTER -->
+    <!-- FOOTER -->
     <footer>
         <div class="footer-contenido">
             <div class="footer-columna">
@@ -340,7 +350,7 @@
                     <li><a href="./objetivos.html">Objetivos</a></li>
                     <li><a href="/mis-rutinas.html">Mis Rutinas</a></li>
                     <li><a href="/explorar-rutinas.html">Explorar</a></li>
-                    
+
                 </ul>
             </div>
             <div class="footer-columna">
@@ -407,8 +417,9 @@
                 </div>
             </div>
         </div>
-    </div>  
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script type = "module" src="/src/paginas/dashboard_usuario.js"></script>
+    <script type="module" src="/src/paginas/dashboard_usuario.js"></script>
 </body>
+
 </html>
