@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Redirigimos al home
       setTimeout(() => {
-        window.location.href = '../home/inicio.html';
+        window.location.href = '../../../frontend/public/dashboard_usuario.html';
       }, 1500);
     }
   });
