@@ -447,3 +447,50 @@ CREATE TRIGGER trigger_actualizar_progreso_objetivo
     AFTER INSERT ON public.historial_rutinas
     FOR EACH ROW
     EXECUTE FUNCTION actualizar_progreso_objetivo_con_rutina();
+
+
+
+-- se añadió avatar_url en perfiles
+-- luego se crea un script para migrar los datos de avatar_url desde auth.users a perfiles.avatar_url:
+
+-- 4. ACTUALIZAR EL CEREBRO DEL ROBOT (La función)
+CREATE OR REPLACE FUNCTION public.handle_new_user() 
+RETURNS trigger AS $$
+BEGIN
+  INSERT INTO public.perfiles (
+    id, 
+    nombre, 
+    apellido, 
+    genero, 
+    fecha_nacimiento,
+    peso,
+    altura,
+    objetivos,
+    nivel_actividad,
+    preferencias_ejercicio,
+    dieta_saludable,
+    avatar_url
+  )
+  VALUES (
+    new.id, 
+    new.raw_user_meta_data->>'nombre',
+    new.raw_user_meta_data->>'apellido',
+    new.raw_user_meta_data->>'genero',
+    (new.raw_user_meta_data->>'fecha_nacimiento')::date,
+    
+    -- Mapeo seguro de números
+    CASE WHEN new.raw_user_meta_data->>'peso' = '' THEN NULL 
+        ELSE (new.raw_user_meta_data->>'peso')::numeric END,
+        
+    CASE WHEN new.raw_user_meta_data->>'altura' = '' THEN NULL 
+        ELSE (new.raw_user_meta_data->>'altura')::numeric END,
+        
+    (new.raw_user_meta_data->'objetivos'), 
+    new.raw_user_meta_data->>'nivel_actividad',
+    (new.raw_user_meta_data->'preferencias_ejercicio'), 
+    (new.raw_user_meta_data->>'dieta_saludable')::boolean,
+    NULL
+  );
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
