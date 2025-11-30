@@ -185,7 +185,7 @@ function actualizarInformacionUsuario() {
 
     // Actualizar header
     document.getElementById('nombreUsuario').textContent = nombreCompleto;
-    document.getElementById('iniciales').textContent = iniciales;
+    document.getElementById('inicialesHeader').textContent = iniciales;
 
     // Actualizar perfil principal
     document.getElementById('nombreCompletoPerfil').textContent = nombreCompleto;
@@ -235,6 +235,7 @@ function actualizarInformacionUsuario() {
 function actualizarAvatar(nombreCompleto) {
     const iniciales = obtenerIniciales(nombreCompleto);
     document.getElementById('inicialesGrandes').textContent = iniciales;
+    document.getElementById('inicialesHeader').textContent = iniciales;
 
     if (datosUsuario?.avatar_url) {
         // Si hay foto de perfil, mostrarla
@@ -242,10 +243,20 @@ function actualizarAvatar(nombreCompleto) {
         img.src = datosUsuario.avatar_url;
         img.style.display = 'block';
         document.getElementById('avatarPredeterminado').style.display = 'none';
+
+        // Header avatar
+        const imgHeader = document.getElementById('fotoPerfilHeader');
+        imgHeader.src = datosUsuario.avatar_url;
+        imgHeader.style.display = 'block';
+        document.getElementById('inicialesHeader').style.display = 'none';
     } else {
         // Mostrar iniciales
         document.getElementById('fotoPerfil').style.display = 'none';
         document.getElementById('avatarPredeterminado').style.display = 'flex';
+
+        // Header avatar
+        document.getElementById('fotoPerfilHeader').style.display = 'none';
+        document.getElementById('inicialesHeader').style.display = 'block';
     }
 }
 
