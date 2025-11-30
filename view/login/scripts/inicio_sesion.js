@@ -1,5 +1,6 @@
 // 1. Importamos la NUEVA función de login
 import { loginUsuario } from '../services/servicio_autenticacion.js';
+import { supabase } from '../../../core/services/cliente_supabase.js';
 
 /**
  * Muestra un mensaje en la interfaz de usuario
@@ -95,20 +96,30 @@ document.addEventListener('DOMContentLoaded', () => {
     btnSubmit.textContent = 'Ingresando...';
 
     // 3.Llamamos al servicio
+    console.log('Login: Attempting login for email:', correo);
     const { data, error } = await loginUsuario({ correo, contrasena });
+    console.log('Login: Login result - data:', data, 'error:', error);
 
     if (error) {
       // 4. Si hay error, mostramos el mensaje real
+      console.log('Login: Login failed with error:', error);
       const mensajeAmigable = procesarErrorSupabase(error);
       mostrarMensaje(mensajeAmigable, "error");
       btnSubmit.disabled = false;
       btnSubmit.textContent = 'Iniciar Sesión';
     } else {
       // 5. ¡ÉXITO!
+      console.log('Login: Login successful, user data:', data);
       mostrarMensaje("¡Bienvenido! Redirigiendo...", "exito");
+
+      // Verificar que la sesión se haya establecido
+      console.log('Login: Checking session after login...');
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      console.log('Login: Session after login - data:', sessionData, 'error:', sessionError);
 
       // Redirigimos al dashboard
       setTimeout(() => {
+        console.log('Login: Redirecting to dashboard...');
         window.location.href = '../../view/dashboard/dashboard_usuario.html';
       }, 800);
     }

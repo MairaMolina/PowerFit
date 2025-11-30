@@ -16,13 +16,38 @@ document.addEventListener('DOMContentLoaded', async () => {
 // ====== VERIFICAR SI HAY SESIÓN ACTIVA ======
 async function verificarSesion() {
     try {
+        console.log('Perfil: Starting session verification...');
+
+        // Log all localStorage keys related to auth
+        const allKeys = Object.keys(localStorage);
+        const authKeys = allKeys.filter(key => key.includes('supabase') || key.includes('auth') || key.includes('session'));
+        console.log('Perfil: All localStorage keys:', allKeys);
+        console.log('Perfil: Auth-related keys:', authKeys);
+
         // 1. Intenta obtener la sesión del localStorage (guardada por login)
         const sesionGuardada = localStorage.getItem('supabase.session');
+        console.log('Perfil: localStorage supabase.session:', sesionGuardada ? 'found' : 'not found');
+        if (sesionGuardada) {
+            console.log('Perfil: localStorage session content (first 100 chars):', sesionGuardada.substring(0, 100));
+        }
+
+        // Also check what Supabase has
+        const { data: supabaseSession, error: supabaseError } = await supabase.auth.getSession();
+        console.log('Perfil: Supabase getSession - data exists:', !!supabaseSession, 'error:', supabaseError);
+        if (supabaseSession?.session) {
+            console.log('Perfil: Supabase session user email:', supabaseSession.session.user?.email);
+            console.log('Perfil: Supabase session expires at:', new Date(supabaseSession.session.expires_at * 1000));
+        }
 
         if (!sesionGuardada) {
-            // Si no hay sesión en localStorage, redirigir a login
-            window.location.href = '../login/iniciar_sesion.html';
-            return;
+            console.log('Perfil: No session in localStorage, checking Supabase session...');
+            if (!supabaseSession.session) {
+                console.log('Perfil: No Supabase session either, redirecting to login');
+                window.location.href = '../login/iniciar_sesion.html';
+                return;
+            } else {
+                console.log('Perfil: Using Supabase session instead');
+            }
         }
 
         // 2. Parsear la sesión guardada
@@ -30,9 +55,33 @@ async function verificarSesion() {
 
         // 3. Validar que tenga los datos necesarios
         if (!session || !session.user || !session.access_token) {
+            console.log('Perfil: Session data invalid, redirecting to login');
             window.location.href = '../login/iniciar_sesion.html';
             return;
         }
+
+        // 4. Verificar si la sesión ha expirado
+        console.log('Perfil: Session expires_at (timestamp):', session.expires_at);
+        console.log('Perfil: Current time (timestamp):', Math.floor(Date.now() / 1000));
+        if (session.expires_at < Math.floor(Date.now() / 1000)) {
+            console.log('Perfil: WARNING: Session is expired! Attempting to refresh...');
+            // Intentar refrescar la sesión
+            const { data: refreshedSession, error: refreshError } = await supabase.auth.refreshSession();
+            if (refreshError || !refreshedSession.session) {
+                console.log('Perfil: Failed to refresh session, redirecting to login');
+                window.location.href = '../login/iniciar_sesion.html';
+                return;
+            } else {
+                console.log('Perfil: Session refreshed successfully');
+                // Actualizar localStorage con la nueva sesión
+                localStorage.setItem('supabase.session', JSON.stringify(refreshedSession.session));
+                usuarioActual = refreshedSession.session.user;
+            }
+        } else {
+            console.log('Perfil: Session is still valid');
+        }
+
+        console.log('Perfil: Session valid, user:', session.user.email);
 
         // 4. Establecer el usuario actual
         usuarioActual = session.user;
@@ -52,14 +101,17 @@ async function cargarDatosUsuario() {
         mostrarCargando();
 
         // Cargar datos básicos del usuario
+        console.log('Perfil: Fetching user data for email:', usuarioActual.email);
         const { data: usuarioData, error: usuarioError } = await supabase
             .from('usuarios')
             .select('*')
             .eq('correo', usuarioActual.email)
             .single();
 
+        console.log('Perfil: Usuario query result - data:', usuarioData, 'error:', usuarioError);
+
         if (usuarioError) {
-            console.log('Usuario no encontrado en tabla usuarios, usando datos de auth');
+            console.log('Perfil: Usuario no encontrado en tabla usuarios, usando datos de auth');
             // Si no existe en la tabla, usar datos básicos
             datosUsuario = {
                 id: null,
@@ -74,23 +126,30 @@ async function cargarDatosUsuario() {
                 avatar_url: null
             };
         } else {
+            console.log('Perfil: Usuario encontrado en DB');
             // Usuario encontrado, usar sus datos
             datosUsuario = { ...usuarioData };
 
             // Intentar cargar datos adicionales del perfil (opcional)
             try {
+                console.log('Perfil: Fetching profile data for user_id:', usuarioData.id);
                 const { data: perfilData, error: perfilError } = await supabase
                     .from('perfiles_usuario')
                     .select('*, avatar_url')
                     .eq('usuario_id', usuarioData.id)
                     .single();
 
+                console.log('Perfil: Perfil query result - data:', perfilData, 'error:', perfilError);
+
                 if (!perfilError && perfilData) {
+                    console.log('Perfil: Profile data found, merging');
                     // Combinar datos del perfil
                     datosUsuario = { ...datosUsuario, ...perfilData };
+                } else {
+                    console.log('Perfil: No profile data found or error');
                 }
             } catch (perfilError) {
-                console.log('Tabla perfiles_usuario no disponible');
+                console.log('Perfil: Tabla perfiles_usuario no disponible or error:', perfilError);
             }
         }
 
@@ -410,11 +469,14 @@ async function verificarEmailUnico(email) {
 
 // ====== GUARDAR AVATAR SELECCIONADO ======
 async function guardarAvatarSeleccionado(avatarUrl) {
+    console.log('guardarAvatarSeleccionado called with:', avatarUrl);
+
     // Actualizar datos locales siempre
     if (!datosUsuario) {
         datosUsuario = {};
     }
     datosUsuario.avatar_url = avatarUrl || null;
+    console.log('Updated local datosUsuario.avatar_url:', datosUsuario.avatar_url);
 
     // Actualizar la interfaz (vista previa en modal de edición)
     const avatarPreview = document.getElementById('avatarPreview');
@@ -422,15 +484,19 @@ async function guardarAvatarSeleccionado(avatarUrl) {
     if (avatarUrl) {
         avatarPreviewImg.src = avatarUrl;
         avatarPreview.style.display = 'block';
+        console.log('Avatar preview updated with URL:', avatarUrl);
     } else {
         avatarPreview.style.display = 'none';
+        console.log('Avatar preview hidden');
     }
 
     // Actualizar input oculto
     document.getElementById('inputAvatarUrl').value = avatarUrl || '';
+    console.log('Input hidden updated with:', avatarUrl || '');
 
     // Si el usuario ya existe en BD, intentar guardar
     if (datosUsuario.id) {
+        console.log('User exists in DB, attempting to save avatar...');
         try {
             const { data, error } = await supabase
                 .from('perfiles_usuario')
@@ -443,7 +509,7 @@ async function guardarAvatarSeleccionado(avatarUrl) {
                 .select();
 
             if (error) throw error;
-            console.log('Avatar guardado en BD:', avatarUrl);
+            console.log('Avatar guardado en BD:', avatarUrl, 'data:', data);
 
             // Actualizar avatar principal también
             actualizarAvatar(datosUsuario.nombre_completo || '');
@@ -452,6 +518,8 @@ async function guardarAvatarSeleccionado(avatarUrl) {
             console.error('Error al guardar avatar en BD:', error);
             // No bloqueamos el flujo, se guardará al dar click en "Guardar Cambios"
         }
+    } else {
+        console.log('User not in DB yet, avatar will be saved with profile');
     }
 }
 
@@ -603,6 +671,7 @@ async function guardarCambiosPerfil() {
 
     } catch (error) {
         console.error('Error al guardar cambios:', error);
+        console.log('Error details:', error.message, error.details, error.code);
         alert('Error al guardar los cambios. Por favor intenta nuevamente.');
     }
 }
@@ -616,6 +685,7 @@ function inicializarEventos() {
         if (option) {
             console.log('Avatar clickeado:', option.dataset.avatar);
             const avatarUrl = option.dataset.avatar;
+            console.log('Setting avatar URL to input:', avatarUrl);
             document.getElementById('inputAvatarUrl').value = avatarUrl;
             seleccionarAvatar(avatarUrl);
         }
@@ -632,6 +702,7 @@ function inicializarEventos() {
     document.getElementById('botonConfirmarAvatar')?.addEventListener('click', async () => {
         console.log('Botón Guardar Avatar clickeado');
         const selectedAvatar = document.getElementById('inputAvatarUrl').value;
+        console.log('Avatar URL to save:', selectedAvatar);
 
         // Guardar el avatar seleccionado en la base de datos
         await guardarAvatarSeleccionado(selectedAvatar);

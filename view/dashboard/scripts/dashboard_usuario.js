@@ -5,6 +5,20 @@ const supabaseUrl = 'https://iinbzpqjxpciivcomruk.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpbmJ6cHFqeHBjaWl2Y29tcnVrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjI4NjQzMywiZXhwIjoyMDc3ODYyNDMzfQ.ZrgGyJUf50WzlIONM_t0-qmufnixDdgb8xUaAtsGpuI';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+// ====== LISTENER PARA GUARDAR SESIÓN EN LOCALSTORAGE ======
+supabase.auth.onAuthStateChange((event, session) => {
+    console.log('Dashboard Supabase auth state change:', event, session ? 'session exists' : 'no session');
+    if (session) {
+        // Guardar la sesión en localStorage para que otras páginas puedan acceder
+        localStorage.setItem('supabase.session', JSON.stringify(session));
+        console.log('Dashboard: Session saved to localStorage');
+    } else {
+        // Limpiar localStorage cuando no hay sesión
+        localStorage.removeItem('supabase.session');
+        console.log('Dashboard: Session removed from localStorage');
+    }
+});
+
 // ====== VARIABLES GLOBALES ======
 let usuarioActual = null;
 let datosUsuario = null;
@@ -18,13 +32,30 @@ document.addEventListener('DOMContentLoaded', async () => {
 // ====== VERIFICAR SI HAY SESIÓN ACTIVA ======
 async function verificarSesion() {
     try {
+        console.log('Dashboard: Starting session verification...');
+
         // 1. Intenta obtener la sesión del localStorage (guardada por login)
         const sesionGuardada = localStorage.getItem('supabase.session');
+        console.log('Dashboard: localStorage supabase.session:', sesionGuardada ? 'found' : 'not found');
+
+        // Also check what Supabase has
+        const { data: supabaseSession, error: supabaseError } = await supabase.auth.getSession();
+        console.log('Dashboard: Supabase getSession - data:', supabaseSession, 'error:', supabaseError);
 
         if (!sesionGuardada) {
-            // Si no hay sesión en localStorage, redirigir a login
-            window.location.href = '/iniciar_sesion.html';
-            return;
+            console.log('Dashboard: No session in localStorage, checking Supabase session...');
+            if (!supabaseSession.session) {
+                console.log('Dashboard: No Supabase session either, redirecting to login');
+                window.location.href = '/iniciar_sesion.html';
+                return;
+            } else {
+                console.log('Dashboard: Using Supabase session instead');
+                // Use Supabase session
+                usuarioActual = supabaseSession.session.user;
+                await cargarDatosUsuario();
+                await cargarDashboard();
+                return;
+            }
         }
 
         // 2. Parsear la sesión guardada
@@ -32,9 +63,12 @@ async function verificarSesion() {
 
         // 3. Validar que tenga los datos necesarios
         if (!session || !session.user || !session.access_token) {
+            console.log('Dashboard: Session data invalid, redirecting to login');
             window.location.href = '/iniciar_sesion.html';
             return;
         }
+
+        console.log('Dashboard: Session valid, user:', session.user.email);
 
         // 4. Establecer el usuario actual
         usuarioActual = session.user;
