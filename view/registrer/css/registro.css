@@ -1,10 +1,20 @@
-/* registro */
-
+/* --- Estilos Generales --- */
 body {
-    background-color: #f4f4f4;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     min-height: 100vh;
+    background-color: #f7f7f7;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-image: url('.././Background/Fondo_powerfit.png');
+    background-color: rgba(255, 255, 255, 0.121); /* Aplica una transparencia dependiendo de */
+    backdrop-filter: blur(2px); /* Desenfoque sutil */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 main.contenedor-formulario {
@@ -15,25 +25,31 @@ main.contenedor-formulario {
     justify-content: center;
     padding: 20px;
     box-sizing: border-box;
-}
-
-.logo-formulario img {
-    height: 60px;
-    margin-bottom: 20px;
-}
-
-main.contenedor-formulario h2 {
-    color: black;
-    margin-bottom: 10px;
-}
-
-main.contenedor-formulario p {
-    color: black;
-    margin-bottom: 30px;
+    width: 100%;
+    max-width: 480px;
     text-align: center;
 }
 
-/* Estilos para mensajes de error y éxito */
+.logo-formulario img {
+    display: flex;
+    position: relative;
+    right: 450px;
+    height: 90px;
+}
+
+main.contenedor-formulario h2 {
+    font-size: 1.8rem;
+    color: #0077cc;
+    margin: 2px 0;
+    font-weight: 700;
+}
+
+main.contenedor-formulario > p {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+/* --- Mensajes de Error/Éxito --- */
 #mensaje-contenedor {
     width: 100%;
     max-width: 400px;
@@ -55,7 +71,7 @@ main.contenedor-formulario p {
 }
 
 #mensaje-contenedor.mensaje-error {
-    background-color: #fee;
+    background-color: #ffebee;
     border-left: 4px solid #dc3545;
     color: #721c24;
 }
@@ -85,20 +101,29 @@ main.contenedor-formulario p {
         opacity: 0;
         transform: translateY(-10px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
+/* --- Formulario (Tarjeta) --- */
 #formulario-registro {
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 12px 30px #0077cc;
+    background-color: #f1f1f1;
+    padding: 40px 45px;
+    border-radius: 4px;
+    box-shadow: 0 8px 30px rgba(36, 36, 36, 0.227);
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
     box-sizing: border-box;
+    text-align: left;
+}
+
+#formulario-registro h3 {
+    color: #0077cc;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    font-weight: 600;
 }
 
 .grupo-input {
@@ -106,52 +131,112 @@ main.contenedor-formulario p {
 }
 
 .grupo-input label {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     margin-bottom: 8px;
-    font-weight: bold;
-    color: black;
+    font-weight: 600;
+    color: #0077cc;
+    font-size: 0.9rem;
 }
 
-/* campo del género */
-#formulario-registro label[for="genero"] {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: black;
-}
-
-#formulario-registro select#genero {
+/* --- Inputs Generales --- */
+.grupo-input input[type="text"],
+.grupo-input input[type="email"],
+.grupo-input input[type="password"],
+.grupo-input input[type="number"] {
     width: 100%;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 7px;
+    padding: 12px 14px;
+    border: none;
+    border-radius: 4px;
     box-sizing: border-box;
-    font-size: 1rem;
+    font-size: 0.95rem;
     background-color: #fff;
+    box-shadow: inset 0 2px 4px rgba(42, 42, 42, 0.282);
+    transition: box-shadow 0.2s ease;
+}
+
+.grupo-input input:focus {
+    outline: none;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06), 0 0 0 2px rgba(0, 119, 204, 0.3);
+}
+
+.grupo-input input::placeholder {
+    color: #aaa;
+}
+
+/* --- Input de Fecha --- */
+.grupo-input input[type="date"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: none;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+    background-color: #fff;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+    transition: box-shadow 0.2s ease;
+    color: #333;
+    cursor: pointer;
+}
+
+.grupo-input input[type="date"]:focus {
+    outline: none;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06), 0 0 0 2px rgba(0, 119, 204, 0.3);
+}
+
+/* Estilo del icono del calendario en navegadores Webkit (Chrome, Edge, Safari) */
+.grupo-input input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    filter: invert(40%) sepia(85%) saturate(1500%) hue-rotate(180deg);
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+.grupo-input input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+/* --- Select (Género, Nivel Actividad) --- */
+#formulario-registro label[for="genero"],
+#formulario-registro label[for="nivelActividad"] {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px; 
+    font-weight: 600;
+    color: #0077cc;
+    font-size: 0.9rem;
+}
+
+.grupo-input label[for="fechaNacimiento"] {
+    margin-top: 15px;
+}
+
+#formulario-registro select {
+    width: 100%;
+    padding: 12px 14px;
+    border: none;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+    background-color: #fff;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
     color: #333;
     appearance: none;
     cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%230077cc' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
 }
 
-#formulario-registro select#genero:focus {
-    border-color: #0077cc;
+#formulario-registro select:focus {
     outline: none;
-    box-shadow: 0 0 5px rgba(0, 119, 204, 0.5);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06), 0 0 0 2px rgba(0, 119, 204, 0.3);
 }
 
-/* Inputs generales */
-.grupo-input input[type="text"],
-.grupo-input input[type="email"],
-.grupo-input input[type="password"] {
-    width: 100%;
-    padding: 17px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    box-sizing: border-box;
-    font-size: 1rem;
-}
-
-/* Contenedor para input con icono de ojo */
+/* --- Input con Icono (Ojo) --- */
 .input-con-icono {
     position: relative;
     width: 100%;
@@ -164,385 +249,185 @@ main.contenedor-formulario p {
 
 .icono-ojo {
     position: absolute;
-    right: 15px;
+    right: 12px;
     top: 50%;
     transform: translateY(-50%);
-    cursor: pointer;
-    color: #666;
-    font-size: 1.2rem;
-    transition: color 0.3s ease;
-}
-
-.icono-ojo:hover {
-    color: #0077cc;
-}
-
-/* Lista de requisitos de contraseña */
-.lista-requisitos {
-    list-style-type: none;
-    padding-left: 10px;
-    font-size: 0.85rem;
-    margin-top: 5px;
-}
-
-.lista-requisitos .cumplido {
-    color: green;
-}
-
-.lista-requisitos .no-cumplido {
-    color: red;
-}
-
-.grupo-input input[type="text"]::placeholder,
-.grupo-input input[type="email"]::placeholder {
     color: #aaa;
-}
-
-.aceptar-terminos {
-    display: flex;
-    align-items: center;
-    margin-bottom: 25px;
-}
-
-.aceptar-terminos input[type="checkbox"] {
-    margin-right: 10px;
-}
-
-.aceptar-terminos label {
-    font-size: 0.9rem;
-    color: #666;
-}
-
-.aceptar-terminos a {
-    color: #0077cc;
-    text-decoration: none;
-}
-
-.aceptar-terminos a:hover {
-    text-decoration: underline;
-}
-
-.boton-primario {
-    background-color: #0077cc;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
     cursor: pointer;
-    font-size: 1.1rem;
-    width: 100%;
-    transition: background-color 0.3s ease;
-}
-
-.boton-primario:hover {
-    background-color: #005f99;
-}
-
-.barra-navegacion .boton.active {
-    background-color: #005f99;
-}
-
-.enlace-login {
-    margin-top: 25px;
-    color: #666;
-    font-size: 0.9rem;
-}
-
-.enlace-login a {
-    color: #0077cc;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.enlace-login a:hover {
-    text-decoration: underline;
-}
-
-footer {
-    background-color: white;
-    color: #333;
-    text-align: center;
-    padding: 15px;
-    margin-top: auto;
-    fill: white;
-    padding: 10px;
-}
-
-.flatpickr-months .flatpickr-prev-month:hover,
-.flatpickr-months .flatpickr-next-month:hover {
-    color: white;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-}
-
-/* Días de la semana */
-.flatpickr-weekdays {
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #e0e0e0;
-    padding: 10px 0;
-}
-
-.flatpickr-weekday {
-    color: #666;
-    font-weight: 600;
-    font-size: 0.85rem;
-}
-
-/* Días del calendario */
-.flatpickr-days {
-    background-color: white;
-}
-
-.flatpickr-day {
-    color: #333;
-    border-radius: 8px;
-    margin: 2px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-.flatpickr-day:hover:not(.flatpickr-disabled):not(.selected) {
-    background-color: #e6f2ff;
-    border-color: #0077cc;
-    color: #0077cc;
-    transform: scale(1.05);
-}
-
-/* Día seleccionado */
-.flatpickr-day.selected,
-.flatpickr-day.selected:hover {
-    background: linear-gradient(135deg, #0077cc 0%, #005fa3 100%);
-    border-color: #0077cc;
-    color: white;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(0, 119, 204, 0.3);
-}
-
-/* Día de hoy */
-.flatpickr-day.today {
-    border-color: #0077cc;
-    color: #0077cc;
-    font-weight: 600;
-}
-
-.flatpickr-day.today:hover {
-    background-color: #e6f2ff;
-    color: #0077cc;
-}
-
-/* Días deshabilitados */
-.flatpickr-day.flatpickr-disabled,
-.flatpickr-day.prevMonthDay,
-.flatpickr-day.nextMonthDay {
-    color: #ccc;
-}
-
-.grupo-input input[type="password"] {
-    width: 100%;
-    padding: 17px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    box-sizing: border-box;
     font-size: 1rem;
-}
-
-/* Contenedor para input con icono de ojo */
-.input-con-icono {
-    position: relative;
-    width: 100%;
-}
-
-.input-con-icono input {
-    width: 100%;
-    padding-right: 45px;
-}
-
-.icono-ojo {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    color: #666;
-    font-size: 1.2rem;
-    transition: color 0.3s ease;
+    transition: color 0.2s ease;
 }
 
 .icono-ojo:hover {
     color: #0077cc;
 }
 
-/* Lista de requisitos de contraseña */
+/* --- Lista de Requisitos de Contraseña --- */
 .lista-requisitos {
     list-style-type: none;
-    padding-left: 10px;
-    font-size: 0.85rem;
-    margin-top: 5px;
+    padding-left: 5px;
+    font-size: 0.8rem;
+    margin-top: 8px;
 }
 
 .lista-requisitos .cumplido {
-    color: green;
+    color: #28a745;
 }
 
 .lista-requisitos .no-cumplido {
-    color: red;
+    color: #dc3545;
 }
 
-.grupo-input input[type="text"]::placeholder,
-.grupo-input input[type="email"]::placeholder {
-    color: #aaa;
+/* --- Checkboxes y Radios --- */
+.opciones-checkbox,
+.opciones-radio {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 5px;
 }
 
+.opciones-checkbox label,
+.opciones-radio label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: normal;
+    color: #555;
+    cursor: pointer;
+    padding: 10px 12px;
+    background-color: #fff;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.opciones-checkbox label:hover,
+.opciones-radio label:hover {
+    background-color: #e6f2ff;
+}
+
+.opciones-checkbox input[type="checkbox"],
+.opciones-radio input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #0077cc;
+}
+
+/* --- Grupo Doble (Peso/Altura) --- */
+.grupo-doble {
+    display: flex;
+    gap: 15px;
+}
+
+.grupo-doble .grupo-input {
+    flex: 1;
+}
+
+/* --- Aceptar Términos --- */
 .aceptar-terminos {
     display: flex;
     align-items: center;
     margin-bottom: 25px;
+    margin-top: 20px;
 }
 
 .aceptar-terminos input[type="checkbox"] {
     margin-right: 10px;
+    accent-color: #0077cc;
 }
 
 .aceptar-terminos label {
-    font-size: 0.9rem;
-    color: #666;
+    font-size: 0.85rem;
+    color: #555;
 }
 
 .aceptar-terminos a {
     color: #0077cc;
     text-decoration: none;
+    font-weight: 600;
 }
 
 .aceptar-terminos a:hover {
     text-decoration: underline;
 }
 
+/* --- Botones --- */
 .boton-primario {
     background-color: #0077cc;
     color: white;
-    padding: 12px 20px;
+    font-weight: bold;
+    font-size: 1rem;
     border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1.1rem;
+    padding: 14px;
     width: 100%;
+    border-radius: 4px;
+    cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .boton-primario:hover {
-    background-color: #005f99;
+    background-color: #005fa3;
 }
 
-.barra-navegacion .boton.active {
-    background-color: #005f99;
+.boton-secundario {
+    background-color: #6c757d;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    border: none;
+    padding: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
+.boton-secundario:hover {
+    background-color: #5a6268;
+}
+
+.botones-navegacion {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.botones-navegacion .boton-primario {
+    flex: 2;
+}
+
+.botones-navegacion .boton-secundario {
+    flex: 1;
+}
+
+/* --- Enlace Login --- */
 .enlace-login {
     margin-top: 25px;
-    color: #666;
     font-size: 0.9rem;
+    color: #666;
 }
 
 .enlace-login a {
     color: #0077cc;
+    font-weight: 600;
     text-decoration: none;
-    font-weight: bold;
 }
 
 .enlace-login a:hover {
     text-decoration: underline;
 }
 
+/* --- Footer --- */
 footer {
-    background-color: white;
-    color: #333;
+    width: 100%;
     text-align: center;
-    padding: 15px;
-    margin-top: auto;
-    fill: white;
-    padding: 10px;
-}
-
-.flatpickr-months .flatpickr-prev-month:hover,
-.flatpickr-months .flatpickr-next-month:hover {
-    color: white;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-}
-
-/* Días de la semana */
-.flatpickr-weekdays {
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #e0e0e0;
-    padding: 10px 0;
-}
-
-.flatpickr-weekday {
-    color: #666;
-    font-weight: 600;
+    padding: 20px;
+    color: #0077cc;
     font-size: 0.85rem;
+    margin-top: auto;
 }
 
-/* Días del calendario */
-.flatpickr-days {
-    background-color: white;
-}
-
-.flatpickr-day {
-    color: #333;
-    border-radius: 8px;
-    margin: 2px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-.flatpickr-day:hover:not(.flatpickr-disabled):not(.selected) {
-    background-color: #e6f2ff;
-    border-color: #0077cc;
-    color: #0077cc;
-    transform: scale(1.05);
-}
-
-/* Día seleccionado */
-.flatpickr-day.selected,
-.flatpickr-day.selected:hover {
-    background: linear-gradient(135deg, #0077cc 0%, #005fa3 100%);
-    border-color: #0077cc;
-    color: white;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(0, 119, 204, 0.3);
-}
-
-/* Día de hoy */
-.flatpickr-day.today {
-    border-color: #0077cc;
-    color: #0077cc;
-    font-weight: 600;
-}
-
-.flatpickr-day.today:hover {
-    background-color: #e6f2ff;
-    color: #0077cc;
-}
-
-/* Días deshabilitados */
-.flatpickr-day.flatpickr-disabled,
-.flatpickr-day.prevMonthDay,
-.flatpickr-day.nextMonthDay {
-    color: #ccc;
-}
-
-/* Flecha del calendario */
-.flatpickr-calendar.arrowTop:before {
-    border-bottom-color: #0077cc;
-}
-
-.flatpickr-calendar.arrowTop:after {
-    border-bottom-color: #0077cc;
-}
-
-/* --- Estilos para Multi-paso y Nuevos Campos --- */
-
+/* --- Pasos del Formulario --- */
 .paso-formulario {
     animation: fadeIn 0.4s ease-in-out;
 }
@@ -556,81 +441,78 @@ footer {
         opacity: 0;
         transform: translateY(10px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-/* Grupo doble para peso y altura */
-.grupo-doble {
-    display: flex;
-    gap: 15px;
-}
-
-.grupo-doble .grupo-input {
-    flex: 1;
-}
-
-/* Checkboxes y Radios personalizados */
-.opciones-checkbox,
-.opciones-radio {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 5px;
-}
-
-.opciones-checkbox label,
-.opciones-radio label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: normal;
-    cursor: pointer;
-    padding: 8px;
-    border: 1px solid #eee;
-    border-radius: 6px;
-    transition: background-color 0.2s;
-}
-
-.opciones-checkbox label:hover,
-.opciones-radio label:hover {
-    background-color: #f9f9f9;
-}
-
-.opciones-checkbox input[type="checkbox"],
-.opciones-radio input[type="radio"] {
-    width: 18px;
-    height: 18px;
-    accent-color: #0077cc;
-}
-
-/* Botones de navegación */
-.botones-navegacion {
-    display: flex;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.boton-secundario {
-    background-color: #6c757d;
-    color: white;
-    padding: 12px 20px;
-    border: none;
+/* --- Flatpickr Personalizado --- */
+.flatpickr-calendar {
     border-radius: 8px;
-    cursor: pointer;
-    font-size: 1.1rem;
-    flex: 1;
-    transition: background-color 0.3s ease;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
 }
 
-.boton-secundario:hover {
-    background-color: #5a6268;
+.flatpickr-months .flatpickr-prev-month:hover,
+.flatpickr-months .flatpickr-next-month:hover {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
 }
 
-/* Ajuste para que el botón primario comparta espacio si está en grupo */
-.botones-navegacion .boton-primario {
-    flex: 2;
+.flatpickr-weekdays {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 10px 0;
+}
+
+.flatpickr-weekday {
+    color: #666;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.flatpickr-days {
+    background-color: white;
+}
+
+.flatpickr-day {
+    color: #333;
+    border-radius: 8px;
+    margin: 2px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.flatpickr-day:hover:not(.flatpickr-disabled):not(.selected) {
+    background-color: #e6f2ff;
+    border-color: #0077cc;
+    color: #0077cc;
+    transform: scale(1.05);
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.selected:hover {
+    background: linear-gradient(135deg, #0077cc 0%, #005fa3 100%);
+    border-color: #0077cc;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 119, 204, 0.3);
+}
+
+.flatpickr-day.today {
+    border-color: #0077cc;
+    color: #0077cc;
+    font-weight: 600;
+}
+
+.flatpickr-day.today:hover {
+    background-color: #e6f2ff;
+    color: #0077cc;
+}
+
+.flatpickr-day.flatpickr-disabled,
+.flatpickr-day.prevMonthDay,
+.flatpickr-day.nextMonthDay {
+    color: #ccc;
 }

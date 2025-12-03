@@ -7,7 +7,7 @@
     <title>Power Fit - Registro</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <!-- Flatpickr - Date Picker -->
+    <link href="https://cdn.jsdelivr.net/static/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="/view/registrer/css/registro.css">
 </head>
@@ -15,19 +15,19 @@
 <body>
 
     <main class="contenedor-formulario">
-        <div class="logo-formulario">
-            <img src="./images/Logo_powerfit.png" alt="Logo Power Fit">
+        <div class="logo-formulario" class = "boton-logo">
+        <a href="../../view/home/inicio.html">
+            <img src="../registrer/images/Logo_powerfit.png" alt="Logo Power Fit">
+           </a>
         </div>
         <h2>Crear Cuenta</h2>
-        <p>Regístrate para acceder a todas las funcionalidades</p>
+        <p>¡Comienza tu transformación hoy! Crea tu cuenta y da el primer paso hacia una vida más saludable.</p>
 
         <!-- Contenedor de mensajes -->
         <div id="mensaje-contenedor" class="mensaje-oculto"></div>
 
         <form id="formulario-registro">
             <!-- PASO 1: Información de Cuenta -->
-            <div id="paso-1" class="paso-formulario">
-                <h3>Paso 1: Información Personal</h3>
                 <div class="grupo-input">
                     <label for="nombreCompleto">Nombres completos</label>
                     <input type="text" id="nombreCompleto" name="nombreCompleto" placeholder="Tus nombres" required>
@@ -47,14 +47,12 @@
                         <option value="masculino">Masculino</option>
                         <option value="no-binario">No binario</option>
                         <option value="prefiero-no-decirlo">Prefiero no decirlo</option>
-                        <option value="otro">Otro</option>
                     </select>
                 </div>
 
                 <div class="grupo-input">
                     <label for="fechaNacimiento">Fecha de Nacimiento</label>
-                    <input type="text" id="fechaNacimiento" name="fechaNacimiento" placeholder="Selecciona tu fecha"
-                        required>
+                    <input type="date" id="fechaNacimiento" name="fechaNacimiento"required>
                 </div>
 
                 <div class="grupo-input">
@@ -164,7 +162,37 @@
         <p>© 2025 Power Fit</p>
     </footer>
 
-    <!-- Flatpickr JS -->
+    <script>
+    // Toggle para contraseña
+    document.getElementById('toggle-contrasena').addEventListener('click', function() {
+        const input = document.getElementById('contrasena');
+        if (input.type === 'password') {
+            input.type = 'text';
+            this.classList.remove('fa-eye');
+            this.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            this.classList.remove('fa-eye-slash');
+            this.classList.add('fa-eye');
+        }
+    });
+
+    // Toggle para confirmar contraseña
+    document.getElementById('toggle-confirmar').addEventListener('click', function() {
+        const input = document.getElementById('confirmarContrasena');
+        if (input.type === 'password') {
+            input.type = 'text';
+            this.classList.remove('fa-eye');
+            this.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            this.classList.remove('fa-eye-slash');
+            this.classList.add('fa-eye');
+        }
+    });
+        </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
     <script type="module" src="./scripts/registro.js"></script>
