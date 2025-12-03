@@ -1,24 +1,66 @@
+/* =========================================
+   VARIABLES Y TEMA OSCURO
+   ========================================= */
+:root {
+    --color-fondo-tarjeta: #ffffff;
+    --color-texto: #333333;
+    --color-fondo-item: #f9f9f9;
+    --color-borde-item: #eeeeee;
+}
+
+body.tema-oscuro {
+  --color-fondo: #10131a;
+  --color-fondo-tarjeta: #1b1f29;
+  --color-fondo-contraste: #232837;
+  --color-texto: #f5f7fb;
+  --color-texto-secundario: #b3b9c7;
+  --color-borde: rgba(255, 255, 255, 0.12);
+  --color-fondo-item: #232837; /* Fondo para items en oscuro */
+  --color-borde-item: #3a3f50;
+  
+  --sombra-pequena: 0 4px 12px rgba(0, 0, 0, 0.55);
+  --sombra-mediana: 0 12px 28px rgba(0, 0, 0, 0.6);
+  --sombra-grande: 0 18px 40px rgba(0, 0, 0, 0.7);
+}
+
+.header-dashboard {
+    padding-top: 1.5rem; /* Ajusta este valor si lo quieres más pegado */
+    padding-bottom: 1.5rem;
+}
+
+h1.titulo-pagina {
+    margin-top: 0 !important; /* Fuerza al título a subir */
+}
+
+
+/* =========================================
+   ESTILOS DE TARJETAS (ADAPTADOS A DARK MODE)
+   ========================================= */
 
 /* Tarjeta base del listado */
 .tarjeta-listado, .tarjeta-proximos, .tarjeta-motivacion {
-    background-color: var(--color-background-tarjeta, #ffffff);
+    background-color: var(--color-fondo-tarjeta); /* Variable correcta */
+    color: var(--color-texto);
     padding: 25px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .header-seccion h2 {
     font-size: 1.5rem;
     margin-bottom: 5px;
+    color: var(--color-texto);
 }
 
 /* Estilos de Cada Item de Objetivo */
 .objetivo-item {
-    border: 1px solid var(--color-border-light, #eee);
+    border: 1px solid var(--color-borde-item);
     border-radius: 8px;
     padding: 15px;
     margin-bottom: 15px;
-    background-color: var(--color-background-light, #f9f9f9);
+    background-color: var(--color-fondo-item); /* Variable dinámica */
+    color: var(--color-texto);
 }
 
 .objetivo-item h5 {
@@ -26,17 +68,62 @@
     color: var(--color-primary-dark, #0056b3);
 }
 
-.meta-status {
-    font-size: 0.9rem;
-    color: var(--color-text-muted, #666);
+/* En modo oscuro, ajustamos el título del item para que resalte */
+body.tema-oscuro .objetivo-item h5 {
+    color: #4dabf7; 
 }
 
+.meta-status {
+    font-size: 0.9rem;
+    color: var(--color-texto-secundario, #666);
+}
+
+/* Manejo de Logos */
+.logo-light { display: block; }
+.logo-dark { display: none; }
+body.tema-oscuro .logo-light { display: none; }
+body.tema-oscuro .logo-dark { display: block; }
+
+/* =========================================
+   AVATAR DE USUARIO
+   ========================================= */
+.avatar-usuario {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primario, #0d6efd), var(--color-secundario, #0dcaf0));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 0.9rem;
+    position: relative;
+    overflow: hidden;
+    margin-right: 10px; /* Separación con el texto */
+}
+  
+.avatar-usuario img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+  
 /* Barra de Progreso */
 .progreso-bar-contenedor {
     height: 10px;
     background-color: var(--color-progress-bg, #e9ecef);
     border-radius: 5px;
     margin: 10px 0;
+}
+
+/* En modo oscuro, el fondo de la barra de progreso debe ser más oscuro */
+body.tema-oscuro .progreso-bar-contenedor {
+    background-color: #3a3f50;
 }
 
 .progreso-bar {
@@ -50,14 +137,46 @@
     line-height: 10px;
 }
 
-/* Estilos de Resumen (los 4 cuadros superiores) */
-.resumen-estadisticas .col-md-3 > div {
-    /* Clase de estilo para las tarjetas de resumen */
+/* =========================================
+   RESUMEN ESTADÍSTICAS (Las tarjetas de colores)
+   ========================================= */
+
+/* Estilo Base para las tarjetas de resumen */
+.resumen-estadisticas .col-md-6 > div, 
+.resumen-estadisticas .col-lg-12 > div {
     padding: 15px;
     border-radius: 8px;
     text-align: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.3s ease;
 }
+
+/* --- TARJETA NARANJA (Completados) --- */
+.card-resumen-naranja {
+    background-color: #ffe0b2; /* Color Claro Original */
+    color: #333;
+}
+
+/* Modo Oscuro Naranja */
+body.tema-oscuro .card-resumen-naranja {
+    background-color: #5c4025; /* Naranja oscuro/marrón */
+    color: #ffdcb5;
+}
+
+/* --- TARJETA AZUL (Pendientes) --- */
+.card-resumen-azul {
+    background-color: #b2ebf2; /* Color Claro Original */
+    color: #333;
+}
+
+/* Modo Oscuro Azul */
+body.tema-oscuro .card-resumen-azul {
+    background-color: #1c4b52; /* Azul verdoso oscuro */
+    color: #bdfbfc;
+}
+
+
+/* Textos dentro del resumen */
 .resumen-estadisticas .valor-resumen {
     font-size: 2rem;
     font-weight: 700;
@@ -65,12 +184,22 @@
 }
 .resumen-estadisticas .descripcion-resumen {
     font-size: 0.9rem;
-    color: var(--color-text-muted);
+    opacity: 0.8; /* Usar opacidad en lugar de color fijo para que sirva en ambos modos */
 }
 
 /* panel de Proximos a Vencer */
 .tarjeta-proximos h4 {
-    border-bottom: 2px solid var(--color-border-light);
+    border-bottom: 2px solid var(--color-borde, #eee);
     padding-bottom: 10px;
     margin-bottom: 15px;
+    color: var(--color-texto);
+}
+
+/* Ajustes generales de texto en modo oscuro */
+body.tema-oscuro .text-muted {
+    color: #adb5bd !important;
+}
+
+body.tema-oscuro .text-secondary {
+    color: #a0a0a0 !important;
 }

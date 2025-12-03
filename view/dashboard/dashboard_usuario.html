@@ -16,7 +16,8 @@
     <aside class="sidebar">
         <!-- Logo -->
         <div class="logo-sidebar">
-            <img src="../../view/registrer/images/Logo_powerfit.png" alt="Power Fit Logo">
+            <img src="../../view/registrer/images/Logo_powerfit.png" alt="Power Fit Logo" class="logo logo-light">
+            <img src="../../view/registrer/images/Logo_powerfit_dark.png" alt="Power Fit Logo" class="logo logo-dark">
         </div>
 
         <!-- Menú de navegación -->
@@ -90,10 +91,11 @@
                             <!-- Perfil de usuario -->
                             <div class="dropdown perfil-dropdown">
                                 <button class="perfil-usuario" id="dropdownPerfil" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                    <div class="avatar-usuario">
-                                        <span id="iniciales">PF</span>
-                                    </div>
+                                aria-expanded="false">
+                                 <div class="avatar-usuario" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                                     <img src="" alt="Avatar" id="fotoPerfilHeader" style="display: none; width: 100%; height: 100%; object-fit: cover;">
+                                    <span id="inicialesHeader">PF</span>
+                                        </div>
                                     <div class="info-usuario">
                                         <span class="nombre-usuario" id="nombreUsuario">Cargando...</span>
                                         <span class="rol-usuario">Usuario</span>
@@ -102,8 +104,6 @@
                                 </button>
 
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownPerfil">
-                                    <li><a class="dropdown-item" href="/perfil.html">
-                                            <i class="fas fa-user"></i> Mi Perfil
                                         </a></li>
                                     <li><a class="dropdown-item" href="/configuracion.html">
                                             <i class="fas fa-cog"></i> Configuración de Cuenta
@@ -324,11 +324,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <button class="btn btn-outline-primary w-100 mt-3" data-bs-toggle="modal"
-                            data-bs-target="#modalActualizarMedidas">
-                            <i class="fas fa-edit"></i> Actualizar Medidas
-                        </button>
                     </div>
 
                 </div>
@@ -344,11 +339,9 @@
             <div class="footer-columna">
                 <h4>Enlaces</h4>
                 <ul>
-                    <li><a href="/inicio.html">Inicio</a></li>
-                    <li><a href="dashboard.html">Dashboard</a></li>
-                    <li><a href="perfil.html">Perfil</a></li>
-                    <li><a href="./objetivos.html">Objetivos</a></li>
-                    <li><a href="/mis-rutinas.html">Mis Rutinas</a></li>
+                    <li><a href="../../view/perfil/perfil.html">Perfil</a></li>
+                    <li><a href="../../view/objetivos/objetivos.html">Objetivos</a></li>
+                    <li><a href="../../view/rutinas/rutinas.html">Mis Rutinas</a></li>
                     <li><a href="/explorar-rutinas.html">Explorar</a></li>
 
                 </ul>
@@ -419,7 +412,7 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="module" src="/src/paginas/dashboard_usuario.js"></script>
+    <script type="module" src="../../view/dashboard/scripts/dashboard_usuario.js"></script>
 </body>
 
 </html>

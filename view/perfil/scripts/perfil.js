@@ -127,28 +127,34 @@ async function cargarDatosUsuario() {
             };
         } else {
             console.log('Perfil: Usuario encontrado en DB');
-            // Usuario encontrado, usar sus datos
             datosUsuario = { ...usuarioData };
+            const usuarioId = datosUsuario.id;
 
-            // Intentar cargar datos adicionales del perfil (opcional)
             try {
-                console.log('Perfil: Fetching profile data for user_id:', usuarioData.id);
+                console.log('Perfil: Fetching profile data for user_id:', usuarioId);
                 const { data: perfilData, error: perfilError } = await supabase
                     .from('perfiles_usuario')
                     .select('*, avatar_url')
-                    .eq('usuario_id', usuarioData.id)
+                    .eq('usuario_id', usuarioId)
                     .single();
 
                 console.log('Perfil: Perfil query result - data:', perfilData, 'error:', perfilError);
 
                 if (!perfilError && perfilData) {
                     console.log('Perfil: Profile data found, merging');
-                    // Combinar datos del perfil
-                    datosUsuario = { ...datosUsuario, ...perfilData };
+                    datosUsuario = {
+                        ...datosUsuario,
+                        ...perfilData,
+                        usuario_id: usuarioId,
+                        perfil_id: perfilData.id
+                    };
+                    datosUsuario.id = usuarioId;
                 } else {
+                    datosUsuario.usuario_id = usuarioId;
                     console.log('Perfil: No profile data found or error');
                 }
             } catch (perfilError) {
+                datosUsuario.usuario_id = usuarioId;
                 console.log('Perfil: Tabla perfiles_usuario no disponible or error:', perfilError);
             }
         }
@@ -217,7 +223,7 @@ function actualizarInformacionUsuario() {
 
     // Mostrar objetivos como etiquetas
     const contenedorObjetivos = document.getElementById('campoObjetivos');
-    const objetivos = datosUsuario?.objetivos ? datosUsuario.objetivos.split(',').map(obj => obj.trim()) : [];
+    const objetivos = normalizarObjetivos(datosUsuario?.objetivos);
 
     if (objetivos.length === 0) {
         contenedorObjetivos.innerHTML = '<span class="text-muted">No especificados</span>';
@@ -278,6 +284,25 @@ function obtenerIniciales(nombre) {
         return (palabras[0][0] + palabras[1][0]).toUpperCase();
     }
     return palabras[0].substring(0, 2).toUpperCase();
+}
+
+function normalizarObjetivos(valor) {
+    if (!valor) return [];
+    if (Array.isArray(valor)) return valor;
+    if (typeof valor === 'string') {
+        const trimmed = valor.trim();
+        if (!trimmed) return [];
+        if ((trimmed.startsWith('[') && trimmed.endsWith(']')) || trimmed.startsWith('{')) {
+            try {
+                const parsed = JSON.parse(trimmed);
+                if (Array.isArray(parsed)) return parsed;
+            } catch (e) {
+                // ignore
+            }
+        }
+        return trimmed.split(',').map(obj => obj.trim()).filter(Boolean);
+    }
+    return [];
 }
 
 // ====== CALCULAR EDAD ======
@@ -348,7 +373,7 @@ function llenarModalEdicion() {
     }
 
     // Llenar checkboxes de objetivos
-    const objetivosSeleccionados = datosUsuario?.objetivos ? datosUsuario.objetivos.split(',').map(obj => obj.trim()) : [];
+    const objetivosSeleccionados = normalizarObjetivos(datosUsuario?.objetivos);
     document.getElementById('objPerderPeso').checked = objetivosSeleccionados.includes('Perder peso');
     document.getElementById('objGanarMusculo').checked = objetivosSeleccionados.includes('Ganar masa muscular');
     document.getElementById('objTonificar').checked = objetivosSeleccionados.includes('Tonificar');
@@ -378,21 +403,14 @@ function validarTelefono(telefono) {
 // ====== ACTUALIZAR VISTA PREVIA DE OBJETIVOS ======
 function actualizarVistaPreviaObjetivos() {
     const contenedor = document.getElementById('vistaPreviaObjetivos');
-    const objetivosSeleccionados = [];
-
-    // Recopilar objetivos seleccionados
-    if (document.getElementById('objPerderPeso').checked) objetivosSeleccionados.push('Perder peso');
-    if (document.getElementById('objGanarMusculo').checked) objetivosSeleccionados.push('Ganar masa muscular');
-    if (document.getElementById('objTonificar').checked) objetivosSeleccionados.push('Tonificar');
-    if (document.getElementById('objMantener').checked) objetivosSeleccionados.push('Mantener forma');
-    if (document.getElementById('objResistencia').checked) objetivosSeleccionados.push('Mejorar resistencia');
+    const objetivosSeleccionados = obtenerObjetivosSeleccionados();
 
     if (objetivosSeleccionados.length === 0) {
         contenedor.innerHTML = '<small class="text-muted">Selecciona objetivos arriba para ver la vista previa</small>';
     } else {
         contenedor.innerHTML = objetivosSeleccionados.map(objetivo => `
-            <span class="badge bg-primary me-1 mb-1">${objetivo}</span>
-        `).join('');
+            <span class="badge bg-primary me-1 mb-1">${objetivo}</span>
+        `).join('');
     }
 }
 
@@ -406,7 +424,7 @@ function obtenerObjetivosSeleccionados() {
     if (document.getElementById('objMantener').checked) objetivos.push('Mantener forma');
     if (document.getElementById('objResistencia').checked) objetivos.push('Mejorar resistencia');
 
-    return objetivos.join(', ');
+    return objetivos;
 }
 
 // ====== VALIDAR CAMPOS DEL FORMULARIO ======
@@ -482,7 +500,7 @@ async function verificarEmailUnico(email) {
 async function guardarAvatarSeleccionado(avatarUrl) {
     console.log('guardarAvatarSeleccionado called with:', avatarUrl);
 
-    // Actualizar datos locales siempre
+    // 1. Actualizar datos locales y UI
     if (!datosUsuario) {
         datosUsuario = {};
     }
@@ -505,32 +523,39 @@ async function guardarAvatarSeleccionado(avatarUrl) {
     document.getElementById('inputAvatarUrl').value = avatarUrl || '';
     console.log('Input hidden updated with:', avatarUrl || '');
 
-    // Si el usuario ya existe en BD, intentar guardar
+    // 2. Guardar en Base de Datos usando UPSERT
+    // Solo intentamos guardar si ya tenemos el ID del usuario
     if (datosUsuario.id) {
-        console.log('User exists in DB, attempting to save avatar...');
+        console.log('User exists in DB, attempting to save avatar using UPSERT...');
         try {
+            // Prepara los datos para el upsert
+            const datosAvatarActualizar = {
+                usuario_id: datosUsuario.id,
+                avatar_url: avatarUrl || null
+            };
+
             const { data, error } = await supabase
                 .from('perfiles_usuario')
-                .upsert({
-                    usuario_id: datosUsuario.id,
-                    avatar_url: avatarUrl || null
-                }, {
-                    onConflict: 'usuario_id'
+                .upsert(datosAvatarActualizar, {
+                    // Esta es la clave: si ya existe una fila con este usuario_id, la actualiza.
+                    onConflict: 'usuario_id' 
                 })
                 .select();
 
             if (error) throw error;
-            console.log('Avatar guardado en BD:', avatarUrl, 'data:', data);
+            
+            console.log('Avatar guardado/actualizado en BD:', avatarUrl, 'data:', data);
 
-            // Actualizar avatar principal también
+            // 3. Actualizar avatar principal también
             actualizarAvatar(datosUsuario.nombre_completo || '');
 
         } catch (error) {
-            console.error('Error al guardar avatar en BD:', error);
-            // No bloqueamos el flujo, se guardará al dar click en "Guardar Cambios"
+            console.error('Error al guardar avatar en BD con upsert:', error);
+            // Mostrar un mensaje de error al usuario si es necesario
+            alert('Error al guardar el avatar. Por favor, asegúrate de que tu sesión es válida.');
         }
     } else {
-        console.log('User not in DB yet, avatar will be saved with profile');
+        console.log('User ID not available yet (first time profile setup), avatar will be saved with full profile update.');
     }
 }
 
@@ -548,8 +573,9 @@ async function guardarCambiosPerfil() {
     const telefono = document.getElementById('inputTelefono').value.trim();
     const peso = document.getElementById('inputPeso').value;
     const altura = document.getElementById('inputAltura').value;
-    const objetivos = obtenerObjetivosSeleccionados();
-    const avatarUrl = document.getElementById('inputAvatarUrl').value; // OBTENER VALOR DE AVATAR
+    const objetivosSeleccionados = obtenerObjetivosSeleccionados();
+    const objetivosString = objetivosSeleccionados.length ? objetivosSeleccionados.join(', ') : null;
+    const avatarUrl = document.getElementById('inputAvatarUrl').value;
 
     const nombreCompleto = `${nombre} ${apellido}`;
 
@@ -563,7 +589,7 @@ async function guardarCambiosPerfil() {
     }
 
     try {
-        // Preparar datos básicos (tabla usuarios)
+        // --- 1. Guardar datos básicos en la tabla 'usuarios' (Lógica de Insert/Update) ---
         const datosUsuarioActualizar = {
             nombre_completo: nombreCompleto,
             correo: correo,
@@ -585,7 +611,7 @@ async function guardarCambiosPerfil() {
             usuarioData = result.data;
             usuarioError = result.error;
         } else {
-            // Usuario no existe, intentar insertar
+            // Usuario no existe, intentar insertar (con fallback a update)
             const result = await supabase
                 .from('usuarios')
                 .insert(datosUsuarioActualizar)
@@ -593,7 +619,7 @@ async function guardarCambiosPerfil() {
             usuarioData = result.data;
             usuarioError = result.error;
 
-            // Si insert falla por duplicado, intentar update
+            // Si insert falla por duplicado, intentar update (esto captura casos donde ya existe el registro pero no se cargó el ID localmente)
             if (usuarioError && usuarioError.code === '23505') {
                 const updateResult = await supabase
                     .from('usuarios')
@@ -612,81 +638,81 @@ async function guardarCambiosPerfil() {
         // Actualizar el ID si se creó el usuario
         if (usuarioData && usuarioData[0]) {
             datosUsuario.id = usuarioData[0].id;
+            datosUsuario.usuario_id = usuarioData[0].id;
         }
-
-        // Guardar datos adicionales en tabla perfiles_usuario
+        
+        // --- 2. Guardar datos adicionales en la tabla 'perfiles_usuario' (Usando UPSERT) ---
         const datosPerfilActualizar = {
-            usuario_id: datosUsuario.id,
+            usuario_id: datosUsuario.usuario_id || datosUsuario.id, // ID del usuario ya debe estar disponible
             telefono: telefono || null,
             peso: peso ? parseFloat(peso) : null,
             altura: altura ? parseFloat(altura) : null,
-            objetivos: objetivos || null,
-            avatar_url: avatarUrl || null // GUARDAR VALOR DE AVATAR
+            objetivos: objetivosString,
+            avatar_url: avatarUrl || null
         };
 
-        console.log('Datos a guardar en perfiles_usuario:', datosPerfilActualizar);
+        console.log('Datos a guardar en perfiles_usuario (UPSERT):', datosPerfilActualizar);
 
-        // Intentar insertar primero
-        let perfilData, perfilError;
-        try {
-            const insertResult = await supabase
-                .from('perfiles_usuario')
-                .insert(datosPerfilActualizar)
-                .select();
-
-            perfilData = insertResult.data;
-            perfilError = insertResult.error;
-        } catch (insertError) {
-            // Si falla por duplicado, intentar update
-            const updateResult = await supabase
-                .from('perfiles_usuario')
-                .update({
-                    telefono: telefono || null,
-                    peso: peso ? parseFloat(peso) : null,
-                    altura: altura ? parseFloat(altura) : null,
-                    objetivos: objetivos || null,
-                    avatar_url: avatarUrl || null // ACTUALIZAR VALOR DE AVATAR
-                })
-                .eq('usuario_id', datosUsuario.id)
-                .select();
-
-            perfilData = updateResult.data;
-            perfilError = updateResult.error;
-        }
+        const { data: perfilData, error: perfilError } = await supabase
+            .from('perfiles_usuario')
+            .upsert(datosPerfilActualizar, {
+                // ESTA ES LA CLAVE: Dice a Supabase que 'usuario_id' es la restricción única.
+                // Si ya existe una fila con ese usuario_id, la actualiza.
+                onConflict: 'usuario_id' 
+            })
+            .select();
 
         if (perfilError) {
-            console.error('Error al guardar datos de perfil:', perfilError);
-            // No lanzamos error aquí porque los datos básicos ya se guardaron
+            console.error('Error al guardar datos de perfil (UPSERT):', perfilError);
+            // No lanzamos error aquí para no detener el flujo si los datos básicos se guardaron
         } else {
-            console.log('Datos guardados en perfiles_usuario:', perfilData);
+            console.log('Datos guardados/actualizados en perfiles_usuario:', perfilData);
         }
 
-        // Actualizar datos locales
+        // --- 3. Actualizar datos locales y UI ---
         datosUsuario = {
             ...datosUsuario,
             ...datosUsuarioActualizar,
             ...datosPerfilActualizar,
-            avatar_url: avatarUrl || null // ACTUALIZAR VALOR DE AVATAR
+            avatar_url: avatarUrl || null,
+            objetivos: objetivosString
         };
 
-        // Actualizar la interfaz
-        actualizarInformacionUsuario();
+        const datosHeader = {
+            nombre_completo: nombreCompleto, // Asegura que el nombre actualizado se guarde
+            avatar_url: avatarUrl || null    // El nuevo avatar_url
+        };
+        
+        localStorage.setItem('pf.avatar', JSON.stringify(datosHeader));
+        console.log('Sincronización de localStorage (pf.avatar) completada.');
 
-        // Cerrar modal
+        actualizarInformacionUsuario();
+        actualizarAvatar(nombreCompleto);
+
+        // Cerrar modal y mostrar confirmación
         const modalElement = document.getElementById('modalEditarPerfil');
         const modal = window.bootstrap.Modal.getInstance(modalElement) || new window.bootstrap.Modal(modalElement);
         modal.hide();
 
-        // Mostrar confirmación
-        alert('Perfil actualizado exitosamente.');
+        // NUEVA ALERTA ESTÉTICA:
+        Swal.fire({
+            icon: 'success',                 // Tipo de icono (success, error, warning, info)
+            title: '¡Actualizado!',          // Título grande
+            text: 'Tu perfil se ha guardado exitosamente.', // Texto pequeño
+            confirmButtonColor: '#0d6efd',   // Color del botón (Azul Bootstrap)
+            confirmButtonText: 'Genial'      // Texto del botón
+        });
 
     } catch (error) {
-        console.error('Error al guardar cambios:', error);
-        console.log('Error details:', error.message, error.details, error.code);
-        alert('Error al guardar los cambios. Por favor intenta nuevamente.');
-    }
-}
-
+    console.error('Error al guardar cambios:', error);
+    
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Hubo un problema al guardar los cambios. Inténtalo de nuevo.',
+        confirmButtonColor: '#d33' // Rojo para errores
+    });
+}};
 // ====== INICIALIZAR EVENTOS ======
 function inicializarEventos() {
     // Evento para selección de avatar

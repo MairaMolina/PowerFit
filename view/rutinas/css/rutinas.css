@@ -1,32 +1,83 @@
-/* Tarjeta base del listado */
+/* =========================================
+   VARIABLES Y TEMA OSCURO
+   ========================================= */
+   :root {
+    --color-fondo-tarjeta: #ffffff;
+    --color-texto: #333333;
+    --color-texto-secundario: #666666;
+    --color-fondo-item: #ffffff;
+    --color-fondo-detalle: #f8f9fa; /* Fondo para detalles internos */
+    --color-borde-item: #eeeeee;
+    --color-filtro-bg: #f8f9fa;
+    --color-filtro-btn: #ffffff;
+}
+
+body.tema-oscuro {
+    --color-fondo: #10131a;
+    --color-fondo-tarjeta: #1b1f29;
+    --color-fondo-contraste: #232837;
+    --color-texto: #f5f7fb;
+    --color-texto-secundario: #b3b9c7;
+    --color-borde: rgba(255, 255, 255, 0.12);
+    
+    --color-fondo-item: #232837; 
+    --color-fondo-detalle: #151820; /* Fondo más oscuro para detalles */
+    --color-borde-item: #3a3f50;
+    
+    --color-filtro-bg: #232837;
+    --color-filtro-btn: #2d3342;
+
+    --sombra-pequena: 0 4px 12px rgba(0, 0, 0, 0.55);
+    --sombra-mediana: 0 12px 28px rgba(0, 0, 0, 0.6);
+    --sombra-grande: 0 18px 40px rgba(0, 0, 0, 0.7);
+}
+
+/* =========================================
+   AJUSTE DE HEADER
+   ========================================= */
+.header-dashboard {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+h1.titulo-pagina { margin-top: 0 !important; }
+
+/* =========================================
+   ESTILOS GENERALES TARJETAS
+   ========================================= */
 .tarjeta-listado, .tarjeta-proximos, .tarjeta-motivacion {
-    background-color: var(--color-background-tarjeta, #ffffff);
+    background-color: var(--color-fondo-tarjeta);
+    color: var(--color-texto);
     padding: 25px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .header-seccion h2 {
     font-size: 1.5rem;
     margin-bottom: 5px;
+    color: var(--color-texto);
 }
 
-/* Filtros de rutinas */
+/* =========================================
+   FILTROS DE RUTINAS
+   ========================================= */
 .filtros-rutinas {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
     padding: 15px;
-    background-color: #f8f9fa;
+    background-color: var(--color-filtro-bg);
     border-radius: 8px;
+    transition: background-color 0.3s ease;
 }
 
 .btn-filtro {
     padding: 8px 16px;
     border: 2px solid transparent;
     border-radius: 20px;
-    background-color: #fff;
-    color: #666;
+    background-color: var(--color-filtro-btn);
+    color: var(--color-texto-secundario);
     font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
@@ -45,15 +96,21 @@
     border-color: #667eea;
 }
 
-/* Estilos de Cada Item de Rutina */
+/* =========================================
+   ITEMS DE RUTINA (Las tarjetas grandes)
+   ========================================= */
 .rutina-item {
-    border: 1px solid var(--color-border-light, #eee);
+    border: 1px solid var(--color-borde-item);
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 20px;
-    background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+    
+    /* Usamos variables en lugar de gradiente fijo blanco */
+    background-color: var(--color-fondo-item); 
+    
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
+    color: var(--color-texto);
 }
 
 .rutina-item:hover {
@@ -61,9 +118,7 @@
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }
 
-.rutina-item.hidden {
-    display: none;
-}
+.rutina-item.hidden { display: none; }
 
 .rutina-header {
     display: flex;
@@ -77,9 +132,7 @@
     flex-shrink: 0;
 }
 
-.rutina-info {
-    flex-grow: 1;
-}
+.rutina-info { flex-grow: 1; }
 
 .rutina-titulo {
     font-size: 1.3rem;
@@ -87,62 +140,20 @@
     color: var(--color-primary-dark, #0056b3);
     margin-bottom: 5px;
 }
+/* Título más claro en modo oscuro */
+body.tema-oscuro .rutina-titulo { color: #667eea; }
 
 .rutina-descripcion {
-    color: var(--color-text-muted, #666);
+    color: var(--color-texto-secundario);
     font-size: 0.95rem;
     margin-bottom: 10px;
 }
 
-/* Badge de nivel */
-.nivel-badge {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 15px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-left: 10px;
-}
-
-.nivel-badge.nivel-1 {
-    background-color: #c8e6c9;
-    color: #2e7d32;
-}
-
-.nivel-badge.nivel-2 {
-    background-color: #fff9c4;
-    color: #f57f17;
-}
-
-.nivel-badge.nivel-3 {
-    background-color: #ffccbc;
-    color: #d84315;
-}
-
-/* Tags de características */
-.rutina-tags {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 15px;
-}
-
-.tag {
-    padding: 5px 12px;
-    background-color: #e3f2fd;
-    color: #1976d2;
-    border-radius: 12px;
-    font-size: 0.85rem;
-    font-weight: 500;
-}
-
-.tag i {
-    margin-right: 4px;
-}
-
-/* Detalles de ejercicios */
+/* =========================================
+   DETALLES INTERNOS (Ejercicios, Frecuencia)
+   ========================================= */
 .ejercicios-detalle {
-    background-color: #f5f5f5;
+    background-color: var(--color-fondo-detalle);
     padding: 15px;
     border-radius: 8px;
     margin-top: 15px;
@@ -151,7 +162,7 @@
 .ejercicios-detalle h5 {
     font-size: 1rem;
     font-weight: 600;
-    color: #333;
+    color: var(--color-texto);
     margin-bottom: 10px;
 }
 
@@ -163,19 +174,13 @@
 
 .ejercicio-lista li {
     padding: 8px 0;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--color-borde-item);
     font-size: 0.9rem;
-    color: #555;
+    color: var(--color-texto-secundario);
 }
 
-.ejercicio-lista li:last-child {
-    border-bottom: none;
-}
-
-.ejercicio-lista li i {
-    color: #667eea;
-    margin-right: 8px;
-}
+.ejercicio-lista li:last-child { border-bottom: none; }
+.ejercicio-lista li i { color: #667eea; margin-right: 8px; }
 
 /* Sección de frecuencia */
 .frecuencia-info {
@@ -183,14 +188,14 @@
     gap: 20px;
     margin-top: 15px;
     padding-top: 15px;
-    border-top: 2px dashed #e0e0e0;
+    border-top: 2px dashed var(--color-borde-item);
 }
 
 .frecuencia-item {
     flex: 1;
     text-align: center;
     padding: 10px;
-    background-color: #fff;
+    background-color: var(--color-filtro-btn); /* Reutilizamos fondo de botón */
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
@@ -203,17 +208,39 @@
 
 .frecuencia-item .label {
     font-size: 0.8rem;
-    color: #999;
+    color: var(--color-texto-secundario);
     text-transform: uppercase;
 }
 
-/* Estilos de Resumen (los cuadros superiores) */
+/* =========================================
+   RESUMEN ESTADÍSTICAS (Lado Derecho)
+   ========================================= */
 .resumen-estadisticas .col-md-6 > div,
 .resumen-estadisticas .col-lg-12 > div {
     padding: 20px;
     border-radius: 12px;
     text-align: center;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Tarjeta Nivel Actual */
+.card-resumen-nivel {
+    background-color: #e3f2fd; /* Azul claro original */
+    color: #333;
+}
+body.tema-oscuro .card-resumen-nivel {
+    background-color: #1a3852; /* Azul oscuro */
+    color: #bbdefb;
+}
+
+/* Tarjeta Rutinas Disponibles */
+.card-resumen-disponible {
+    background-color: #f3e5f5; /* Morado claro original */
+    color: #333;
+}
+body.tema-oscuro .card-resumen-disponible {
+    background-color: #4a148c; /* Morado oscuro */
+    color: #e1bee7;
 }
 
 .resumen-estadisticas .valor-resumen {
@@ -224,20 +251,54 @@
 
 .resumen-estadisticas .descripcion-resumen {
     font-size: 0.9rem;
-    color: var(--color-text-muted);
+    opacity: 0.8;
     margin-top: 5px;
 }
 
-/* Panel de Progresión */
+/* =========================================
+   OTROS ELEMENTOS
+   ========================================= */
+.logo-light { display: block; }
+.logo-dark { display: none; }
+body.tema-oscuro .logo-light { display: none; }
+body.tema-oscuro .logo-dark { display: block; }
+
+/* Avatar */
+.avatar-usuario {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primario, #0d6efd), var(--color-secundario, #0dcaf0));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 0.9rem;
+    position: relative;
+    overflow: hidden;
+    margin-right: 10px;
+}
+  
+.avatar-usuario img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 .tarjeta-proximos h4,
 .tarjeta-motivacion h4 {
-    border-bottom: 2px solid var(--color-border-light);
+    border-bottom: 2px solid var(--color-borde-item);
     padding-bottom: 10px;
     margin-bottom: 15px;
     font-size: 1.1rem;
+    color: var(--color-texto);
 }
 
-/* Botón de acción */
 .btn-accion-rutina {
     width: 100%;
     padding: 10px;
@@ -256,18 +317,44 @@
     box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
 }
 
+/* Utilidades Texto Oscuro */
+body.tema-oscuro .text-muted, 
+body.tema-oscuro .text-secondary {
+    color: #a0a0a0 !important;
+}
+
+/* Tags */
+.rutina-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
+
+.tag {
+    padding: 5px 12px;
+    background-color: #e3f2fd;
+    color: #1976d2;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+body.tema-oscuro .tag {
+    background-color: #1a3852;
+    color: #90caf9;
+}
+
+/* Badges */
+.nivel-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-left: 10px;
+}
+.nivel-badge.nivel-1 { background-color: #c8e6c9; color: #2e7d32; }
+.nivel-badge.nivel-2 { background-color: #fff9c4; color: #f57f17; }
+.nivel-badge.nivel-3 { background-color: #ffccbc; color: #d84315; }
+
 /* Responsive */
 @media (max-width: 768px) {
-    .filtros-rutinas {
-        justify-content: center;
-    }
-    
-    .frecuencia-info {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .rutina-header {
-        flex-direction: column;
-    }
+    .filtros-rutinas { justify-content: center; }
+    .frecuencia-info { flex-direction: column; gap: 10px; }
+    .rutina-header { flex-direction: column; }
 }

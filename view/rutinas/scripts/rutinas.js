@@ -1,4 +1,7 @@
 import { supabase } from '../../../core/services/cliente_supabase.js';
+import { inicializarTema } from '../../shared/scripts/tema.js';
+import { aplicarAvatarHeader } from '../../shared/scripts/header_usuario.js';
+
 
 // ============================================
 // CÁLCULOS Y UTILIDADES
@@ -704,6 +707,8 @@ async function initializeApp() {
 
     // Cargar rutinas personalizadas
     await loadRoutineList(user.id);
+    aplicarAvatarHeader();
+    inicializarTema();
 }
 
 document.addEventListener('DOMContentLoaded', initializeApp);

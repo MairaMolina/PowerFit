@@ -15,6 +15,7 @@
 
   --color-fondo: #f8f9fa;
   --color-fondo-tarjeta: #ffffff;
+  --color-fondo-contraste: #f1f4f9;
   --color-texto: #212529;
   --color-texto-secundario: #6c757d;
   --color-borde: #dee2e6;
@@ -27,13 +28,132 @@
   --sombra-grande: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
-/* Tema oscuro */
+/* Tema oscuro igual que dashboard */
 body.tema-oscuro {
-  --color-fondo: #1a1a1a;
-  --color-fondo-tarjeta: #2d2d2d;
-  --color-texto: #f8f9fa;
-  --color-texto-secundario: #adb5bd;
-  --color-borde: #495057;
+  --color-fondo: #10131a;
+  --color-fondo-tarjeta: #1b1f29;
+  --color-fondo-contraste: #232837;
+  --color-texto: #f5f7fb;
+  --color-texto-secundario: #b3b9c7;
+  --color-borde: rgba(255, 255, 255, 0.12);
+  --sombra-pequena: 0 4px 12px rgba(0, 0, 0, 0.55);
+  --sombra-mediana: 0 12px 28px rgba(0, 0, 0, 0.6);
+  --sombra-grande: 0 18px 40px rgba(0, 0, 0, 0.7);
+}
+
+/* =========================================
+   MODALES EN MODO OSCURO
+   ========================================= */
+
+/* Fondo y texto del modal */
+body.tema-oscuro .modal-content {
+    background-color: var(--color-fondo-tarjeta, #1b1f29);
+    color: var(--color-texto, #f5f7fb);
+    border: 1px solid var(--color-borde, rgba(255, 255, 255, 0.1));
+}
+
+/* Header y Footer del modal (bordes) */
+body.tema-oscuro .modal-header,
+body.tema-oscuro .modal-footer {
+    border-color: var(--color-borde, rgba(255, 255, 255, 0.1));
+}
+
+/* Botón de cerrar (la X) - Invertir color para que se vea blanca */
+body.tema-oscuro .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Inputs y Selects dentro del modal */
+body.tema-oscuro .modal-body .form-control,
+body.tema-oscuro .modal-body .form-select {
+    background-color: var(--color-fondo, #10131a); /* Un poco más oscuro que la tarjeta */
+    border-color: var(--color-borde, rgba(255, 255, 255, 0.2));
+    color: var(--color-texto, #f5f7fb);
+}
+
+/* Texto placeholder de los inputs */
+body.tema-oscuro .form-control::placeholder {
+    color: var(--color-texto-secundario, #b3b9c7);
+    opacity: 0.7;
+}
+
+/* Texto de ayuda (form-text) */
+body.tema-oscuro .form-text {
+    color: var(--color-texto-secundario, #b3b9c7);
+}
+
+/* Checkboxes */
+body.tema-oscuro .form-check-input {
+    background-color: var(--color-fondo, #10131a);
+    border-color: var(--color-borde, rgba(255, 255, 255, 0.3));
+}
+
+/* Al estar seleccionados (checked) los checkboxes */
+body.tema-oscuro .form-check-input:checked {
+    background-color: #0d6efd; /* Azul primario */
+    border-color: #0d6efd;
+}
+
+/* Etiquetas (Labels) */
+body.tema-oscuro .form-label, 
+body.tema-oscuro .form-check-label {
+    color: var(--color-texto, #f5f7fb);
+}
+
+/* Vista previa de imagen (thumbnail) */
+body.tema-oscuro .img-thumbnail {
+    background-color: var(--color-fondo, #10131a);
+    border-color: var(--color-borde, rgba(255, 255, 255, 0.2));
+}
+
+/* Invertir color del icono nativo del navegador (el calendario dentro del input) */
+body.tema-oscuro ::-webkit-calendar-picker-indicator {
+    filter: invert(1); /* Vuelve el icono negro a blanco */
+    opacity: 0.6;      /* Un poco de transparencia para que no brille tanto */
+    cursor: pointer;
+}
+
+/* =========================================
+   SWEETALERT2 - ADAPTACIÓN MODO OSCURO
+   ========================================= */
+
+/* Cuando el body tiene la clase 'tema-oscuro', cambiamos los estilos del popup */
+body.tema-oscuro .swal2-popup {
+    background-color: var(--color-fondo-tarjeta, #1b1f29) !important; /* Fondo oscuro */
+    color: var(--color-texto, #f5f7fb) !important; /* Texto claro */
+    border: 1px solid var(--color-borde, rgba(255, 255, 255, 0.1));
+}
+
+/* Título de la alerta */
+body.tema-oscuro .swal2-title {
+    color: var(--color-texto, #f5f7fb) !important;
+}
+
+/* Texto del contenido */
+body.tema-oscuro .swal2-html-container {
+    color: var(--color-texto-secundario, #b3b9c7) !important;
+}
+
+/* Botón de confirmación: para asegurar que contraste bien con el fondo */
+body.tema-oscuro .swal2-confirm {
+    background: linear-gradient(135deg, #0d6efd, #0dcaf0) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.4);
+}
+
+body.tema-oscuro .swal2-confirm:hover {
+    background: linear-gradient(135deg, #0b5ed7, #0bb4c3) !important;
+}
+
+body.tema-oscuro .swal2-confirm:active {
+    background: linear-gradient(135deg, #23abd1, #1d84d7) !important;
+}
+
+/* Icono de éxito (Success) - Ajuste para que no tenga fondo blanco feo */
+body.tema-oscuro .swal2-success-circular-line-left,
+body.tema-oscuro .swal2-success-circular-line-right,
+body.tema-oscuro .swal2-success-fix {
+    background-color: transparent !important;
 }
 
 * {
@@ -59,7 +179,7 @@ body {
   height: 100vh;
   background-color: var(--color-fondo-tarjeta);
   border-right: 1px solid var(--color-borde);
-  padding: 45px 0;
+  padding: 25px 0;
   z-index: 1000;
   overflow-y: auto;
   transition: all 0.3s ease;
@@ -67,16 +187,20 @@ body {
 
 .logo-sidebar {
   text-align: center;
-  padding: 0 20px 30px;
+  padding: 0 12px 15px;
   border-bottom: 1px solid var(--color-borde);
-  box-shadow: var(--sombra-pequena);
   margin-bottom: 30px;
 }
 
 .logo-sidebar img {
-  height: 60px;
+  height: 90px;
   width: auto;
 }
+
+.logo-light { display: block; }
+.logo-dark { display: none; }
+body.tema-oscuro .logo-light { display: none; }
+body.tema-oscuro .logo-dark { display: block; }
 
 .navegacion-sidebar {
   padding: 0 15px;
@@ -225,6 +349,7 @@ body {
   font-weight: 700;
   font-size: 0.9rem;
   position: relative;
+  overflow: hidden;
 }
 
 .avatar-usuario img {

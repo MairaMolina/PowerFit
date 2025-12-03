@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Power Fit - Mis Rutinas</title>    
+    <title>Power Fit - Mis Rutinas</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
@@ -16,14 +16,12 @@
 </head>
 
 <body>
-    <!-- SIDEBAR LATERAL IZQUIERDO -->
     <aside class="sidebar">
-        <!-- Logo -->
         <div class="logo-sidebar">
-            <img src="../../view/registrer/images/Logo_powerfit.png" alt="Power Fit Logo">
+            <img src="../registrer/images/Logo_powerfit.png" alt="Power Fit Logo" class="logo logo-light">
+            <img src="../registrer/images/Logo_powerfit_dark.png" alt="Power Fit Logo dark" class="logo logo-dark">
         </div>
 
-        <!-- Menú de navegación -->
         <nav class="navegacion-sidebar">
             <p class="titulo-menu">Menú Principal</p>
             <ul class="lista-menu">
@@ -77,8 +75,40 @@
             <div class="container-fluid">
                 <div class="row align-items-center">
                     <div class="col-md-6">
-                        <h1 class="titulo-pagina">Mis Rutinas Personalizadas</h1>
-                        <p class="subtitulo-pagina">Rutinas diseñadas especialmente para ti según tus objetivos.</p>
+                        <h1 class="titulo-pagina">Mis Rutinas</h1>
+                        <p class="subtitulo-pagina">Rutinas diseñadas especialmente para ti.</p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="controles-header">
+                            <button class="boton-tema" id="botonTema" title="Cambiar tema">
+                                <i class="fas fa-moon"></i>
+                            </button>
+
+                            <div class="dropdown perfil-dropdown">
+                                <button class="perfil-usuario" id="dropdownPerfil" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="avatar-usuario" style="overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                                        <img src="" alt="Avatar" id="fotoPerfilHeader" style="display: none; width: 100%; height: 100%; object-fit: cover;">
+                                        <span id="inicialesHeader">PF</span>
+                                    </div>
+                                    <div class="info-usuario">
+                                        <span class="nombre-usuario" id="nombreUsuario">Cargando...</span>
+                                        <span class="rol-usuario">Usuario</span>
+                                    </div>
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownPerfil">
+                                    <li><a class="dropdown-item" href="/configuracion.html">
+                                            <i class="fas fa-cog"></i> Configuración de Cuenta
+                                        </a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-danger" href="#" id="botonCerrarSesion">
+                                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                                        </a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -94,11 +124,9 @@
                         </div>
 
                         <p class="text-muted mb-3">
-                            <i class="fas fa-lightbulb"></i> Rutinas personalizadas basadas en tu perfil (IMC,
-                            nivel de actividad y preferencias). Cada rutina incluye 3 niveles de progresión.
+                            <i class="fas fa-lightbulb"></i> Rutinas personalizadas basadas en tu perfil.
                         </p>
 
-                        <!-- Filtros por objetivo -->
                         <div class="filtros-rutinas mb-4">
                             <button class="btn-filtro active" data-filter="todos">
                                 <i class="fas fa-th"></i> Todas
@@ -129,13 +157,13 @@
 
                     <div class="row resumen-estadisticas mb-4">
                         <div class="col-md-6 col-lg-12 mb-3">
-                            <div style="background-color: #e3f2fd;">
+                            <div class="card-resumen-nivel">
                                 <p class="valor-resumen" id="nivelActual">1</p>
                                 <p class="descripcion-resumen">Nivel Actual</p>
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-12 mb-3">
-                            <div style="background-color: #f3e5f5;">
+                            <div class="card-resumen-disponible">
                                 <p class="valor-resumen" id="rutinasDisponibles">0</p>
                                 <p class="descripcion-resumen">Rutinas disponibles</p>
                             </div>
@@ -162,6 +190,31 @@
     </main>
 
     <footer>
+        <div class="footer-contenido">
+            <div class="footer-columna">
+                <h4>Enlaces</h4>
+                <ul>
+                    <li><a href="../../view/dashboard/dashboard_usuario.html">Dashboard</a></li>
+                    <li><a href="../../view/rutinas/rutinas.html">Mis Rutinas</a></li>
+                    <li><a href="/explorar-rutinas.html">Explorar</a></li>
+                </ul>
+            </div>
+            <div class="footer-columna">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Términos y Condiciones</a></li>
+                    <li><a href="#">Política de Privacidad</a></li>
+                </ul>
+            </div>
+            <div class="footer-columna">
+                <h4>Contacto</h4>
+                <p>📩 <a href="mailto:contacto@powerfit.com">contacto@powerfit.com</a></p>
+                <p>📞 +57 311 1111111</p>
+            </div>
+        </div>
+        <div class="footer-copy">
+            <p>© 2025 Power Fit. Todos los derechos reservados.</p>
+        </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

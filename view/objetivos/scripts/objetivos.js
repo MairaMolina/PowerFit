@@ -1,5 +1,6 @@
 import { supabase } from '../../../core/services/cliente_supabase.js';
-
+import { inicializarTema } from '../../shared/scripts/tema.js';
+import { aplicarAvatarHeader } from '../../shared/scripts/header_usuario.js';
 
 // DATOS Y CÁLCULOS
 
@@ -219,9 +220,9 @@ async function loadObjectiveList(userId) {
 
     // Obtener perfil del usuario
     const { data: perfil, error: perfilError } = await supabase
-        .from('perfiles')
+        .from('perfiles_usuario')
         .select('peso, altura, nivel_actividad, preferencias_ejercicio')
-        .eq('id', userId)
+        .eq('usuario_id', userId)
         .single();
 
     if (perfilError) {
@@ -246,7 +247,11 @@ async function setupNewObjectiveForm(userId) {
     const alerta = document.getElementById('alertaFormulario');
 
     // Precarga de datos de perfil
-    const { data: profileData } = await supabase.from('perfiles').select('peso, altura, nivel_actividad').eq('id', userId).single();
+    const { data: profileData } = await supabase
+        .from('perfiles_usuario')
+        .select('peso, altura, nivel_actividad')
+        .eq('usuario_id', userId)
+        .single();
 
     // Lógica para mostrar/ocultar campos condicionales
     tipoMetaSelect.addEventListener('change', () => {
@@ -342,6 +347,8 @@ async function setupNewObjectiveForm(userId) {
 // INICIALIZACIÓN
 async function initializeApp() {
     const { data: { user } } = await supabase.auth.getUser();
+    inicializarTema();
+    aplicarAvatarHeader();
 
     if (!user) {
         // Redirigir si no hay sesión

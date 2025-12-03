@@ -15,6 +15,7 @@
   
   --color-fondo: #f8f9fa;
   --color-fondo-tarjeta: #ffffff;
+  --color-fondo-contraste: #f1f4f9;
   --color-texto: #212529;
   --color-texto-secundario: #6c757d;
   --color-borde: #dee2e6;
@@ -29,11 +30,15 @@
 
 /* Tema oscuro */
 body.tema-oscuro {
-  --color-fondo: #1a1a1a;
-  --color-fondo-tarjeta: #2d2d2d;
-  --color-texto: #f8f9fa;
-  --color-texto-secundario: #adb5bd;
-  --color-borde: #495057;
+  --color-fondo: #10131a;
+  --color-fondo-tarjeta: #1b1f29;
+  --color-fondo-contraste: #de0000;
+  --color-texto: #f5f7fb;
+  --color-texto-secundario: #b3b9c7;
+  --color-borde: rgba(255, 255, 255, 0.12);
+  --sombra-pequena: 0 4px 12px rgba(0, 0, 0, 0.55);
+  --sombra-mediana: 0 12px 28px rgba(0, 0, 0, 0.6);
+  --sombra-grande: 0 18px 40px rgba(0, 0, 0, 0.7);
 }
 
 * {
@@ -59,7 +64,7 @@ body {
   height: 100vh;
   background-color: var(--color-fondo-tarjeta);
   border-right: 1px solid var(--color-borde);
-  padding: 45px 0;
+  padding: 25px 0;
   z-index: 1000;
   overflow-y: auto;
   transition: all 0.3s ease;
@@ -67,15 +72,32 @@ body {
 
 .logo-sidebar {
   text-align: center;
-  padding: 0 20px 30px;
+  padding: 0 12px 15px;
   border-bottom: 1px solid var(--color-borde);
-  box-shadow: var(--sombra-pequena);
   margin-bottom: 30px;
 }
 
 .logo-sidebar img {
-  height: 60px;
+  height: 90px;
   width: auto;
+}
+
+/* Por defecto: mostrar logo claro, ocultar oscuro */
+.logo-light {
+  display: block;
+}
+
+.logo-dark {
+  display: none;
+}
+
+/* En modo oscuro: ocultar logo claro, mostrar oscuro */
+body.tema-oscuro .logo-light {
+  display: none;
+}
+
+body.tema-oscuro .logo-dark {
+  display: none;
 }
 
 .navegacion-sidebar {
@@ -224,6 +246,18 @@ body {
   color: white;
   font-weight: 700;
   font-size: 0.9rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.avatar-usuario img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .info-usuario {
@@ -413,7 +447,7 @@ body {
   align-items: center;
   gap: 15px;
   padding: 15px;
-  background-color: var(--color-fondo);
+  background-color: var(--color-fondo-contraste);
   border-radius: 12px;
   border: 1px solid var(--color-borde);
   transition: all 0.3s ease;
@@ -506,7 +540,7 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  color: white;
+  color: rgb(23, 97, 193);
   flex-shrink: 0;
 }
 
@@ -673,7 +707,7 @@ body {
   align-items: center;
   gap: 12px;
   padding: 15px;
-  background-color: var(--color-fondo);
+  background-color: var(--color-fondo-contraste);
   border-radius: 12px;
   border: 1px solid var(--color-borde);
   transition: all 0.3s ease;
@@ -752,7 +786,7 @@ body {
   align-items: center;
   gap: 12px;
   padding: 15px;
-  background-color: var(--color-fondo);
+  background-color: var(--color-fondo-contraste);
   border-radius: 12px;
   border: 1px solid var(--color-borde);
   transition: all 0.3s ease;
@@ -813,6 +847,15 @@ body {
   color: var(--color-exito);
 }
 
+body.tema-oscuro .duracion,
+body.tema-oscuro .calorias,
+body.tema-oscuro .estado-ejercicio.pendiente,
+body.tema-oscuro .badge-proximo.intermedio,
+body.tema-oscuro .badge-proximo.principiante {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--color-texto-secundario);
+}
+
 /* ====== MEDIDAS CORPORALES ====== */
 .lista-medidas {
   display: flex;
@@ -825,7 +868,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 12px 15px;
-  background-color: var(--color-fondo);
+  background-color: var(--color-fondo-contraste);
   border-radius: 10px;
   border: 1px solid var(--color-borde);
 }
@@ -839,8 +882,30 @@ body {
 .valor-medida {
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--color-primario);
+  color: #0d6efd;
 }
+
+body.tema-oscuro .valor-medida {
+  color: #4fb3ff;
+}
+
+.valor-medida small {
+  color: var(--color-texto-secundario);
+}
+
+body.tema-oscuro .valor-medida small {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.valor-medida.imc-bajo { color: #ffb347; }
+.valor-medida.imc-normal { color: #50c878; }
+.valor-medida.imc-sobre { color: #ff8c42; }
+.valor-medida.imc-obeso { color: #ff4f5e; }
+
+body.tema-oscuro .valor-medida.imc-bajo { color: #ffd480; }
+body.tema-oscuro .valor-medida.imc-normal { color: #6fffb0; }
+body.tema-oscuro .valor-medida.imc-sobre { color: #ffb07c; }
+body.tema-oscuro .valor-medida.imc-obeso { color: #ff8694; }
 
 /* ====== BOTONES ====== */
 .boton-iniciar-entrenamiento {
@@ -860,6 +925,69 @@ footer {
     margin-left: var(--sidebar-width);
     margin-top: 60px;
     padding: 40px 0 20px;
+}
+
+body.tema-oscuro .footer-columna a,
+body.tema-oscuro .footer-columna p {
+    color: var(--color-texto-secundario);
+}
+
+body.tema-oscuro .footer-columna a:hover {
+    color: #4fb3ff;
+}
+
+/* ====== ESTADOS VACÍOS ====== */
+.card-empty,
+.lista-entrenamientos .text-center,
+.lista-ejercicios .text-center,
+.lista-proximos .text-center {
+  background-color: transparent;
+  color: var(--color-texto-secundario);
+  border: 1px dashed transparent;
+  border-radius: 12px;
+  padding: 20px 12px;
+}
+
+.card-empty p,
+.lista-entrenamientos .text-center p,
+.lista-ejercicios .text-center p,
+.lista-proximos .text-center p {
+  margin-bottom: 10px;
+  color: inherit;
+}
+
+.card-empty .btn,
+.lista-entrenamientos .text-center .btn,
+.lista-ejercicios .text-center .btn,
+.lista-proximos .text-center .btn {
+  border-radius: 30px;
+  font-weight: 600;
+}
+
+body.tema-oscuro .card-empty p,
+body.tema-oscuro .card-empty .text-muted,
+body.tema-oscuro .lista-entrenamientos .text-center p,
+body.tema-oscuro .lista-entrenamientos .text-center .text-muted,
+body.tema-oscuro .lista-ejercicios .text-center p,
+body.tema-oscuro .lista-ejercicios .text-center .text-muted,
+body.tema-oscuro .lista-proximos .text-center p,
+body.tema-oscuro .lista-proximos .text-center .text-muted {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Mensajes de error tipo “Error al cargar rutinas” */
+body.tema-oscuro #listaEntrenamientosRecientes p.text-muted,
+body.tema-oscuro #listaEjerciciosHoy p.text-muted,
+body.tema-oscuro #listaProximosEntrenamientos p.text-muted {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+body.tema-oscuro .card-empty .btn-outline-primary:hover,
+body.tema-oscuro .lista-entrenamientos .text-center .btn-outline-primary:hover,
+body.tema-oscuro .lista-ejercicios .text-center .btn-outline-primary:hover,
+body.tema-oscuro .lista-proximos .text-center .btn-outline-primary:hover {
+  background-color: rgba(79, 179, 255, 0.15);
+  color: #4fb3ff;
 }
 
 .footer-contenido {
