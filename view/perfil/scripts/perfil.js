@@ -700,7 +700,7 @@ async function guardarCambiosPerfil() {
             title: '¡Actualizado!',          // Título grande
             text: 'Tu perfil se ha guardado exitosamente.', // Texto pequeño
             confirmButtonColor: '#0d6efd',   // Color del botón (Azul Bootstrap)
-            confirmButtonText: 'Genial'      // Texto del botón
+            confirmButtonText: '¡Perfecto!'      // Texto del botón
         });
 
     } catch (error) {
@@ -817,5 +817,82 @@ function inicializarEventos() {
         const icono = document.querySelector('#botonTema i');
         icono?.classList.remove('fa-moon');
         icono?.classList.add('fa-sun');
+    }
+    // ====== EVENTO BORRAR PERFIL ======
+    const btnBorrarPerfil = document.getElementById('BorrarPerfil');
+
+    if (btnBorrarPerfil) {
+        btnBorrarPerfil.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            // 1. Alerta de confirmación (Roja y de Advertencia)
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "¡Esta acción eliminará tu cuenta y todos tus datos permanentemente!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, borrar mi cuenta',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true,
+                
+                customClass: {
+                    popup: 'alerta-borrar-cuenta' 
+                }
+            }).then(async (result) => {
+                
+                if (result.isConfirmed) {
+                    try {
+                        Swal.fire({
+                            title: 'Eliminando cuenta...',
+                            text: 'Borrando datos de seguridad...',
+                            allowOutsideClick: false,
+                            didOpen: () => { Swal.showLoading(); }
+                        });
+
+                        console.log('🗑️ Ejecutando RPC eliminar_mi_cuenta...');
+
+                        // 2. Ejecutamos el método RPC en la base de datos
+                        // Esto borra el correo de Auth Y los datos públicos en cascada
+                        const { error } = await supabase.rpc('eliminar_mi_cuenta');
+
+                        if (error) throw error;
+
+                        // 4. Cerrar la sesión localmente (limpiar tokens del navegador)
+                        const { error: signOutError } = await supabase.auth.signOut();
+                        
+                        // Limpiar cualquier rastro local
+                        localStorage.removeItem('pf.avatar'); 
+                        localStorage.removeItem('supabase.session'); // Por si acaso
+
+                        // 5. Éxito y Redirección
+                        await Swal.fire({
+                            icon: 'success',
+                            title: 'Cuenta eliminada',
+                            text: 'Tu cuenta y tu correo han sido borrados totalmente.',
+                            timer: 2000,
+                            showConfirmButton: false,
+                            // Aseguramos el estilo rojo que creamos antes
+                            customClass: {
+                                popup: 'alerta-borrar-cuenta' 
+                            }
+                        });
+
+                        // Redirigir al login
+                        window.location.href = '../login/iniciar_sesion.html';
+
+                    } catch (error) {
+                        console.error('❌ Error al borrar cuenta:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'No se pudo eliminar la cuenta: ' + error.message,
+                            customClass: { popup: 'alerta-borrar-cuenta' }
+                        });
+                    }
+                }
+            });
+        });
     }
 }

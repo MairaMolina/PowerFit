@@ -633,29 +633,61 @@ function inicializarEventos() {
     const btnCerrarSesion = document.getElementById('botonCerrarSesion');
     
     if (btnCerrarSesion) {
-        btnCerrarSesion.addEventListener('click', async (e) => {
+        btnCerrarSesion.addEventListener('click', (e) => { // Quitamos async de aquí, lo ponemos dentro
             e.preventDefault();
 
-            if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-                try {
-                    console.log('🚪 Cerrando sesión...');
-                    
-                    const { error } = await supabase.auth.signOut();
-                    if (error) throw error;
-
-                    console.log('✅ Sesión cerrada');
-
-                    // Redirigir
-                    window.location.replace('/view/home/inicio.html');
-
-                } catch (error) {
-                    console.error('❌ Error al cerrar sesión:', error);
-                    alert('Error al cerrar sesión');
+            // Usamos SweetAlert2 para confirmar
+            Swal.fire({
+                title: '¿Cerrar sesión?',
+                text: "¿Estás seguro de que deseas salir de Power Fit?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',   // Rojo para indicar salida
+                cancelButtonColor: '#3085d6', // Azul para mantenerse
+                confirmButtonText: 'Sí, cerrar sesión',
+                cancelButtonText: 'Cancelar',
+                // Estas clases permiten que el CSS del modo oscuro que te di antes funcione aquí también
+                customClass: {
+                    popup: 'swal2-popup'
                 }
-            }
+            }).then(async (result) => {
+                // Si el usuario confirma (da click en "Sí")
+                if (result.isConfirmed) {
+                    try {
+                        console.log('🚪 Cerrando sesión...');
+                        
+                        // Opcional: Mostrar un "Cargando..." mientras Supabase cierra
+                        Swal.fire({
+                            title: 'Cerrando sesión...',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        const { error } = await supabase.auth.signOut();
+                        if (error) throw error;
+
+                        console.log('✅ Sesión cerrada');
+
+                        // Redirigir
+                        window.location.replace('/view/home/inicio.html');
+
+                    } catch (error) {
+                        console.error('❌ Error al cerrar sesión:', error);
+                        
+                        // Alerta de error bonita
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'No se pudo cerrar la sesión. Por favor intenta de nuevo.'
+                        });
+                    }
+                }
+            });
         });
     }
-
+    
     // Cambiar tema
     const btnTema = document.getElementById('botonTema');
     if (btnTema) {

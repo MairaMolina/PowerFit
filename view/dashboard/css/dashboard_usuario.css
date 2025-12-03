@@ -41,6 +41,96 @@ body.tema-oscuro {
   --sombra-grande: 0 18px 40px rgba(0, 0, 0, 0.7);
 }
 
+/* =========================================
+   SWEETALERT2 - ADAPTACIÓN MODO OSCURO
+   ========================================= */
+
+/* 1. Fondo y Texto General del Popup */
+body.tema-oscuro .swal2-popup {
+    background-color: var(--color-fondo-tarjeta, #1b1f29) !important;
+    color: var(--color-texto, #f5f7fb) !important;
+    border: 1px solid var(--color-borde, rgba(255, 255, 255, 0.1));
+}
+
+/* 2. Título */
+body.tema-oscuro .swal2-title {
+    color: var(--color-texto, #f5f7fb) !important;
+}
+
+/* 3. Texto del mensaje */
+body.tema-oscuro .swal2-html-container {
+    color: var(--color-texto-secundario, #b3b9c7) !important;
+}
+
+/* 4. Botón de Cancelar (Gris oscuro en lugar de gris claro) */
+body.tema-oscuro .swal2-cancel {
+    background-color: #1c2538 !important; /* Gris oscuro */
+    color: #b3b9c7 !important;
+}
+body.tema-oscuro .swal2-cancel:hover {
+    background-color: #273256 !important; /* Más oscuro al pasar el mouse */
+}
+
+/* Icono de Warning (Amarillo) */
+body.tema-oscuro .swal2-icon.swal2-warning {
+    border-color: #f8bb86 !important;
+    color: #f8bb86 !important;
+}
+
+/* Icono de Success (Verde) - Fondo transparente */
+body.tema-oscuro .swal2-success-circular-line-left,
+body.tema-oscuro .swal2-success-circular-line-right,
+body.tema-oscuro .swal2-success-fix {
+    background-color: transparent !important;
+}
+
+/* Icono de Error (Rojo) */
+body.tema-oscuro .swal2-error-x-mark-line-left,
+body.tema-oscuro .swal2-error-x-mark-line-right {
+    background-color: #d33 !important;
+}
+
+/* =========================================
+   DROPDOWN MENU (PERFIL) - MODO OSCURO
+   ========================================= */
+
+/* 1. Contenedor del Menú Desplegable */
+body.tema-oscuro .dropdown-menu {
+    background-color: var(--color-fondo-tarjeta, #1b1f29); /* Fondo gris oscuro */
+    border: 1px solid var(--color-borde, rgba(255, 255, 255, 0.15)); /* Borde sutil */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Sombra profunda para profundidad */
+}
+
+/* 2. Textos de las opciones (Configuración, etc.) */
+body.tema-oscuro .dropdown-item {
+    color: var(--color-texto-secundario, #b3b9c7);
+    transition: all 0.2s ease;
+}
+
+/* 3. Efecto Hover (Al pasar el mouse por encima) */
+body.tema-oscuro .dropdown-item:hover, 
+body.tema-oscuro .dropdown-item:focus {
+    background-color: rgba(255, 255, 255, 0.05); /* Fondo ligeramente más claro */
+    color: var(--color-texto, #ffffff); /* Texto blanco brillante */
+}
+
+/* 4. Línea divisoria (El <hr>) */
+body.tema-oscuro .dropdown-divider {
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 5. Botón "Cerrar Sesión" (Rojo) */
+/* Lo hacemos un rojo un poco más pastel/brillante para que se lea bien en oscuro */
+body.tema-oscuro .dropdown-item.text-danger {
+    color: #ff6b6b !important; 
+}
+
+/* Hover específico para Cerrar Sesión (Fondo rojizo suave) */
+body.tema-oscuro .dropdown-item.text-danger:hover {
+    background-color: rgba(255, 107, 107, 0.1);
+    color: #ff8787 !important;
+}
+
 * {
   margin: 0;
   padding: 0;
