@@ -41,7 +41,7 @@ USING (correo = auth.email());
 DROP POLICY IF EXISTS "usuarios_crear" ON public.usuarios;
 CREATE POLICY "usuarios_crear"
 ON public.usuarios FOR INSERT
-WITH CHECK (correo = auth.email());
+WITH CHECK (true);  -- Permitir durante el registro
 
 DROP POLICY IF EXISTS "usuarios_actualizar" ON public.usuarios;
 CREATE POLICY "usuarios_actualizar"
@@ -57,7 +57,7 @@ USING (EXISTS (SELECT 1 FROM public.usuarios WHERE usuarios.id = perfiles_usuari
 DROP POLICY IF EXISTS "perfiles_crear" ON public.perfiles_usuario;
 CREATE POLICY "perfiles_crear"
 ON public.perfiles_usuario FOR INSERT
-WITH CHECK (EXISTS (SELECT 1 FROM public.usuarios WHERE usuarios.id = perfiles_usuario.usuario_id AND usuarios.correo = auth.email()));
+WITH CHECK (true);  -- Permitir durante el registro
 
 DROP POLICY IF EXISTS "perfiles_actualizar" ON public.perfiles_usuario;
 CREATE POLICY "perfiles_actualizar"

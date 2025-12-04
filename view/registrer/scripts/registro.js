@@ -52,13 +52,16 @@ function procesarErrorSupabase(error) {
     'Password should be at least 6 characters': 'La contraseña debe tener al menos 6 caracteres.',
     'Email rate limit exceeded': 'Has intentado registrarte muchas veces. Por favor, espera unos minutos.',
     'Signup disabled': 'El registro está temporalmente deshabilitado. Intenta más tarde.',
+    'duplicate key': 'Este correo electrónico ya está registrado.',
+    'permission denied': 'No tienes permisos para crear una cuenta. Contacta con soporte.',
   };
 
   // Buscar mensaje específico
-  const errorMessage = error.message || '';
+  const errorMessage = error.message || error.toString() || '';
+  const errorCode = error.code || '';
 
   for (const [key, value] of Object.entries(mensajesError)) {
-    if (errorMessage.includes(key)) {
+    if (errorMessage.toLowerCase().includes(key.toLowerCase()) || errorCode.toLowerCase().includes(key.toLowerCase())) {
       return value;
     }
   }
@@ -359,7 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const peso = document.getElementById('peso').value;
     const altura = document.getElementById('altura').value;
     const nivelActividad = document.getElementById('nivelActividad').value;
-    const aceptaTerminos = document.getElementById("aceptarTerminos").checked;
+    const aceptaTerminos = document.getElementById("aceptarTerminos-paso1").checked;
 
     // Checkboxes y Radios
     const objetivos = Array.from(document.querySelectorAll('input[name="objetivos"]:checked')).map(cb => cb.value);
@@ -430,8 +433,8 @@ document.addEventListener('DOMContentLoaded', () => {
       paso1.classList.remove('paso-oculto');
 
       setTimeout(() => {
-        window.location.href = '../../login/iniciar_sesion.html';
-      }, 2000);
+        window.location.href = '../../view/login/iniciar_sesion.html';
+      }, 1000);
     }
   });
 });

@@ -34,6 +34,8 @@ CREATE POLICY "El sistema puede crear perfiles"
 ON public.perfiles FOR INSERT WITH CHECK ( auth.uid() = id );
 
 -- 4. ACTUALIZAR EL CEREBRO DEL ROBOT (La función)
+-- DESACTIVADA: Usar la estructura de fix_db.sql en su lugar
+/*
 CREATE OR REPLACE FUNCTION public.handle_new_user() 
 RETURNS trigger AS $$
 BEGIN
@@ -52,35 +54,63 @@ BEGIN
   )
   VALUES (
     new.id, 
-    new.raw_user_meta_data->>'nombre',
-    new.raw_user_meta_data->>'apellido',
-    new.raw_user_meta_data->>'genero',
-    (new.raw_user_meta_data->>'fecha_nacimiento')::date,
+    COALESCE(new.raw_user_meta_data->>'nombre', ''),
+    COALESCE(new.raw_user_meta_data->>'apellido', ''),
+    COALESCE(new.raw_user_meta_data->>'genero', ''),
+    CASE 
+      WHEN new.raw_user_meta_data->>'fecha_nacimiento' IS NOT NULL 
+        AND new.raw_user_meta_data->>'fecha_nacimiento' != '' 
+      THEN (new.raw_user_meta_data->>'fecha_nacimiento')::date
+      ELSE NULL
+    END,
     
-    -- Mapeo seguro de números (evita error si vienen vacíos)
-    CASE WHEN new.raw_user_meta_data->>'peso' = '' THEN NULL 
-         ELSE (new.raw_user_meta_data->>'peso')::numeric END,
+    -- Mapeo seguro de peso
+    CASE 
+      WHEN new.raw_user_meta_data->>'peso' IS NOT NULL 
+        AND new.raw_user_meta_data->>'peso' != '' 
+      THEN (new.raw_user_meta_data->>'peso')::numeric
+      ELSE NULL 
+    END,
          
-    CASE WHEN new.raw_user_meta_data->>'altura' = '' THEN NULL 
-         ELSE (new.raw_user_meta_data->>'altura')::numeric END,
+    -- Mapeo seguro de altura
+    CASE 
+      WHEN new.raw_user_meta_data->>'altura' IS NOT NULL 
+        AND new.raw_user_meta_data->>'altura' != '' 
+      THEN (new.raw_user_meta_data->>'altura')::numeric
+      ELSE NULL 
+    END,
          
-    (new.raw_user_meta_data->'objetivos'), 
-    new.raw_user_meta_data->>'nivel_actividad',
-    (new.raw_user_meta_data->'preferencias_ejercicio'), 
-    (new.raw_user_meta_data->>'dieta_saludable')::boolean
+    CASE 
+      WHEN new.raw_user_meta_data->'objetivos' IS NOT NULL 
+      THEN new.raw_user_meta_data->'objetivos'
+      ELSE '[]'::jsonb
+    END,
+    COALESCE(new.raw_user_meta_data->>'nivel_actividad', ''),
+    CASE 
+      WHEN new.raw_user_meta_data->'preferencias_ejercicio' IS NOT NULL 
+      THEN new.raw_user_meta_data->'preferencias_ejercicio'
+      ELSE '[]'::jsonb
+    END, 
+    CASE 
+      WHEN new.raw_user_meta_data->>'dieta_saludable' IN ('true', 'false') 
+      THEN (new.raw_user_meta_data->>'dieta_saludable')::boolean
+      ELSE NULL
+    END
   );
   RETURN new;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+*/
 
 -- 5. REINICIAR EL GATILLO (TRIGGER)
 -- Borramos el trigger viejo si existe para evitar conflictos
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 
 -- Creamos el nuevo trigger
-CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+-- DESACTIVADO: Usar la estructura de fix_db.sql en su lugar
+-- CREATE TRIGGER on_auth_user_created
+--   AFTER INSERT ON auth.users
+--   FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
 
 -- ============================================
 -- ESQUEMA DE OBJETIVOS
