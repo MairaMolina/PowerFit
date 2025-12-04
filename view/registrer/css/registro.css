@@ -17,6 +17,50 @@ body {
     background-attachment: fixed;
 }
 
+#requisitos-contrasena-lista, 
+#feedback-coincidencia {
+    display: none; 
+    margin-top: 5px;
+}
+
+/* Estilo para cuando se muestran */
+.mostrar-ayuda {
+    display: block !important;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- ICONO DENTRO DEL INPUT --- */
+
+.contenedor-input-icono {
+    position: relative; /* Vital para que el icono se quede aquí dentro */
+    width: 100%;
+}
+
+.contenedor-input-icono input {
+    padding-right: 45px; /* Espacio a la derecha para que el texto no tape al icono */
+}
+
+.icono-flotante {
+    position: absolute;
+    right: 15px;        
+    top: 50%;          
+    transform: translateY(-50%); 
+    cursor: pointer;    
+    color: #6c757d;     
+    font-size: 1.2rem;
+    z-index: 10;        
+    transition: color 0.3s ease;
+}
+
+.icono-flotante:hover {
+    color: #0d6efd; 
+}
+
 main.contenedor-formulario {
     flex-grow: 1;
     display: flex;
@@ -405,6 +449,7 @@ main.contenedor-formulario > p {
     margin-top: 25px;
     font-size: 0.9rem;
     color: #666;
+    text-align: center;
 }
 
 .enlace-login a {

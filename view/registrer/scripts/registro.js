@@ -1,6 +1,6 @@
 // Importamos el servicio y los validadores
-import { registrarUsuario } from '../services/servicio_autenticacion.js';
-import { validarCorreo, validarRequisitosContrasena } from '../../../frontend/src/utilidades/validar_formulario.js';
+import { registrarUsuario } from '../../registrer/services/servicio_autenticacion.js';
+import { validarCorreo, validarRequisitosContrasena } from '../../../old/frontend/src/utilidades/validar_formulario.js';
 
 /**
  * Muestra un mensaje en la interfaz de usuario
@@ -84,27 +84,76 @@ function calcularFechaMaxima() {
  */
 function aplicarRestriccionDeEdad() {
   const inputFecha = document.getElementById('fechaNacimiento');
+  const botonCalendario = document.getElementById('boton-calendario'); // Referencia al icono
   const fechaMaxima = calcularFechaMaxima();
 
   if (inputFecha && typeof flatpickr !== 'undefined') {
-    // Inicializar Flat pickr con configuración personalizada
-    flatpickr(inputFecha, {
-      locale: 'es', // Español
-      dateFormat: 'Y-m-d', // Formato YYYY-MM-DD
-      maxDate: fechaMaxima, // Restricción de 14 años
-      defaultDate: null,
-      allowInput: false, // No permitir entrada manual
-      disableMobile: false, // Usar en móviles también
-      monthSelectorType: 'dropdown', // Selector de mes tipo dropdown
-      yearSelectorRange: 100, // Mostrar 100 años hacia atrás
+    
+    const fp = flatpickr(inputFecha, {
+      locale: 'es',
+      dateFormat: 'Y-m-d',
+      altInput: true,
+      altFormat: "d/m/Y",
+      allowInput: true,
+      clickOpens: false, 
+      placeholder: "DD/MM/AAAA",
+      maxDate: fechaMaxima,
+      disableMobile: "true",
+      closeOnSelect: true,
+      
+      // 🔥 LA SOLUCIÓN MÁGICA 🔥
+      // Esto le dice a Flatpickr: "Si toco este elemento, NO hagas el auto-cierre"
+      ignoredFocusElements: [botonCalendario], 
+
+      onReady: function(selectedDates, dateStr, instance) {
+        const inputVisual = instance.altInput;
+
+        // --- TU LÓGICA DE MÁSCARA (SE MANTIENE IGUAL) ---
+        inputVisual.addEventListener('input', function(e) {
+          if (e.inputType === 'deleteContentBackward') return;
+          let valor = this.value.replace(/\D/g, '');
+          if (valor.length > 8) valor = valor.substring(0, 8);
+
+          let dia = ''; let mes = ''; let anio = '';
+
+          // Día
+          if (valor.length >= 1) {
+             dia = valor.substring(0, 2);
+             if (dia.length === 2 && parseInt(dia) > 31) dia = "31";
+             if (dia.length === 1 && parseInt(dia) > 3) dia = "0" + dia; 
+          }
+          // Mes
+          if (valor.length >= 3) {
+             mes = valor.substring(2, 4);
+             if (mes.length === 2 && parseInt(mes) > 12) mes = "12";
+             if (mes.length === 1 && parseInt(mes) > 1) mes = "0" + mes;
+          }
+          // Año
+          if (valor.length >= 5) anio = valor.substring(4, 8);
+
+          let valorFinal = dia;
+          if (valor.length >= 3 || (dia.length === 2 && valor.length > 2)) valorFinal += '/' + mes;
+          if (valor.length >= 5 || (mes.length === 2 && valor.length > 4)) valorFinal += '/' + anio;
+
+          this.value = valorFinal;
+        });
+      },
+      
       onChange: function (selectedDates, dateStr, instance) {
-        // Trigger change event para validaciones
         inputFecha.dispatchEvent(new Event('change'));
       }
     });
+
+    // Evento del icono para abrir/cerrar
+    if (botonCalendario) {
+        botonCalendario.addEventListener('click', (e) => {
+            e.preventDefault(); 
+            // Ya no necesitamos stopPropagation, usamos toggle() directo
+            fp.toggle(); 
+        });
+    }
   }
 }
-
 
 document.addEventListener('DOMContentLoaded', () => {
   const formulario = document.getElementById("formulario-registro");
@@ -143,27 +192,97 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- Validación en Tiempo Real (CU-07) ---
-  if (contrasenaInput && requisitosLista) {
-    const mensajes = {
+ const feedbackCoincidencia = document.getElementById('feedback-coincidencia');
+
+  // Configuración de reglas
+  const mensajes = {
       longitud: "Mínimo 10 caracteres",
       mayuscula: "Al menos una mayúscula",
       minuscula: "Al menos una minúscula",
       numero: "Al menos un número",
       especial: "Al menos un carácter especial (!@#$)"
-    };
+  };
 
-    contrasenaInput.addEventListener('input', () => {
-      const { requisitos } = validarRequisitosContrasena(contrasenaInput.value);
+  // 1. Inicializar lista (oculta pero creada)
+  const inicializarLista = () => {
+      if (!requisitosLista) return;
       requisitosLista.innerHTML = '';
-
-      for (const [key, esCumplido] of Object.entries(requisitos)) {
-        const li = document.createElement('li');
-        li.textContent = mensajes[key];
-        li.className = esCumplido ? 'cumplido' : 'no-cumplido';
-        requisitosLista.appendChild(li);
+      for (const [key, texto] of Object.entries(mensajes)) {
+          const li = document.createElement('li');
+          li.id = `req-${key}`;
+          // Estado inicial: Círculo vacío (fa-circle) y texto gris
+          li.innerHTML = `<i class="far fa-circle"></i> ${texto}`;
+          requisitosLista.appendChild(li);
       }
-    });
+  };
+  inicializarLista();
+
+  // --- LÓGICA CAMPO CONTRASEÑA ---
+
+  if (contrasenaInput) {
+      // A. Mostrar lista apenas se pulsa (focus)
+      contrasenaInput.addEventListener('focus', () => {
+          requisitosLista.classList.add('mostrar-ayuda');
+      });
+
+      // B. Validar mientras escribe
+      contrasenaInput.addEventListener('input', () => {
+          const { requisitos } = validarRequisitosContrasena(contrasenaInput.value);
+
+          for (const [key, esCumplido] of Object.entries(requisitos)) {
+              if (mensajes[key]) {
+                  const li = document.getElementById(`req-${key}`);
+                  if (li) {
+                      if (esCumplido) {
+                          // CUMPLE: Chulito verde relleno
+                          li.className = 'cumplido';
+                          li.innerHTML = `<i class="fas fa-check-circle"></i> ${mensajes[key]}`;
+                      } else {
+                          // NO CUMPLE: Círculo vacío
+                          li.className = '';
+                          li.innerHTML = `<i class="far fa-circle"></i> ${mensajes[key]}`;
+                      }
+                  }
+              }
+          }
+          
+          // Si ya hay algo en confirmar, re-validar coincidencia
+          if (confirmarInput.value.length > 0) validarCoincidencia();
+      });
+  }
+
+  // --- LÓGICA CAMPO CONFIRMAR ---
+
+  if (confirmarInput) {
+      // A. Mostrar mensaje apenas se pulsa (focus)
+      confirmarInput.addEventListener('focus', () => {
+          feedbackCoincidencia.classList.add('mostrar-ayuda');
+          validarCoincidencia(); // Validar inmediatamente por si ya había texto
+      });
+
+      // B. Validar mientras escribe
+      confirmarInput.addEventListener('input', validarCoincidencia);
+  }
+
+  function validarCoincidencia() {
+      const pass = contrasenaInput.value;
+      const confirm = confirmarInput.value;
+
+      // Si está vacío, no mostramos iconos feos, solo mensaje neutral o vacío
+      if (confirm.length === 0) {
+          feedbackCoincidencia.innerHTML = '';
+          return;
+      }
+
+      if (pass === confirm) {
+          // COINCIDEN: Chulito verde
+          feedbackCoincidencia.innerHTML = '<i class="fas fa-check-circle"></i> Las contraseñas coinciden';
+          feedbackCoincidencia.className = 'feedback-text texto-coincide mostrar-ayuda';
+      } else {
+          // NO COINCIDEN: Círculo con X (o solo texto rojo)
+          feedbackCoincidencia.innerHTML = '<i class="fas fa-times-circle"></i> Las contraseñas no coinciden';
+          feedbackCoincidencia.className = 'feedback-text texto-no-coincide mostrar-ayuda';
+      }
   }
 
   // --- Navegación entre Pasos ---
@@ -181,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const confirmar = document.getElementById("confirmarContrasena").value;
 
     if (!nombre || !apellido || !genero || !fechaNacimiento || !correo || !contrasena || !confirmar) {
-      mostrarMensaje("Por favor, completa todos los campos del paso 1.", "error");
+      mostrarMensaje("Por favor, completa todos los campos.", "error");
       return;
     }
 

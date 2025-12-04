@@ -7,7 +7,7 @@
     <title>Power Fit - Registro</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link href="https://cdn.jsdelivr.net/static/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/static/bootstrap/5.3.0/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="/view/registrer/css/registro.css">
 </head>
@@ -15,19 +15,20 @@
 <body>
 
     <main class="contenedor-formulario">
-        <div class="logo-formulario" class = "boton-logo">
-        <a href="../../view/home/inicio.html">
-            <img src="../registrer/images/Logo_powerfit.png" alt="Logo Power Fit">
-           </a>
+        <div class="logo-formulario" class="boton-logo">
+            <a href="../../view/home/inicio.html">
+                <img src="../registrer/images/Logo_powerfit.png" alt="Logo Power Fit">
+            </a>
         </div>
         <h2>Crear Cuenta</h2>
         <p>¡Comienza tu transformación hoy! Crea tu cuenta y da el primer paso hacia una vida más saludable.</p>
 
-        <!-- Contenedor de mensajes -->
         <div id="mensaje-contenedor" class="mensaje-oculto"></div>
 
-        <form id="formulario-registro">
-            <!-- PASO 1: Información de Cuenta -->
+        <form id="formulario-registro" novalidate>
+            
+            <div id="paso-1" class="paso-formulario">
+                
                 <div class="grupo-input">
                     <label for="nombreCompleto">Nombres completos</label>
                     <input type="text" id="nombreCompleto" name="nombreCompleto" placeholder="Tus nombres" required>
@@ -35,11 +36,10 @@
 
                 <div class="grupo-input">
                     <label for="apellidoCompleto">Apellidos completos</label>
-                    <input type="text" id="apellidoCompleto" name="apellidoCompleto" placeholder="Tus apellidos"
-                        required>
+                    <input type="text" id="apellidoCompleto" name="apellidoCompleto" placeholder="Tus apellidos" required>
                 </div>
 
-                <div>
+                <div class="grupo-input">
                     <label for="genero">Género</label>
                     <select id="genero" name="genero" required>
                         <option value="" disabled selected>Selecciona una opción</option>
@@ -52,23 +52,26 @@
 
                 <div class="grupo-input">
                     <label for="fechaNacimiento">Fecha de Nacimiento</label>
-                    <input type="date" id="fechaNacimiento" name="fechaNacimiento"required>
+                    <div class="contenedor-input-icono">
+                        <input type="text" id="fechaNacimiento" placeholder="Dia/Mes/Año" name="fechaNacimiento" class="form-control" required>
+                        <i class="fas fa-calendar-alt icono-flotante" id="boton-calendario"></i>
+                    </div>
                 </div>
 
                 <div class="grupo-input">
                     <label for="correoElectronico">Correo electrónico</label>
-                    <input type="email" id="correoElectronico" name="correoElectronico" placeholder="nombre@ejemplo.com"
-                        required>
+                    <input type="email" id="correoElectronico" name="correoElectronico" placeholder="nombre@ejemplo.com" required>
                 </div>
+
                 <div class="grupo-input">
                     <label for="contrasena">Contraseña</label>
                     <div class="input-con-icono">
                         <input type="password" id="contrasena" name="contrasena" required>
                         <i class="fa fa-eye icono-ojo" id="toggle-contrasena"></i>
                     </div>
-                    <ul id="requisitos-contrasena-lista" class="lista-requisitos">
-                    </ul>
+                    <ul id="requisitos-contrasena-lista" class="lista-requisitos"></ul>
                 </div>
+
                 <div class="grupo-input">
                     <label for="confirmarContrasena">Confirmar contraseña</label>
                     <div class="input-con-icono">
@@ -77,14 +80,21 @@
                     </div>
                 </div>
 
+                <div class="aceptar-terminos">
+                    <input type="checkbox" id="aceptarTerminos" name="aceptarTerminos">
+                  <label for="aceptarTerminos">Acepto los <a href="#">términos y condiciones</a>
+                    </label>
+                </div>
+                
                 <button type="button" id="btn-siguiente" class="boton-primario">Siguiente</button>
-            </div>
+                    <p class="enlace-login">¿Ya tienes una cuenta? <a href="../login/iniciar_sesion.html">Iniciar sesión</a></p>
+                    <p>
 
-            <!-- PASO 2: Información Física y Objetivos -->
+            </div> 
             <div id="paso-2" class="paso-formulario paso-oculto">
+                
                 <h3>Paso 2: Perfil Fitness</h3>
 
-                <!-- 1. Información Física -->
                 <div class="grupo-doble">
                     <div class="grupo-input">
                         <label for="peso">Peso (kg)</label>
@@ -92,25 +102,21 @@
                     </div>
                     <div class="grupo-input">
                         <label for="altura">Altura (cm)</label>
-                        <input type="number" id="altura" name="altura" placeholder="Ej: 175" step="1" min="50"
-                            max="250">
+                        <input type="number" id="altura" name="altura" placeholder="Ej: 175" step="1" min="50" max="250">
                     </div>
                 </div>
 
-                <!-- 2. Objetivos -->
                 <div class="grupo-input">
                     <label>¿Cuál es tu objetivo principal?</label>
                     <div class="opciones-checkbox">
                         <label><input type="checkbox" name="objetivos" value="ganar_musculo"> Ganar músculo</label>
                         <label><input type="checkbox" name="objetivos" value="perder_peso"> Perder peso</label>
                         <label><input type="checkbox" name="objetivos" value="mejorar_salud"> Mejorar salud</label>
-                        <label><input type="checkbox" name="objetivos" value="aumentar_resistencia"> Aumentar
-                            resistencia</label>
+                        <label><input type="checkbox" name="objetivos" value="aumentar_resistencia"> Aumentar resistencia</label>
                         <label><input type="checkbox" name="objetivos" value="otro"> Otro</label>
                     </div>
                 </div>
 
-                <!-- 3. Nivel de Actividad -->
                 <div class="grupo-input">
                     <label for="nivelActividad">¿Cuántas veces a la semana te ejercitas?</label>
                     <select id="nivelActividad" name="nivelActividad">
@@ -122,7 +128,6 @@
                     </select>
                 </div>
 
-                <!-- 4. Preferencias -->
                 <div class="grupo-input">
                     <label>¿Qué tipo de ejercicio te gusta?</label>
                     <div class="opciones-checkbox">
@@ -133,7 +138,6 @@
                     </div>
                 </div>
 
-                <!-- 5. Dieta -->
                 <div class="grupo-input">
                     <label>¿Incluyes alimentos saludables en tu dieta?</label>
                     <div class="opciones-radio">
@@ -143,7 +147,7 @@
                 </div>
 
                 <div class="aceptar-terminos">
-                    <input type="checkbox" id="aceptarTerminos" name="aceptarTerminos" required>
+                    <input type="checkbox" id="aceptarTerminos" name="aceptarTerminos">
                     <label for="aceptarTerminos">Acepto los <a href="#">términos y condiciones</a></label>
                 </div>
 
@@ -152,51 +156,17 @@
                     <button type="submit" id="btn-crear-cuenta" class="boton-primario">Crear Cuenta</button>
                 </div>
             </div>
-        </form>
-
-        <p class="enlace-login">¿Ya tienes una cuenta? <a href="../login/iniciar_sesion.html">Iniciar
-                sesión</a></p>
+            </form>
     </main>
 
     <footer>
         <p>© 2025 Power Fit</p>
     </footer>
 
-    <script>
-    // Toggle para contraseña
-    document.getElementById('toggle-contrasena').addEventListener('click', function() {
-        const input = document.getElementById('contrasena');
-        if (input.type === 'password') {
-            input.type = 'text';
-            this.classList.remove('fa-eye');
-            this.classList.add('fa-eye-slash');
-        } else {
-            input.type = 'password';
-            this.classList.remove('fa-eye-slash');
-            this.classList.add('fa-eye');
-        }
-    });
-
-    // Toggle para confirmar contraseña
-    document.getElementById('toggle-confirmar').addEventListener('click', function() {
-        const input = document.getElementById('confirmarContrasena');
-        if (input.type === 'password') {
-            input.type = 'text';
-            this.classList.remove('fa-eye');
-            this.classList.add('fa-eye-slash');
-        } else {
-            input.type = 'password';
-            this.classList.remove('fa-eye-slash');
-            this.classList.add('fa-eye');
-        }
-    });
-        </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="./scripts/registro.js"></script>
 
 </body>
-
 </html>
