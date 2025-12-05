@@ -271,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const pass = contrasenaInput.value;
       const confirm = confirmarInput.value;
 
-      // Si está vacío, no mostramos iconos feos, solo mensaje neutral o vacío
+      // Si está vacío, se muestra un mensaje neutral
       if (confirm.length === 0) {
           feedbackCoincidencia.innerHTML = '';
           return;

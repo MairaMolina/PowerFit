@@ -561,3 +561,63 @@ footer {
 .flatpickr-day.nextMonthDay {
     color: #ccc;
 }
+
+/* FOOTER */
+footer {
+  background-color: #ffffff;
+  color: #000000;
+  padding: 30px 20px 10px;
+  font-size: 0.95rem;
+  border-top: 1px solid #ccc;
+}
+
+.footer-contenido {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto 20px;
+}
+
+.footer-columna {
+  flex: 1 1 200px;
+}
+
+.footer-columna h4 {
+  margin-bottom: 10px;
+  color: #0077cc;
+  font-size: 1.1rem;
+}
+
+.footer-columna ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-columna ul li {
+  margin-bottom: 8px;
+}
+
+.footer-columna ul li a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.footer-columna ul li a:hover {
+  text-decoration: underline;
+}
+
+.footer-columna p a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.footer-copy {
+  text-align: center;
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
+  font-size: 0.85rem;
+  color: #555;
+}

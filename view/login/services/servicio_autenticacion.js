@@ -33,7 +33,7 @@ export async function cerrarSesion() {
  */
 export async function solicitarResetPassword(correo) {
   const { data, error } = await supabase.auth.resetPasswordForEmail(correo, {
-    redirectTo: window.location.origin + '/view/login/reset_password.html', // Ajusta según tu estructura
+    redirectTo: window.location.origin + '/old/frontend/public/cambiar-contrasena.html', // Ajusta según tu estructura
   });
   return { data, error };
 }

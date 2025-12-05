@@ -6,15 +6,129 @@
     <title>Power Fit - Cambiar Contraseña</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="/src/estilos/generales.css">
-    <link rel="stylesheet" href="/src/estilos/inicio_sesion.css">
+    <link rel="stylesheet" href="/view/login/css/inicio_sesion.css">
+
+    <style>
+        /* Para posicionar el icono del ojo dentro del input */
+        .input-con-icono {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        /* El input ocupa todo el espacio pero deja hueco para el icono */
+        .input-con-icono input {
+            width: 100%;
+            padding-right: 40px; /* Espacio para que el texto no toque el ojo */
+        }
+
+        /* Estilo del icono del ojo */
+        .icono-ojo {
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+            color: #666;
+            font-size: 1.1em;
+            z-index: 10;
+        }
+
+        /* Estilos de la lista de requisitos */
+        .requisitos-pass {
+            list-style: none;
+            padding: 0;
+            margin: 5px 0 15px 0;
+            font-size: 0.85em;
+            color: #666;
+            display: none; /* Se oculta hasta hacer click */
+        }
+        .requisitos-pass li {
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Color verde cuando cumple */
+        .req-cumplido {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        /* Mensaje de coincidencia */
+        .msg-coincidencia {
+            font-size: 0.9em;
+            margin-top: 5px;
+            min-height: 20px; /* Para evitar saltos */
+        }
+
+        /* FOOTER */
+        footer {
+        background-color: #ffffff;
+        color: #000000;
+        padding: 30px 20px 10px;
+        font-size: 0.95rem;
+        border-top: 1px solid #ccc;
+        }
+
+        .footer-contenido {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 20px;
+        max-width: 1000px;
+        margin: 0 auto 20px;
+        }
+
+        .footer-columna {
+        flex: 1 1 200px;
+        }
+
+        .footer-columna h4 {
+        margin-bottom: 10px;
+        color: #0077cc;
+        font-size: 1.1rem;
+        }
+
+        .footer-columna ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        }
+
+        .footer-columna ul li {
+        margin-bottom: 8px;
+        }
+
+        .footer-columna ul li a {
+        color: #000000;
+        text-decoration: none;
+        }
+
+        .footer-columna ul li a:hover {
+        text-decoration: underline;
+        }
+
+        .footer-columna p a {
+        color: #000000;
+        text-decoration: none;
+        }
+
+        .footer-copy {
+        text-align: center;
+        border-top: 1px solid #ccc;
+        padding-top: 10px;
+        font-size: 0.85rem;
+        color: #555;
+        }
+
+    </style>
 </head>
 <body>
 
     <main class="contenedor-formulario">
 
         <div class="logo-formulario">
-            <img src="./recursos/imagenes/logo_powerfit.png" alt="Logo Power Fit">
+            <img src="/view/registrer/images/Logo_powerfit.png" alt="Logo Power Fit">
         </div>
 
         <h2>Cambiar Contraseña</h2>
@@ -24,12 +138,22 @@
 
             <div class="grupo-input">
                 <label for="nuevaContrasena">Nueva Contraseña</label>
-                <input type="password" id="nuevaContrasena" name="nuevaContrasena" required>
+                <div class="input-con-icono">
+                    <input type="password" id="nuevaContrasena" name="nuevaContrasena" required>
+                    <i class="far fa-eye icono-ojo" id="toggle-contrasena"></i>
+                </div>
+                
+                <ul id="lista-requisitos" class="requisitos-pass"></ul>
             </div>
 
             <div class="grupo-input">
                 <label for="confirmarContrasena">Confirmar Nueva Contraseña</label>
-                <input type="password" id="confirmarContrasena" name="confirmarContrasena" required>
+                <div class="input-con-icono">
+                    <input type="password" id="confirmarContrasena" name="confirmarContrasena" required>
+                    <i class="far fa-eye icono-ojo" id="toggle-confirmar"></i>
+                </div>
+                
+                <div id="feedback-coincidencia" class="msg-coincidencia"></div>
             </div>
 
             <button type="submit" id="btn-cambiar-contrasena" class="boton-primario">Cambiar Contraseña</button>
@@ -44,9 +168,32 @@
     </main>
 
     <footer>
-        <p>© 2025 Power Fit</p>
-    </footer>
+    <div class="footer-contenido">
+      <div class="footer-columna">
+        <h4>Enlaces</h4>
+        <ul>
+          <li><a href="#">Inicio</a></li>
+        </ul>
+      </div>
+      <div class="footer-columna">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Términos y Condiciones</a></li>
+          <li><a href="#">Política de Privacidad</a></li>
+        </ul>
+      </div>
+      <div class="footer-columna">
+        <h4>Contacto</h4>
+        <p>📩<a href="mailto:contacto@powerfit.com"> contacto@powerfit.com</a></p>
+        <p>📞 +57 311 1111111</p>
+      </div>
+    </div>
+    <div class="footer-copy">
+      <p>© 2025 Power Fit. Todos los derechos reservados.</p>
+    </div>
+  </footer>
 
-    <script type="module" src="/src/paginas/cambiar-contraseña.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="../src/paginas/cambiar-contraseña.js"></script>
 </body>
 </html>

@@ -16,81 +16,29 @@ document.addEventListener('DOMContentLoaded', async () => {
 // ====== VERIFICAR SI HAY SESIÓN ACTIVA ======
 async function verificarSesion() {
     try {
-        console.log('Perfil: Starting session verification...');
+        console.log('Perfil: Verificando sesión...');
 
-        // Log all localStorage keys related to auth
-        const allKeys = Object.keys(localStorage);
-        const authKeys = allKeys.filter(key => key.includes('supabase') || key.includes('auth') || key.includes('session'));
-        console.log('Perfil: All localStorage keys:', allKeys);
-        console.log('Perfil: Auth-related keys:', authKeys);
+        // 1. Preguntar a Supabase si el usuario es válido (esto verifica token y refresca si es necesario)
+        const { data: { user }, error } = await supabase.auth.getUser();
 
-        // 1. Intenta obtener la sesión del localStorage (guardada por login)
-        const sesionGuardada = localStorage.getItem('supabase.session');
-        console.log('Perfil: localStorage supabase.session:', sesionGuardada ? 'found' : 'not found');
-        if (sesionGuardada) {
-            console.log('Perfil: localStorage session content (first 100 chars):', sesionGuardada.substring(0, 100));
-        }
-
-        // Also check what Supabase has
-        const { data: supabaseSession, error: supabaseError } = await supabase.auth.getSession();
-        console.log('Perfil: Supabase getSession - data exists:', !!supabaseSession, 'error:', supabaseError);
-        if (supabaseSession?.session) {
-            console.log('Perfil: Supabase session user email:', supabaseSession.session.user?.email);
-            console.log('Perfil: Supabase session expires at:', new Date(supabaseSession.session.expires_at * 1000));
-        }
-
-        if (!sesionGuardada) {
-            console.log('Perfil: No session in localStorage, checking Supabase session...');
-            if (!supabaseSession.session) {
-                console.log('Perfil: No Supabase session either, redirecting to login');
-                window.location.href = '../login/iniciar_sesion.html';
-                return;
-            } else {
-                console.log('Perfil: Using Supabase session instead');
-            }
-        }
-
-        // 2. Parsear la sesión guardada
-        const session = JSON.parse(sesionGuardada);
-
-        // 3. Validar que tenga los datos necesarios
-        if (!session || !session.user || !session.access_token) {
-            console.log('Perfil: Session data invalid, redirecting to login');
+        // 2. Si hay error o no hay usuario, redirigir
+        if (error || !user) {
+            console.warn('Perfil: Sesión no válida o expirada. Redirigiendo...');
+            // Opcional: Limpiar rastro local para evitar bucles
+            localStorage.removeItem('supabase.session'); 
             window.location.href = '../login/iniciar_sesion.html';
             return;
         }
 
-        // 4. Verificar si la sesión ha expirado
-        console.log('Perfil: Session expires_at (timestamp):', session.expires_at);
-        console.log('Perfil: Current time (timestamp):', Math.floor(Date.now() / 1000));
-        if (session.expires_at < Math.floor(Date.now() / 1000)) {
-            console.log('Perfil: WARNING: Session is expired! Attempting to refresh...');
-            // Intentar refrescar la sesión
-            const { data: refreshedSession, error: refreshError } = await supabase.auth.refreshSession();
-            if (refreshError || !refreshedSession.session) {
-                console.log('Perfil: Failed to refresh session, redirecting to login');
-                window.location.href = '../login/iniciar_sesion.html';
-                return;
-            } else {
-                console.log('Perfil: Session refreshed successfully');
-                // Actualizar localStorage con la nueva sesión
-                localStorage.setItem('supabase.session', JSON.stringify(refreshedSession.session));
-                usuarioActual = refreshedSession.session.user;
-            }
-        } else {
-            console.log('Perfil: Session is still valid');
-        }
+        // 3. Si llegamos aquí, el usuario es real y válido
+        console.log('Perfil: Usuario validado:', user.email);
+        usuarioActual = user;
 
-        console.log('Perfil: Session valid, user:', session.user.email);
-
-        // 4. Establecer el usuario actual
-        usuarioActual = session.user;
-
-        // 5. Cargar datos del usuario
+        // 4. Cargar sus datos de la base de datos
         await cargarDatosUsuario();
 
     } catch (error) {
-        console.error('Error al verificar sesión:', error);
+        console.error('Error crítico en sesión:', error);
         window.location.href = '../login/iniciar_sesion.html';
     }
 }
