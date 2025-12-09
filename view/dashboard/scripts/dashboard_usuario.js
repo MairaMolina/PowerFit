@@ -1,5 +1,5 @@
 // ====== CONFIGURACIÓN DE SUPABASE ======
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { aplicarAvatarHeader } from '../../shared/scripts/header_usuario.js';
 
 const supabaseUrl = 'https://iinbzpqjxpciivcomruk.supabase.co';

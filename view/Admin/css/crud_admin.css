@@ -1,0 +1,452 @@
+/* =========================================
+   1. VARIABLES Y RESET (Base del diseño)
+   ========================================= */
+   :root {
+    /* Paleta de Colores Power Fit */
+    --color-primary: #0d6efd;
+    --color-primary-dark: #0a58ca;
+    --color-secondary: #6c757d;
+    --color-success: #198754;
+    --color-danger: #dc3545;
+    --color-warning: #ffc107;
+    
+    /* Modo Claro (Por defecto) */
+    --bg-body: #f5f7fb;
+    --bg-sidebar: #ffffff;
+    --bg-card: #ffffff;
+    --color-text: #333333;
+    --color-text-muted: #6c757d;
+    --color-border: #e9ecef;
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* MODO OSCURO */
+body.tema-oscuro {
+    --bg-body: #10131a;
+    --bg-sidebar: #1b1f29;
+    --bg-card: #1b1f29;
+    --color-text: #f5f7fb;
+    --color-text-muted: #b3b9c7;
+    --color-border: rgba(255, 255, 255, 0.1);
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.4);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+body {
+    background-color: var(--bg-body);
+    color: var(--color-text);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: hidden;
+}
+
+body.tema-oscuro .text-muted {
+    color: var(--color-text-muted) !important; /* Forzamos nuestro gris claro */
+    opacity: 0.8; /* Un poco de transparencia para elegancia */
+}
+
+/* --- ESTILOS DEL FOOTER --- */
+.footer-admin {
+    margin-top: auto; /* Empuja el footer al fondo si hay poco contenido */
+    padding: 20px 40px;
+    text-align: center;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    margin-left: 260px; /* Mismo margen que el contenido principal */
+    transition: margin-left 0.3s ease;
+}
+
+/* =========================================
+   2. SIDEBAR (Barra Lateral)
+   ========================================= */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 260px; /* Ancho fijo */
+    background-color: var(--bg-sidebar);
+    border-right: 1px solid var(--color-border);
+    padding: 20px;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Logo */
+.logo-sidebar {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.logo {
+    max-width: 220px;
+    height: auto;
+}
+
+/* Manejo de Logo Claro/Oscuro */
+.logo-light { display: block; }
+.logo-dark { display: none; }
+body.tema-oscuro .logo-light { display: none; }
+body.tema-oscuro .logo-dark { display: block; }
+
+/* Menú */
+.navegacion-sidebar {
+    flex-grow: 1;
+}
+
+.lista-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.item-menu {
+    margin-bottom: 8px;
+}
+
+.item-menu a {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.item-menu a i {
+    width: 25px;
+    font-size: 1.1rem;
+    margin-right: 10px;
+    text-align: center;
+}
+
+/* Efecto Hover y Activo */
+.item-menu a:hover {
+    background-color: rgba(13, 110, 253, 0.1);
+    color: var(--color-primary);
+}
+
+.item-menu.activo a {
+    background-color: var(--color-primary);
+    color: white;
+    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+}
+
+/* Badge de Admin en Sidebar */
+.badge-admin {
+    display: inline-block;
+    background-color: rgba(220, 53, 69, 0.1);
+    color: var(--color-danger);
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-top: 10px;
+    border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+/* =========================================
+   3. CONTENIDO PRINCIPAL (Layout)
+   ========================================= */
+.contenido-principal {
+    margin-left: 260px; /* Mismo ancho que el sidebar */
+    padding: 30px 40px;
+    min-height: 100vh;
+    transition: margin-left 0.3s ease;
+}
+
+/* Header */
+.titulo-pagina {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: var(--color-text);
+}
+
+.subtitulo-pagina {
+    color: var(--color-text-muted);
+    margin: 0;
+}
+
+.badge-admin-header {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Botón Tema */
+.boton-tema {
+    background: none;
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.boton-tema:hover {
+    background-color: var(--color-border);
+}
+
+/* =========================================
+   4. TARJETA DE BIENVENIDA (Hero Section)
+   ========================================= */
+.card-bienvenida {
+    background: linear-gradient(135deg, var(--color-primary), #6610f2);
+    color: white;
+    border-radius: 15px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.contenido-bienvenida {
+    z-index: 2;
+    max-width: 75%;
+}
+
+.contenido-bienvenida h2 {
+    font-weight: 700;
+    margin-bottom: 15px;
+    font-size: 2rem;
+}
+
+.contenido-bienvenida p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+.decoracion-bienvenida {
+    font-size: 10rem;
+    color: rgba(255, 255, 255, 0.1);
+    position: absolute;
+    right: -20px;
+    bottom: -40px;
+    transform: rotate(-15deg);
+}
+
+.titulo-seccion {
+    font-weight: 600;
+    border-left: 5px solid var(--color-primary);
+    padding-left: 15px;
+    margin-top: 20px;
+    color: var(--color-text);
+}
+
+/* =========================================
+   5. TARJETAS DE CONTENIDO (CRUD)
+   ========================================= */
+.tarjeta-listado, .tarjeta-stat {
+    background-color: var(--bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    transition: background-color 0.3s ease;
+}
+
+.tarjeta-stat h3 {
+    margin-bottom: 10px;
+    font-size: 2rem;
+}
+
+.tarjeta-stat h4 {
+    font-weight: 700;
+    margin-bottom: 0;
+    color: var(--color-text);
+}
+
+/* =========================================
+   6. TABLAS (Adaptables a Dark Mode)
+   ========================================= */
+.table-responsive {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table {
+    margin-bottom: 0;
+    color: var(--color-text);
+    border-color: var(--color-border);
+}
+
+.table thead th {
+    background-color: rgba(13, 110, 253, 0.08); /* Azul muy suave */
+    color: var(--color-primary);
+    font-weight: 600;
+    border-bottom: 2px solid var(--color-border);
+    padding: 15px;
+    white-space: nowrap;
+}
+
+.table tbody td {
+    padding: 15px;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--bg-card); /* Asegura fondo correcto */
+    color: var(--color-text);
+}
+
+.table-hover tbody tr:hover td {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* Ajustes de Tabla en Modo Oscuro */
+body.tema-oscuro .table-hover tbody tr:hover td {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Imágenes pequeñas en tablas (Ej: Ejercicios) */
+.img-tabla {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    background-color: #fff;
+}
+
+/* Botones de Acción */
+.btn-accion {
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    margin-right: 5px;
+    border: none;
+    transition: transform 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-accion:hover {
+    transform: translateY(-2px);
+}
+
+.btn-editar {
+    background-color: rgba(255, 193, 7, 0.15);
+    color: #eebb00;
+}
+.btn-editar:hover {
+    background-color: #eebb00;
+    color: black;
+}
+
+.btn-borrar {
+    background-color: rgba(220, 53, 69, 0.15);
+    color: #ff6b6b;
+}
+.btn-borrar:hover {
+    background-color: #ff6b6b;
+    color: white;
+}
+
+#botonCerrarSesion {
+    border-top: 1px solid var(--color-border);
+    margin-top: 10px;      /* Espacio por fuera (arriba de la línea) */
+    padding-top: 20px;     /* Espacio por dentro (entre la línea y el texto) */
+    border-radius: 0;      
+    width: 100%;         
+}
+
+
+#botonCerrarSesion:hover {
+    color: var(--color-danger); /* Texto rojo */
+    background-color: rgba(220, 53, 69, 0.05); 
+}
+
+/* =========================================
+   7. SWEETALERT2 ADAPTACIÓN
+   ========================================= */
+body.tema-oscuro .swal2-popup {
+    background-color: var(--bg-card) !important;
+    color: var(--color-text) !important;
+    border: 1px solid var(--color-border);
+}
+body.tema-oscuro .swal2-title,
+body.tema-oscuro .swal2-html-container {
+    color: var(--color-text) !important;
+}
+body.tema-oscuro .swal2-success-circular-line-left,
+body.tema-oscuro .swal2-success-circular-line-right,
+body.tema-oscuro .swal2-success-fix {
+    background-color: transparent !important;
+}
+
+/* --- RESPONSIVE DESIGN (MÓVILES) --- */
+@media (max-width: 768px) {
+    /* 1. Sidebar Oculto por defecto */
+    .sidebar {
+        transform: translateX(-100%);
+    }
+    
+    /* 2. Cuando se activa, entra */
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    /* 3. Contenido Principal ocupa todo el ancho */
+    .contenido-principal, .footer-admin {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    /* 4. Ajuste de Tarjetas Stats */
+    .col-md-4 {
+        margin-bottom: 15px;
+    }
+
+    /* 5. Tabla con Scroll horizontal */
+    .table-responsive {
+        overflow-x: auto;
+    }
+}
+
+/* Botón Hamburguesa (Solo visible en móvil) */
+.btn-menu-movil {
+    display: none; /* Oculto en PC */
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--color-text);
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+@media (max-width: 768px) {
+    .btn-menu-movil {
+        display: block; /* Visible en móvil */
+    }
+    
+    .header-admin {
+        flex-wrap: wrap; /* Permite que los elementos bajen si no caben */
+    }
+}

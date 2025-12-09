@@ -119,8 +119,8 @@ function redirigirUsuario(rol) {
     
     setTimeout(() => {
         if (rol === 'admin') {
-            // 🔴 RUTA DEL ADMIN (Asegúrate que esta ruta exista)
-            window.location.href = '../../view/admin/crud_admin.html'; 
+            // 🔴 RUTA DEL ADMIN 
+            window.location.href = '../../view/Admin/crud_admin.html'; 
         } else {
             // 🟢 RUTA DEL USUARIO NORMAL
             window.location.href = '../../view/dashboard/dashboard_usuario.html';

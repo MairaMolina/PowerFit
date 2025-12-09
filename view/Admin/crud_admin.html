@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Fit - Panel Administrador</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <link rel="stylesheet" href="./css/crud_admin.css">
+</head>
+<body class="admin-body">
+
+    <aside class="sidebar sidebar-admin">
+        <div class="logo-sidebar">
+            <img src="../../view/registrer/images/Logo_powerfit.png" alt="Power Fit Logo" class="logo logo-light">
+            <img src="../../view/registrer/images/Logo_powerfit_dark.png" alt="Power Fit Logo dark" class="logo logo-dark">
+            <span class="badge-admin">PANEL ADMINISTRADOR</span>
+        </div>
+
+        <nav class="navegacion-sidebar">
+            <ul class="lista-menu">
+                <li class="item-menu activo" data-seccion="dashboard">
+                    <a href="#">
+                        <i class="fas fa-home"></i>
+                        <span>Inicio</span>
+                    </a>
+                </li>
+                <li class="item-menu" data-seccion="usuarios">
+                    <a href="#">
+                        <i class="fas fa-users"></i>
+                        <span>Gestionar Usuarios</span>
+                    </a>
+                </li>
+                <li class="item-menu" data-seccion="ejercicios">
+                    <a href="#">
+                        <i class="fas fa-dumbbell"></i>
+                        <span>Ejercicios</span>
+                    </a>
+                </li>
+                <li class="item-menu" data-seccion="rutinas">
+                    <a href="#">
+                        <i class="fas fa-clipboard-list"></i>
+                        <span>Rutinas Plantilla</span>
+                    </a>
+                </li>
+                <li class="item-menu mt-5">
+                    <a href="#" id="botonCerrarSesion">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Cerrar Sesión</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="contenido-principal">
+        
+        <header class="header-admin d-flex justify-content-between align-items-center mb-4">
+            
+            <div class="d-flex align-items-center">
+                <button class="btn-menu-movil" id="btnMenuMovil">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <div class="saludo-admin">
+                    <h1 class="titulo-pagina">Panel de Control</h1>
+                    <p class="subtitulo-pagina">Bienvenido, Administrador aca podrás gestionar la plataforma.</p>
+                </div>
+            </div>
+            
+            <div class="controles-header d-flex gap-3 align-items-center">
+                <span class="badge-admin-header">
+                    <i class="fas fa-shield-alt"></i> Administrador Power Fit
+                </span>
+                <button class="boton-tema" id="botonTema" title="Cambiar tema">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <div id="seccion-dashboard" class="seccion-admin">
+            <div class="card-bienvenida mb-4">
+                <div class="contenido-bienvenida">
+                    <h2><i class="fas fa-rocket"></i> Centro de Comando Power Fit</h2>
+                    <p>Desde aquí puedes administrar toda la plataforma. Gestiona los usuarios registrados, amplía la biblioteca de ejercicios o diseña nuevas rutinas para la comunidad.</p>
+                </div>
+                <div class="decoracion-bienvenida">
+                    <i class="fas fa-cogs"></i>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card tarjeta-stat">
+                        <div class="card-body text-center">
+                            <h3 class="text-primary"><i class="fas fa-users"></i></h3>
+                            <h4 id="statTotalUsuarios">--</h4>
+                            <p class="text-muted">Usuarios Totales</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card tarjeta-stat">
+                        <div class="card-body text-center">
+                            <h3 class="text-success"><i class="fas fa-dumbbell"></i></h3>
+                            <h4 id="statTotalEjercicios">--</h4>
+                            <p class="text-muted">Ejercicios en Biblioteca</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card tarjeta-stat">
+                        <div class="card-body text-center">
+                            <h3 class="text-warning"><i class="fas fa-clipboard-list"></i></h3>
+                            <h4 id="statTotalRutinas">--</h4>
+                            <p class="text-muted">Rutinas Base</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 id="tituloSeccion" class="titulo-seccion mb-3 d-none">Gestión</h3>
+
+        <div id="seccion-usuarios" class="seccion-admin d-none">
+            <div class="card tarjeta-listado">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle" id="tablaUsuarios">
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Correo</th>
+                                    <th>Rol</th>
+                                    <th>Fecha Registro</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyUsuarios">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="seccion-ejercicios" class="seccion-admin d-none">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <p class="text-muted m-0">Catálogo general de ejercicios</p>
+                <button class="btn btn-primary" id="btnCrearEjercicio">
+                    <i class="fas fa-plus"></i> Nuevo Ejercicio
+                </button>
+            </div>
+            <div class="card tarjeta-listado">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle" id="tablaEjercicios">
+                            <thead>
+                                <tr>
+                                    <th style="width: 80px;">Imagen</th>
+                                    <th>Nombre</th>
+                                    <th>Músculo</th>
+                                    <th>Equipo</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyEjercicios"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="seccion-rutinas" class="seccion-admin d-none">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <p class="text-muted m-0">Plantillas base asignables a usuarios</p>
+                <button class="btn btn-primary" id="btnCrearRutina">
+                    <i class="fas fa-plus"></i> Nueva Rutina Base
+                </button>
+            </div>
+            <div class="card tarjeta-listado">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle" id="tablaRutinas">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Nivel</th>
+                                    <th>Objetivo</th>
+                                    <th>Duración</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyRutinas"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="modal fade" id="modalEjercicio" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tituloModalEjercicio">Nuevo Ejercicio</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEjercicio">
+                        <input type="hidden" id="ejercicioId"> <div class="mb-3">
+                            <label class="form-label">Nombre del Ejercicio</label>
+                            <input type="text" class="form-control" id="nombreEjercicio" required placeholder="Ej: Press de Banca">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Grupo Muscular</label>
+                                <select class="form-select" id="musculoEjercicio" required>
+                                    <option value="">Seleccionar...</option>
+                                    <option value="Pecho">Pecho</option>
+                                    <option value="Espalda">Espalda</option>
+                                    <option value="Pierna">Pierna</option>
+                                    <option value="Hombro">Hombro</option>
+                                    <option value="Bíceps">Bíceps</option>
+                                    <option value="Tríceps">Tríceps</option>
+                                    <option value="Abdomen">Abdomen</option>
+                                    <option value="Cardio">Cardio</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Equipamiento</label>
+                                <select class="form-select" id="equipoEjercicio">
+                                    <option value="Ninguno">Ninguno (Peso corporal)</option>
+                                    <option value="Mancuernas">Mancuernas</option>
+                                    <option value="Barra">Barra</option>
+                                    <option value="Máquina">Máquina</option>
+                                    <option value="Polea">Polea</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">URL de Imagen / GIF</label>
+                            <input type="url" class="form-control" id="imagenEjercicio" placeholder="https://ejemplo.com/imagen.gif">
+                            <div class="form-text">Pega el link de una imagen o GIF demostrativo.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Descripción / Instrucciones</label>
+                            <textarea class="form-control" id="descEjercicio" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnGuardarEjercicio">Guardar Ejercicio</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </main>
+    <footer class="footer-admin">
+        <p class="m-0">© 2025 Power Fit - Todos los derechos reservados.</p>    
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="./scripts/crud_admin.js"></script>
+</body>
+</html>
