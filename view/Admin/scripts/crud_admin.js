@@ -2,7 +2,9 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 // ====== CONFIGURACIÓN SUPABASE ======
 const supabaseUrl = 'https://iinbzpqjxpciivcomruk.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpbmJ6cHFqeHBjaWl2Y29tcnVrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjI4NjQzMywiZXhwIjoyMDc3ODYyNDMzfQ.ZrgGyJUf50WzlIONM_t0-qmufnixDdgb8xUaAtsGpuI'; 
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpbmJ6cHFqeHBjaWl2Y29tcnVrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjI4NjQzMywiZXhwIjoyMDc3ODYyNDMzfQ.ZrgGyJUf50WzlIONM_t0-qmufnixDdgb8xUaAtsGpuI';
+
+// Cliente principal para operaciones generales
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // ====== VARIABLES GLOBALES ======
@@ -12,10 +14,10 @@ let usuarioAdmin = null;
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Cargar tema guardado antes que nada para evitar "fleshazos"
     cargarTemaGuardado();
-    
+
     // 2. Verificar seguridad
     await verificarAdmin();
-    
+
     // 3. Inicializar listeners
     inicializarEventos();
 });
@@ -70,7 +72,7 @@ function inicializarEventos() {
     // Botón Menú Móvil (Toggle Sidebar)
     const btnMenu = document.getElementById('btnMenuMovil');
     const sidebar = document.querySelector('.sidebar');
-    
+
     if (btnMenu) {
         btnMenu.addEventListener('click', () => {
             sidebar.classList.toggle('active');
@@ -79,21 +81,21 @@ function inicializarEventos() {
 
     // Cerrar sidebar al hacer click fuera (Opcional pero recomendado UX)
     document.addEventListener('click', (e) => {
-        if (window.innerWidth <= 768 && 
-            !sidebar.contains(e.target) && 
+        if (window.innerWidth <= 768 &&
+            !sidebar.contains(e.target) &&
             !btnMenu.contains(e.target) &&
             sidebar.classList.contains('active')) {
             sidebar.classList.remove('active');
         }
     });
-    
+
     // Navegación Sidebar
     document.querySelectorAll('.item-menu').forEach(item => {
         item.addEventListener('click', (e) => {
             const seccion = item.dataset.seccion;
-            
+
             // Si no tiene data-seccion, es el botón de salir
-            if (!seccion) return; 
+            if (!seccion) return;
 
             e.preventDefault();
 
@@ -111,7 +113,7 @@ function inicializarEventos() {
 
     // Botón Tema Oscuro
     document.getElementById('botonTema').addEventListener('click', alternarTema);
-    
+
     // Botones de "Crear Nuevo Ejercicio" (Listeners globales)
     // Botón Nuevo Ejercicio
     const btnCrearEje = document.getElementById('btnCrearEjercicio');
@@ -120,7 +122,7 @@ function inicializarEventos() {
             document.getElementById('formEjercicio').reset(); // Limpiar form
             document.getElementById('ejercicioId').value = ''; // Limpiar ID
             document.getElementById('tituloModalEjercicio').textContent = 'Nuevo Ejercicio';
-            
+
             const modal = new bootstrap.Modal(document.getElementById('modalEjercicio'));
             modal.show();
         });
@@ -128,7 +130,7 @@ function inicializarEventos() {
 
     // Botón Guardar Ejercicio (Del Modal)
     document.getElementById('btnGuardarEjercicio').addEventListener('click', guardarEjercicio);
-    
+
     document.getElementById('btnCrearRutina')?.addEventListener('click', () => {
         Swal.fire('Próximamente', 'Aquí abrirá el modal para crear rutinas', 'info');
     });
@@ -137,14 +139,14 @@ function inicializarEventos() {
 function mostrarSeccion(seccionId) {
     // Ocultar todas las secciones
     document.querySelectorAll('.seccion-admin').forEach(div => div.classList.add('d-none'));
-    
+
     // Mostrar la elegida
     const seccionActiva = document.getElementById(`seccion-${seccionId}`);
     if (seccionActiva) seccionActiva.classList.remove('d-none');
 
     // Actualizar título y visibilidad
     const titulo = document.getElementById('tituloSeccion');
-    
+
     // Si estamos en dashboard, ocultamos el título genérico porque ya hay tarjeta de bienvenida
     if (seccionId === 'dashboard') {
         titulo.classList.add('d-none');
@@ -177,14 +179,31 @@ async function cargarUsuarios() {
     tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4"><div class="spinner-border text-primary"></div> Cargando usuarios...</td></tr>';
 
     try {
-        const { data: usuarios, error } = await supabase
-            .from('usuarios')
-            .select('*')
-            .order('created_at', { ascending: false });
+        // Obtener la sesión para el token
+        const { data: { session } } = await supabase.auth.getSession();
 
-        if (error) throw error;
+        if (!session) {
+            throw new Error('No hay sesión activa');
+        }
 
-        if (usuarios.length === 0) {
+        // Llamar a la Edge Function para obtener usuarios combinados
+        const response = await fetch(`${supabaseUrl}/functions/v1/listar-usuarios`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${session.access_token}`
+            }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Error al cargar usuarios');
+        }
+
+        const usuarios = data.usuarios;
+
+        if (!usuarios || usuarios.length === 0) {
             tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No hay usuarios registrados.</td></tr>';
             return;
         }
@@ -193,14 +212,19 @@ async function cargarUsuarios() {
         tbody.innerHTML = usuarios.map(u => {
             const fecha = new Date(u.created_at).toLocaleDateString('es-ES');
             const esAdmin = u.rol === 'admin';
-            const badgeRol = esAdmin 
-                ? '<span class="badge bg-danger">Admin</span>' 
+            const badgeRol = esAdmin
+                ? '<span class="badge bg-danger">Admin</span>'
                 : '<span class="badge bg-primary">Usuario</span>';
-            
+
+            // Indicador si no tiene perfil en public.usuarios
+            const sinPerfil = !u.tiene_perfil_publico
+                ? '<span class="badge bg-warning text-dark ms-1" title="Sin perfil en BD">⚠</span>'
+                : '';
+
             // Botón borrar (Protegemos al admin actual)
-            const btnBorrar = (u.id === usuarioAdmin.id) 
+            const btnBorrar = (u.id === usuarioAdmin.id)
                 ? '<span class="text-muted small">Tu Cuenta</span>'
-                : `<button class="btn-accion btn-borrar" onclick="window.eliminarUsuario('${u.id}', '${u.nombre_completo || 'Usuario'}')" title="Eliminar Usuario">
+                : `<button class="btn-accion btn-borrar" onclick="window.eliminarUsuario('${u.id}', '${u.nombre_completo || u.email || 'Usuario'}')" title="Eliminar Usuario">
                      <i class="fas fa-trash"></i>
                    </button>`;
 
@@ -209,12 +233,12 @@ async function cargarUsuarios() {
                     <td>
                         <div class="d-flex align-items-center">
                             <div class="avatar-tabla me-2" style="width:35px;height:35px;border-radius:50%;background:#e9ecef;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#666;">
-                                ${(u.nombre_completo || 'U').charAt(0).toUpperCase()}
+                                ${(u.nombre_completo || u.email || 'U').charAt(0).toUpperCase()}
                             </div>
-                            <span class="fw-bold">${u.nombre_completo || 'Sin Nombre'}</span>
+                            <span class="fw-bold">${u.nombre_completo || 'Sin Nombre'}${sinPerfil}</span>
                         </div>
                     </td>
-                    <td>${u.correo}</td>
+                    <td>${u.email || u.correo || '-'}</td>
                     <td>${badgeRol}</td>
                     <td>${fecha}</td>
                     <td>${btnBorrar}</td>
@@ -224,16 +248,13 @@ async function cargarUsuarios() {
 
     } catch (error) {
         console.error('Error cargando usuarios:', error);
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error al cargar datos.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error al cargar datos: ' + error.message + '</td></tr>';
     }
 }
 
-// Función Global para eliminar usuario TOTALMENTE
+// Función Global para eliminar usuario TOTALMENTE (via Edge Function)
 window.eliminarUsuario = async (id, nombre) => {
-    // --- DEBUG: Ver qué ID estamos intentando borrar ---
-    console.log("💀 INTENTO DE BORRADO - ID:", id); 
-    console.log("💀 Tipo de dato:", typeof id);
-    // --------------------------------------------------
+    console.log("💀 INTENTO DE BORRADO - ID:", id);
 
     Swal.fire({
         title: '¿Eliminar usuario?',
@@ -256,19 +277,34 @@ window.eliminarUsuario = async (id, nombre) => {
                     didOpen: () => Swal.showLoading()
                 });
 
-                // Llamada RPC
-                const { error } = await supabase.rpc('eliminar_usuario_total', { 
-                    id_a_borrar: id 
-                });
+                // Obtener la sesión actual para enviar el token
+                const { data: { session } } = await supabase.auth.getSession();
 
-                if (error) {
-                    console.error("❌ Error RPC:", error); // Ver error real en consola
-                    throw error;
+                if (!session) {
+                    throw new Error('No hay sesión activa');
                 }
 
-                await Swal.fire('Eliminado', 'Usuario borrado totalmente.', 'success');
-                cargarUsuarios(); 
-                cargarEstadisticasRapidas(); 
+                // Llamar a la Edge Function
+                const response = await fetch(`${supabaseUrl}/functions/v1/eliminar-usuario`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${session.access_token}`
+                    },
+                    body: JSON.stringify({ user_id: id })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    console.error("❌ Error de Edge Function:", data);
+                    throw new Error(data.error || 'Error al eliminar usuario');
+                }
+
+                console.log("✅ Usuario eliminado completamente via Edge Function");
+                await Swal.fire('Eliminado', 'Usuario borrado totalmente del sistema.', 'success');
+                cargarUsuarios();
+                cargarEstadisticasRapidas();
 
             } catch (error) {
                 console.error('Catch Error:', error);
@@ -314,13 +350,13 @@ async function cargarEjercicios() {
 
             let equipo = 'N/A';
             if (e.etiquetas) {
-                 if (Array.isArray(e.etiquetas)) equipo = e.etiquetas.join(', ');
-                 else if (typeof e.etiquetas === 'string') equipo = e.etiquetas.replace(/{|}|"/g, '').replace(/,/g, ', ');
+                if (Array.isArray(e.etiquetas)) equipo = e.etiquetas.join(', ');
+                else if (typeof e.etiquetas === 'string') equipo = e.etiquetas.replace(/{|}|"/g, '').replace(/,/g, ', ');
             }
 
             // Imagen fallback
-            const imagen = e.imagen_url 
-                ? `<img src="${e.imagen_url}" class="img-tabla" alt="${e.nombre}">` 
+            const imagen = e.imagen_url
+                ? `<img src="${e.imagen_url}" class="img-tabla" alt="${e.nombre}">`
                 : `<div class="img-tabla d-flex align-items-center justify-content-center bg-light"><i class="fas fa-dumbbell text-muted"></i></div>`;
 
             return `
@@ -360,11 +396,11 @@ async function guardarEjercicio() {
     // Preparar objeto para INSERT
     const nuevoEjercicio = {
         nombre: nombre,
-        musculos_trabajados: [musculo], 
-        etiquetas: [equipo],            
+        musculos_trabajados: [musculo],
+        etiquetas: [equipo],
         imagen_url: imagen,
         descripcion: descripcion,
-        explicacion_pasos: descripcion 
+        explicacion_pasos: descripcion
     };
 
     const { error } = await supabase.from('ejercicios').insert([nuevoEjercicio]);
@@ -374,7 +410,7 @@ async function guardarEjercicio() {
         Swal.fire('Error', 'No se pudo guardar el ejercicio.', 'error');
     } else {
         Swal.fire('Guardado', 'Ejercicio agregado correctamente.', 'success');
-        
+
         // Cerrar modal
         const modalEl = document.getElementById('modalEjercicio');
         const modal = bootstrap.Modal.getInstance(modalEl);
@@ -400,7 +436,7 @@ window.eliminarEjercicio = async (id) => {
 
     if (result.isConfirmed) {
         const { error } = await supabase.from('ejercicios').delete().eq('id', id);
-        
+
         if (error) {
             Swal.fire('Error', 'No se pudo borrar.', 'error');
         } else {
@@ -502,7 +538,7 @@ function alternarTema() {
     document.body.classList.toggle('tema-oscuro');
     const esOscuro = document.body.classList.contains('tema-oscuro');
     localStorage.setItem('temaAdmin', esOscuro ? 'oscuro' : 'claro');
-    
+
     const icono = document.querySelector('#botonTema i');
     icono.className = esOscuro ? 'fas fa-sun' : 'fas fa-moon';
 }
@@ -512,7 +548,7 @@ function cargarTemaGuardado() {
     if (tema === 'oscuro') {
         document.body.classList.add('tema-oscuro');
         const icono = document.querySelector('#botonTema i');
-        if(icono) icono.className = 'fas fa-sun';
+        if (icono) icono.className = 'fas fa-sun';
     }
 }
 

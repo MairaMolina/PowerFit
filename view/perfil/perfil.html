@@ -17,7 +17,7 @@
         <div class="logo-sidebar">
             <img src="../registrer/images/Logo_powerfit.png" alt="Power Fit Logo" class="logo logo-light">
             <img src="../registrer/images/Logo_powerfit_dark.png" alt="Power Fit Logo dark" class="logo logo-dark">
-          </div>
+        </div>
 
         <nav class="navegacion-sidebar">
             <p class="titulo-menu">Menú Principal</p>
@@ -56,12 +56,6 @@
                     </a>
                 </li>
 
-                <li class="item-menu">
-                    <a href="/configuracion.html">
-                        <i class="fas fa-cog"></i>
-                        <span>Configuración</span>
-                    </a>
-                </li>
             </ul>
         </nav>
     </aside>
@@ -97,13 +91,6 @@
                                 </button>
 
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownPerfil">
-
-                                    <li><a class="dropdown-item" href="/configuracion.html">
-                                            <i class="fas fa-cog"></i> Configuración de Cuenta
-                                        </a></li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
                                     <li><a class="dropdown-item text-danger" href="#" id="botonCerrarSesion">
                                             <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
                                         </a></li>
@@ -264,12 +251,14 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label"><i class="fas fa-user-circle"></i> Avatar</label>
-                        <button type="button" class="btn btn-outline-primary" id="botonSeleccionarAvatar" data-bs-toggle="modal" data-bs-target="#modalSeleccionarAvatar">
+                        <button type="button" class="btn btn-outline-primary" id="botonSeleccionarAvatar"
+                            data-bs-toggle="modal" data-bs-target="#modalSeleccionarAvatar">
                             <i class="fas fa-image"></i> Seleccionar Avatar
                         </button>
                         <input type="hidden" id="inputAvatarUrl" value="">
                         <div id="avatarPreview" class="mt-2" style="display: none;">
-                            <img id="avatarPreviewImg" src="" alt="Vista previa avatar" class="img-thumbnail" style="max-width: 80px; max-height: 80px;">
+                            <img id="avatarPreviewImg" src="" alt="Vista previa avatar" class="img-thumbnail"
+                                style="max-width: 80px; max-height: 80px;">
                         </div>
                     </div>
                     <form id="formularioEditarPerfil">

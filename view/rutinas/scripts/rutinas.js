@@ -20,6 +20,116 @@ function calcularIMC(peso, altura) {
 }
 
 // ============================================
+// GESTIÓN DE PROGRESO (localStorage)
+// ============================================
+
+const STORAGE_KEY = 'powerfit_rutinas_progreso';
+
+/**
+ * Obtiene el progreso guardado de todas las rutinas
+ * @returns {object} Objeto con el progreso de cada rutina
+ */
+function obtenerProgresoGuardado() {
+    try {
+        const guardado = localStorage.getItem(STORAGE_KEY);
+        return guardado ? JSON.parse(guardado) : {};
+    } catch (e) {
+        console.warn('Error al cargar progreso:', e);
+        return {};
+    }
+}
+
+/**
+ * Guarda el progreso de una rutina específica
+ * @param {string} rutinaId - ID de la rutina
+ * @param {string} ejercicioId - ID del ejercicio
+ * @param {boolean} completado - Estado del ejercicio
+ */
+function guardarProgresoEjercicio(rutinaId, ejercicioId, completado) {
+    const progreso = obtenerProgresoGuardado();
+
+    if (!progreso[rutinaId]) {
+        progreso[rutinaId] = {};
+    }
+
+    progreso[rutinaId][ejercicioId] = completado;
+
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(progreso));
+    } catch (e) {
+        console.error('Error al guardar progreso:', e);
+    }
+}
+
+/**
+ * Verifica si un ejercicio está completado
+ * @param {string} rutinaId - ID de la rutina
+ * @param {string} ejercicioId - ID del ejercicio
+ * @returns {boolean} true si está completado
+ */
+function estaEjercicioCompletado(rutinaId, ejercicioId) {
+    const progreso = obtenerProgresoGuardado();
+    return progreso[rutinaId]?.[ejercicioId] === true;
+}
+
+/**
+ * Calcula el porcentaje de progreso de una rutina
+ * @param {string} rutinaId - ID de la rutina
+ * @param {number} totalEjercicios - Total de ejercicios en la rutina
+ * @returns {number} Porcentaje de 0 a 100
+ */
+function calcularPorcentajeProgreso(rutinaId, totalEjercicios) {
+    if (totalEjercicios === 0) return 0;
+
+    const progreso = obtenerProgresoGuardado();
+    const rutinaProgreso = progreso[rutinaId] || {};
+
+    const completados = Object.values(rutinaProgreso).filter(v => v === true).length;
+    return Math.round((completados / totalEjercicios) * 100);
+}
+
+/**
+ * Reinicia el progreso de una rutina
+ * @param {string} rutinaId - ID de la rutina
+ */
+function reiniciarProgresoRutina(rutinaId) {
+    const progreso = obtenerProgresoGuardado();
+    delete progreso[rutinaId];
+
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(progreso));
+    } catch (e) {
+        console.error('Error al reiniciar progreso:', e);
+    }
+}
+
+/**
+ * Actualiza la barra de progreso visual
+ * @param {string} rutinaId - ID de la rutina
+ * @param {number} totalEjercicios - Total de ejercicios
+ */
+function actualizarBarraProgreso(rutinaId, totalEjercicios) {
+    const porcentaje = calcularPorcentajeProgreso(rutinaId, totalEjercicios);
+    const barraElement = document.querySelector(`[data-rutina-id="${rutinaId}"] .progreso-barra`);
+    const porcentajeElement = document.querySelector(`[data-rutina-id="${rutinaId}"] .progreso-porcentaje`);
+
+    if (barraElement) {
+        barraElement.style.width = `${porcentaje}%`;
+
+        // Agregar clase especial si está completo
+        if (porcentaje === 100) {
+            barraElement.classList.add('completo');
+        } else {
+            barraElement.classList.remove('completo');
+        }
+    }
+
+    if (porcentajeElement) {
+        porcentajeElement.textContent = `${porcentaje}%`;
+    }
+}
+
+// ============================================
 // GENERACIÓN DE RUTINAS PERSONALIZADAS
 // ============================================
 
@@ -469,9 +579,12 @@ function renderizarRutina(rutina) {
         tags += `<span class="tag"><i class="fas ${iconMap[cat] || 'fa-star'}"></i>${cat}</span>`;
     });
 
-    // Renderizar ejercicios (depende del tipo de rutina)
+    // Contadores de ejercicios y renderizado
     let ejerciciosHTML = '';
+    let totalEjercicios = 0;
+    let ejercicioIndex = 0;
 
+    // Renderizar ejercicios de cardio (items informativos, no checkboxes)
     if (rutina.ejercicios_cardio) {
         ejerciciosHTML += `
             <div class="mb-3">
@@ -486,22 +599,43 @@ function renderizarRutina(rutina) {
         `;
     }
 
-    if (rutina.ejercicios_fuerza) {
-        ejerciciosHTML += `
-            <div class="mb-3">
-                <h5><i class="fas fa-dumbbell"></i> Fuerza (${rutina.ejercicios_fuerza.frecuencia})</h5>
-                <ul class="ejercicio-lista">
-                    ${rutina.ejercicios_fuerza.ejercicios.map(ej => {
+    // Renderizar ejercicios de fuerza como checkboxes
+    if (rutina.ejercicios_fuerza && rutina.ejercicios_fuerza.ejercicios) {
+        const ejerciciosFuerza = rutina.ejercicios_fuerza.ejercicios;
+        totalEjercicios += ejerciciosFuerza.length;
+
+        const ejerciciosCheckHTML = ejerciciosFuerza.map((ej, idx) => {
+            const ejercicioId = `${rutina.id}_fuerza_${idx}`;
+            const estaCompletado = estaEjercicioCompletado(rutina.id, ejercicioId);
             const detalle = ej.duracion
                 ? `${ej.series} series x ${ej.duracion}`
                 : `${ej.series} series x ${ej.repeticiones} reps`;
-            return `<li><i class="fas fa-angle-right"></i>${ej.nombre}: ${detalle}</li>`;
-        }).join('')}
-                </ul>
+
+            return `
+                <div class="ejercicio-check-item ${estaCompletado ? 'completado' : ''}" 
+                     data-ejercicio-id="${ejercicioId}" 
+                     data-rutina-id="${rutina.id}"
+                     data-total-ejercicios="${ejerciciosFuerza.length}">
+                    <div class="ejercicio-checkbox">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <span class="ejercicio-texto">${ej.nombre}</span>
+                    <span class="ejercicio-detalle">${detalle}</span>
+                </div>
+            `;
+        }).join('');
+
+        ejerciciosHTML += `
+            <div class="mb-3">
+                <h5><i class="fas fa-dumbbell"></i> Fuerza (${rutina.ejercicios_fuerza.frecuencia})</h5>
+                <div class="ejercicios-checkboxes">
+                    ${ejerciciosCheckHTML}
+                </div>
             </div>
         `;
     }
 
+    // Movimiento diario (informativo)
     if (rutina.movimiento_diario) {
         ejerciciosHTML += `
             <div class="mb-3">
@@ -515,6 +649,7 @@ function renderizarRutina(rutina) {
         `;
     }
 
+    // Cardio principal (informativo)
     if (rutina.cardio_principal) {
         ejerciciosHTML += `
             <div class="mb-3">
@@ -531,6 +666,7 @@ function renderizarRutina(rutina) {
         `;
     }
 
+    // Intervalos (informativo)
     if (rutina.intervalos) {
         ejerciciosHTML += `
             <div class="mb-3">
@@ -544,6 +680,7 @@ function renderizarRutina(rutina) {
         `;
     }
 
+    // Intervalos avanzados (informativo)
     if (rutina.intervalos_avanzados) {
         ejerciciosHTML += `
             <div class="mb-3">
@@ -556,6 +693,7 @@ function renderizarRutina(rutina) {
         `;
     }
 
+    // Movilidad (informativo)
     if (rutina.movilidad) {
         ejerciciosHTML += `
             <div class="mb-3">
@@ -568,8 +706,34 @@ function renderizarRutina(rutina) {
         `;
     }
 
+    // Calcular progreso inicial
+    const porcentajeProgreso = calcularPorcentajeProgreso(rutina.id, totalEjercicios);
+
+    // HTML de la barra de progreso (solo si hay ejercicios)
+    let progresoHTML = '';
+    if (totalEjercicios > 0) {
+        progresoHTML = `
+            <div class="rutina-progreso">
+                <div class="progreso-header">
+                    <span class="progreso-label">
+                        <i class="fas fa-chart-line"></i> Tu Progreso
+                    </span>
+                    <div>
+                        <span class="progreso-porcentaje">${porcentajeProgreso}%</span>
+                        <button class="btn-reset-progreso" title="Reiniciar progreso">
+                            <i class="fas fa-redo-alt"></i> Reiniciar
+                        </button>
+                    </div>
+                </div>
+                <div class="progreso-barra-contenedor">
+                    <div class="progreso-barra ${porcentajeProgreso === 100 ? 'completo' : ''}" style="width: ${porcentajeProgreso}%"></div>
+                </div>
+            </div>
+        `;
+    }
+
     const rutinaHTML = `
-        <div class="rutina-item" data-objetivo="${rutina.objetivo}" style="border-left: 4px solid ${rutina.color}">
+        <div class="rutina-item" data-objetivo="${rutina.objetivo}" data-rutina-id="${rutina.id}" data-total-ejercicios="${totalEjercicios}" style="border-left: 4px solid ${rutina.color}">
             <div class="rutina-header">
                 <div class="rutina-icon">${rutina.icono}</div>
                 <div class="rutina-info">
@@ -583,6 +747,8 @@ function renderizarRutina(rutina) {
                     </div>
                 </div>
             </div>
+
+            ${progresoHTML}
 
             <div class="ejercicios-detalle">
                 ${ejerciciosHTML}
@@ -627,6 +793,76 @@ function renderizarRutinasPersonalizadas(rutinas) {
     if (contadorRutinas) {
         contadorRutinas.textContent = rutinas.length;
     }
+
+    // Configurar event listeners para checkboxes de ejercicios
+    setupEjerciciosCheckboxes();
+
+    // Configurar event listeners para botones de reiniciar progreso
+    setupBotonesReiniciar();
+}
+
+/**
+ * Configura los event listeners para los checkboxes de ejercicios
+ */
+function setupEjerciciosCheckboxes() {
+    const checkItems = document.querySelectorAll('.ejercicio-check-item');
+
+    checkItems.forEach(item => {
+        item.addEventListener('click', function () {
+            const rutinaId = this.dataset.rutinaId;
+            const ejercicioId = this.dataset.ejercicioId;
+            const totalEjercicios = parseInt(this.dataset.totalEjercicios) || 0;
+
+            // Toggle estado
+            const estaCompletado = this.classList.toggle('completado');
+
+            // Guardar en localStorage
+            guardarProgresoEjercicio(rutinaId, ejercicioId, estaCompletado);
+
+            // Actualizar barra de progreso
+            actualizarBarraProgreso(rutinaId, totalEjercicios);
+
+            // Feedback visual sutil
+            if (estaCompletado) {
+                this.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            }
+        });
+    });
+}
+
+/**
+ * Configura los event listeners para los botones de reiniciar progreso
+ */
+function setupBotonesReiniciar() {
+    const botonesReset = document.querySelectorAll('.btn-reset-progreso');
+
+    botonesReset.forEach(boton => {
+        boton.addEventListener('click', function (e) {
+            e.stopPropagation(); // Evitar propagación
+
+            const rutinaItem = this.closest('.rutina-item');
+            const rutinaId = rutinaItem?.dataset.rutinaId;
+            const totalEjercicios = parseInt(rutinaItem?.dataset.totalEjercicios) || 0;
+
+            if (!rutinaId) return;
+
+            // Confirmar reinicio
+            if (confirm('¿Deseas reiniciar el progreso de esta rutina?')) {
+                // Reiniciar en localStorage
+                reiniciarProgresoRutina(rutinaId);
+
+                // Quitar clase 'completado' de todos los ejercicios de esta rutina
+                const ejercicios = rutinaItem.querySelectorAll('.ejercicio-check-item');
+                ejercicios.forEach(ej => ej.classList.remove('completado'));
+
+                // Actualizar barra de progreso a 0%
+                actualizarBarraProgreso(rutinaId, totalEjercicios);
+            }
+        });
+    });
 }
 
 // ============================================
@@ -672,24 +908,107 @@ async function loadRoutineList(userId) {
 
     listContainer.innerHTML = '<div class="text-center py-4"><i class="fas fa-spinner fa-spin"></i> Cargando rutinas...</div>';
 
-    // Obtener perfil del usuario
-    const { data: perfil, error: perfilError } = await supabase
-        .from('perfiles')
-        .select('peso, altura, nivel_actividad, preferencias_ejercicio')
-        .eq('id', userId)
-        .single();
+    try {
+        // Paso 1: Obtener el email del usuario autenticado
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
 
-    if (perfilError) {
+        if (userError || !user) {
+            throw new Error('No se pudo obtener el usuario autenticado');
+        }
+
+        // Paso 2: Obtener el ID de la tabla usuarios usando el correo
+        const { data: usuarioData, error: usuarioError } = await supabase
+            .from('usuarios')
+            .select('id')
+            .eq('correo', user.email)
+            .single();
+
+        if (usuarioError || !usuarioData) {
+            console.warn('Usuario no encontrado en tabla usuarios:', usuarioError);
+            // Usar rutinas generales si no hay perfil
+            const rutinasGenerales = generarRutinasPersonalizadas({});
+            renderizarRutinasPersonalizadas(rutinasGenerales);
+            setupFiltros();
+            return;
+        }
+
+        // Paso 3: Obtener perfil del usuario desde perfiles_usuario
+        const { data: perfil, error: perfilError } = await supabase
+            .from('perfiles_usuario')
+            .select('peso, altura, objetivos')
+            .eq('usuario_id', usuarioData.id)
+            .single();
+
+        if (perfilError) {
+            console.warn('Perfil no encontrado:', perfilError);
+            // Usar rutinas generales si no hay perfil
+            const rutinasGenerales = generarRutinasPersonalizadas({});
+            renderizarRutinasPersonalizadas(rutinasGenerales);
+            setupFiltros();
+            return;
+        }
+
+        // Adaptar los datos del perfil al formato esperado por generarRutinasPersonalizadas
+        // Los campos nivel_actividad y preferencias_ejercicio no existen en perfiles_usuario
+        // Se asignan valores por defecto basados en los objetivos del usuario
+        const perfilAdaptado = {
+            peso: perfil.peso,
+            altura: perfil.altura,
+            nivel_actividad: determinarNivelActividad(perfil.objetivos),
+            preferencias_ejercicio: determinarPreferencias(perfil.objetivos)
+        };
+
+        console.log('✅ Perfil cargado correctamente:', perfilAdaptado);
+
+        // Generar rutinas personalizadas
+        const rutinasPersonalizadas = generarRutinasPersonalizadas(perfilAdaptado);
+        renderizarRutinasPersonalizadas(rutinasPersonalizadas);
+
+        // Configurar filtros
+        setupFiltros();
+
+    } catch (error) {
+        console.error('Error cargando rutinas:', error);
         listContainer.innerHTML = `<p class="alert alert-warning">No se pudo cargar tu perfil. Por favor, completa tu información.</p>`;
-        return;
+    }
+}
+
+/**
+ * Determina el nivel de actividad basado en los objetivos del usuario
+ * @param {string} objetivos - Objetivos del usuario
+ * @returns {string} Nivel de actividad
+ */
+function determinarNivelActividad(objetivos) {
+    if (!objetivos) return 'ligero';
+
+    const obj = objetivos.toLowerCase();
+    if (obj.includes('avanzado') || obj.includes('intenso')) return 'activo';
+    if (obj.includes('intermedio') || obj.includes('moderado')) return 'moderado';
+    return 'ligero';
+}
+
+/**
+ * Determina las preferencias de ejercicio basado en los objetivos
+ * @param {string} objetivos - Objetivos del usuario
+ * @returns {array} Lista de preferencias
+ */
+function determinarPreferencias(objetivos) {
+    if (!objetivos) return [];
+
+    const preferencias = [];
+    const obj = objetivos.toLowerCase();
+
+    if (obj.includes('fuerza') || obj.includes('músculo') || obj.includes('musculo')) {
+        preferencias.push('fuerza');
+    }
+    if (obj.includes('cardio') || obj.includes('resistencia') || obj.includes('correr')) {
+        preferencias.push('cardio');
+    }
+    if (obj.includes('peso') || obj.includes('adelgazar')) {
+        preferencias.push('cardio');
     }
 
-    // Generar rutinas personalizadas
-    const rutinasPersonalizadas = generarRutinasPersonalizadas(perfil);
-    renderizarRutinasPersonalizadas(rutinasPersonalizadas);
-
-    // Configurar filtros
-    setupFiltros();
+    return preferencias;
 }
 
 // ============================================
