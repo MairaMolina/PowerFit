@@ -164,8 +164,8 @@
                                 <tr>
                                     <th style="width: 80px;">Imagen</th>
                                     <th>Nombre</th>
-                                    <th>Músculo</th>
-                                    <th>Equipo</th>
+                                    <th>Músculo/Tipo</th>
+                                    <th>Descripción</th> <th>Equipo</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -178,9 +178,9 @@
 
         <div id="seccion-rutinas" class="seccion-admin d-none">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <p class="text-muted m-0">Plantillas base asignables a usuarios</p>
+                <p class="text-muted m-0">Plantillas base para los usuarios</p>
                 <button class="btn btn-primary" id="btnCrearRutina">
-                    <i class="fas fa-plus"></i> Nueva Rutina Base
+                    <i class="fas fa-plus"></i> Nueva Rutina
                 </button>
             </div>
             <div class="card tarjeta-listado">
@@ -191,7 +191,7 @@
                                 <tr>
                                     <th>Nombre</th>
                                     <th>Nivel</th>
-                                    <th>Objetivo</th>
+                                    <th>Categoría</th>
                                     <th>Duración</th>
                                     <th>Acciones</th>
                                 </tr>
@@ -202,62 +202,207 @@
                 </div>
             </div>
         </div>
+        
     <div class="modal fade" id="modalEjercicio" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
+        <div class="modal-dialog modal-lg"> <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="tituloModalEjercicio">Nuevo Ejercicio</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <form id="formEjercicio">
-                        <input type="hidden" id="ejercicioId"> <div class="mb-3">
+                        <input type="hidden" id="ejercicioId">
+                        
+                        <div class="mb-3">
                             <label class="form-label">Nombre del Ejercicio</label>
-                            <input type="text" class="form-control" id="nombreEjercicio" required placeholder="Ej: Press de Banca">
+                            <input type="text" class="form-control" id="nombreEjercicio" required placeholder="Ej: Press Banca o Saludo al Sol">
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Grupo Muscular</label>
-                                <select class="form-select" id="musculoEjercicio" required>
-                                    <option value="">Seleccionar...</option>
-                                    <option value="Pecho">Pecho</option>
-                                    <option value="Espalda">Espalda</option>
-                                    <option value="Pierna">Pierna</option>
-                                    <option value="Hombro">Hombro</option>
-                                    <option value="Bíceps">Bíceps</option>
-                                    <option value="Tríceps">Tríceps</option>
-                                    <option value="Abdomen">Abdomen</option>
-                                    <option value="Cardio">Cardio</option>
+                                <label class="form-label">Enfoque / Músculos (Usa Ctrl para varios)</label>
+                                <select class="form-select" id="musculoEjercicio" multiple size="8" required>
+                                    <optgroup label="Gimnasio - Tren Superior">
+                                        <option value="Pecho">Pecho</option>
+                                        <option value="Espalda">Espalda</option>
+                                        <option value="Hombro">Hombros</option>
+                                        <option value="Bíceps">Bíceps</option>
+                                        <option value="Tríceps">Tríceps</option>
+                                    </optgroup>
+                                    <optgroup label="Gimnasio - Tren Inferior">
+                                        <option value="Cuádriceps">Cuádriceps</option>
+                                        <option value="Femoral">Femorales (Isquios)</option>
+                                        <option value="Glúteo">Glúteos</option>
+                                        <option value="Pantorrilla">Pantorrillas</option>
+                                    </optgroup>
+                                    <optgroup label="Zona Media">
+                                        <option value="Abdomen">Abdomen / Core</option>
+                                        <option value="Lumbares">Lumbares</option>
+                                    </optgroup>
+                                    <optgroup label="Relajación & Mente">
+                                        <option value="Yoga">Yoga</option>
+                                        <option value="Estiramiento">Estiramiento</option>
+                                        <option value="Meditación">Meditación</option>
+                                        <option value="Respiración">Respiración</option>
+                                        <option value="Relajación Muscular">Relajación Muscular</option>
+                                    </optgroup>
+                                    <optgroup label="Otros">
+                                        <option value="Cardio">Cardio</option>
+                                        <option value="Full Body">Full Body</option>
+                                    </optgroup>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Equipamiento</label>
+                                <label class="form-label">Herramienta / Equipo</label>
                                 <select class="form-select" id="equipoEjercicio">
-                                    <option value="Ninguno">Ninguno (Peso corporal)</option>
-                                    <option value="Mancuernas">Mancuernas</option>
-                                    <option value="Barra">Barra</option>
-                                    <option value="Máquina">Máquina</option>
-                                    <option value="Polea">Polea</option>
+                                    <option value="Ninguno">Ninguno (Peso Corporal)</option>
+                                    <optgroup label="Gimnasio">
+                                        <option value="Mancuernas">Mancuernas</option>
+                                        <option value="Barra">Barra</option>
+                                        <option value="Máquina">Máquina</option>
+                                        <option value="Polea">Polea</option>
+                                        <option value="Banco">Banco</option>
+                                    </optgroup>
+                                    <optgroup label="Relajación & Hogar">
+                                        <option value="Colchoneta">Colchoneta / Mat de Yoga</option>
+                                        <option value="Bandas Elásticas">Bandas Elásticas</option>
+                                        <option value="Bloque Yoga">Bloques de Yoga</option>
+                                        <option value="Fitball">Balón (Fitball)</option>
+                                        <option value="Cuerda">Cuerda de saltar</option>
+                                    </optgroup>
                                 </select>
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">URL de Imagen / GIF</label>
-                            <input type="url" class="form-control" id="imagenEjercicio" placeholder="https://ejemplo.com/imagen.gif">
-                            <div class="form-text">Pega el link de una imagen o GIF demostrativo.</div>
+                            <label class="form-label">URL Imagen / GIF</label>
+                            <input type="url" class="form-control" id="imagenEjercicio" placeholder="https://...">
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Descripción / Instrucciones</label>
-                            <textarea class="form-control" id="descEjercicio" rows="3"></textarea>
+                            <label class="form-label">Descripción Corta</label>
+                            <textarea class="form-control" id="descEjercicio" rows="2" placeholder="Resumen breve..."></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Instrucciones (Paso a Paso)</label>
+                            <textarea class="form-control" id="instruccionesEjercicio" rows="4" placeholder="1. Posición inicial... &#10;2. Movimiento..."></textarea>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="btnGuardarEjercicio">Guardar Ejercicio</button>
+                    <button type="button" class="btn btn-primary" id="btnGuardarEjercicio">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="modalRutina" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tituloModalRutina">Nueva Rutina Plantilla</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formRutina">
+                        <input type="hidden" id="rutinaId">
+                        
+                        <div class="row">
+                            <div class="col-lg-5 border-end">
+                                <div class="mb-3">
+                                    <label class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="nombreRutina" required placeholder="Ej: Rutina de Fuerza">
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6 mb-3">
+                                        <label class="form-label">Categoría</label>
+                                        <select class="form-select" id="categoriaRutina">
+                                            <option value="Fuerza">Fuerza</option>
+                                            <option value="Hipertrofia">Hipertrofia</option>
+                                            <option value="Cardio">Cardio</option>
+                                            <option value="Resistencia">Resistencia</option>
+                                            <option value="Flexibilidad">Flexibilidad</option>
+                                            <option value="Híbrido">Híbrido</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <label class="form-label">Nivel</label>
+                                        <select class="form-select" id="nivelRutina">
+                                            <option value="Principiante">Principiante</option>
+                                            <option value="Intermedio">Intermedio</option>
+                                            <option value="Avanzado">Avanzado</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6 mb-3">
+                                        <label class="form-label">Duración (min)</label>
+                                        <input type="number" class="form-control" id="duracionRutina" value="45">
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <label class="form-label">Calorías</label>
+                                        <input type="number" class="form-control" id="caloriasRutina" value="300">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Descripción</label>
+                                    <textarea class="form-control" id="descRutina" rows="2"></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Objetivos (Ctrl + Click)</label>
+                                    <select class="form-select" id="objetivosRutina" multiple size="4">
+                                        <option value="Ganar masa muscular">Ganar masa muscular</option>
+                                        <option value="Perder peso">Perder peso</option>
+                                        <option value="Mejorar salud">Mejorar salud</option>
+                                        <option value="Aumentar resistencia">Aumentar resistencia</option>
+                                        <option value="Definición">Definición</option>
+                                        <option value="Fuerza máxima">Fuerza máxima</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-7">
+                                <h6 class="text-primary mb-3">Ejercicios de la Rutina</h6>
+                                
+                                <div class="input-group mb-3">
+                                    <select class="form-select" id="selectEjerciciosDisponibles">
+                                        <option value="">Cargando ejercicios...</option>
+                                    </select>
+                                    <button class="btn btn-success" type="button" id="btnAgregarEjercicioALista">
+                                        <i class="fas fa-plus"></i> Agregar
+                                    </button>
+                                </div>
+
+                                <div class="border rounded p-2 bg-light" style="max-height: 400px; overflow-y: auto;">
+                                    <table class="table table-sm table-bordered mb-0 bg-white">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Ejercicio</th>
+                                                <th style="width: 70px;">Sets</th>
+                                                <th style="width: 70px;">Reps</th>
+                                                <th style="width: 40px;"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="listaEjerciciosSeleccionados"></tbody>
+                                    </table>
+                                    
+                                    <div id="mensajeSinEjercicios" class="text-center py-4 text-muted">
+                                        <small>Selecciona ejercicios arriba para armar la rutina.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnGuardarRutina">Guardar Rutina</button>
                 </div>
             </div>
         </div>
