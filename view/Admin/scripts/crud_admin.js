@@ -126,35 +126,28 @@ function inicializarEventos() {
         });
     }
 
-    // Botón Guardar Ejercicio (Del Modal)
-    document.getElementById('btnGuardarEjercicio').addEventListener('click', guardarEjercicio);
-<<<<<<< Updated upstream
-    
-    document.getElementById('btnCrearRutina')?.addEventListener('click', () => {
-        Swal.fire('Próximamente', 'Aquí abrirá el modal para crear rutinas', 'info');
-    });
-=======
-
-    // Botón Nueva Rutina (Prepara y Abre Modal)
+    // Botón Nueva Rutina (Abrir Modal)
     const btnCrearRut = document.getElementById('btnCrearRutina');
     if (btnCrearRut) {
-        btnCrearRut.addEventListener('click', async () => {
+        btnCrearRut.addEventListener('click', () => {
             document.getElementById('formRutina').reset();
             document.getElementById('rutinaId').value = '';
             document.getElementById('tituloModalRutina').textContent = 'Nueva Rutina Plantilla';
             
-            await prepararModalRutina(); // Carga la lista de ejercicios
-            
-            new bootstrap.Modal(document.getElementById('modalRutina')).show();
+            // Limpiar select múltiple
+            const select = document.getElementById('objetivosRutina');
+            for(let i=0; i<select.options.length; i++) select.options[i].selected = false;
+
+            const modal = new bootstrap.Modal(document.getElementById('modalRutina'));
+            modal.show();
         });
     }
 
-    // Botón para Agregar Ejercicio a la tabla temporal
-    document.getElementById('btnAgregarEjercicioALista')?.addEventListener('click', agregarEjercicioALista);
-
-    // Botón Guardar Rutina Final
-    document.getElementById('btnGuardarRutina')?.addEventListener('click', guardarRutina);
->>>>>>> Stashed changes
+    // Botón Guardar Rutina
+    const btnGuardarRut = document.getElementById('btnGuardarRutina');
+    if (btnGuardarRut) {
+        btnGuardarRut.addEventListener('click', guardarRutina);
+    }
 }
 
 function mostrarSeccion(seccionId) {
@@ -339,7 +332,6 @@ async function cargarEjercicios() {
             // Formatear Equipo
             let equipo = 'N/A';
             if (e.etiquetas) {
-<<<<<<< Updated upstream
                  if (Array.isArray(e.etiquetas)) equipo = e.etiquetas.join(', ');
                  else if (typeof e.etiquetas === 'string') equipo = e.etiquetas.replace(/{|}|"/g, '').replace(/,/g, ', ');
             }
@@ -347,16 +339,6 @@ async function cargarEjercicios() {
             // Imagen fallback
             const imagen = e.imagen_url 
                 ? `<img src="${e.imagen_url}" class="img-tabla" alt="${e.nombre}">` 
-=======
-                equipo = Array.isArray(e.etiquetas) 
-                    ? e.etiquetas.join(', ') 
-                    : e.etiquetas.replace(/{|}|"/g, '').replace(/,/g, ', ');
-            }
-
-            // Imagen
-            const imagen = e.imagen_url 
-                ? `<img src="${e.imagen_url}" class="img-tabla" alt="img">` 
->>>>>>> Stashed changes
                 : `<div class="img-tabla d-flex align-items-center justify-content-center bg-light"><i class="fas fa-dumbbell text-muted"></i></div>`;
 
             // Descripción truncada
@@ -456,19 +438,11 @@ async function guardarEjercicio() {
 
     const datos = {
         nombre: nombre,
-<<<<<<< Updated upstream
         musculos_trabajados: [musculo], 
         etiquetas: [equipo],            
         imagen_url: imagen,
         descripcion: descripcion,
         explicacion_pasos: descripcion 
-=======
-        musculos_trabajados: musculos, // Array
-        etiquetas: [equipo],           // Array
-        imagen_url: imagen,
-        descripcion: descripcion,
-        explicacion_pasos: instrucciones
->>>>>>> Stashed changes
     };
 
     let errorReq;
@@ -478,11 +452,9 @@ async function guardarEjercicio() {
         const { error } = await supabase.from('ejercicios').update(datos).eq('id', id);
         errorReq = error;
     } else {
-<<<<<<< Updated upstream
         Swal.fire('Guardado', 'Ejercicio agregado correctamente.', 'success');
         
         // Cerrar modal
-=======
         // INSERT
         const { error } = await supabase.from('ejercicios').insert([datos]);
         errorReq = error;
@@ -493,8 +465,7 @@ async function guardarEjercicio() {
         Swal.fire('Error', 'No se pudo guardar: ' + errorReq.message, 'error');
     } else {
         Swal.fire('Guardado', 'Operación exitosa.', 'success');
-        
->>>>>>> Stashed changes
+
         const modalEl = document.getElementById('modalEjercicio');
         const modal = bootstrap.Modal.getInstance(modalEl);
         if(modal) modal.hide();
@@ -517,10 +488,7 @@ window.eliminarEjercicio = async (id) => {
 
     if (res.isConfirmed) {
         const { error } = await supabase.from('ejercicios').delete().eq('id', id);
-<<<<<<< Updated upstream
-        
-=======
->>>>>>> Stashed changes
+
         if (error) {
             Swal.fire('Error', 'Fallo al borrar.', 'error');
         } else {
